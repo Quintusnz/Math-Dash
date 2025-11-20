@@ -4,100 +4,78 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(17, 24, 39, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  padding: var(--space-md);
 }
 
 .modal {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  background: var(--surface-card);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  width: min(480px, 100%);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
   text-align: center;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-h2);
+  font-weight: 800;
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-sm);
 }
 
 .description {
-  color: #6b7280;
-  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-body);
 }
 
 .challenge {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background-color: #f3f4f6;
-  border-radius: 0.5rem;
+  font-size: var(--text-h3);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
 }
 
 .inputGroup {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg);
 }
 
 .input {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 1.125rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 0.5rem;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-body-lg);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
   text-align: center;
   transition: border-color 0.2s;
+  background: var(--surface-card);
 }
 
 .input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
 .error {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
+  color: var(--color-error);
+  font-size: var(--text-caption);
+  margin-top: var(--space-xs);
 }
 
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-md);
   justify-content: center;
-}
-
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-}
-
-.submitButton {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.submitButton:hover {
-  background-color: #2563eb;
-}
-
-.cancelButton {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.cancelButton:hover {
-  background-color: #e5e7eb;
 }

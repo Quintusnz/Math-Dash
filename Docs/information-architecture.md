@@ -44,7 +44,7 @@
 
 ### 2.2 Topics
 
-- `Category list` (e.g., Multiplication, Division, Number Bonds, Doubles/Halves).
+- `Category list` (e.g., Addition & Subtraction Facts, Multiplication Facts/Times Tables, Division Facts, Doubles & Halves, Square Numbers).
 - Within each:
   - `Topic tile` (name, icon, basic progress, lock status).
 - `Topic detail` (optional direct play from here).

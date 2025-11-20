@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import styles from './UpgradeCard.module.css';
@@ -36,7 +36,13 @@ export function UpgradeCard() {
       
       <div className={styles.features}>
         <div className={styles.feature}>
-          <span className={styles.check}>✓</span> All 12 Times Tables
+          <span className={styles.check}>✓</span> Addition & Subtraction Facts (Make 10/20)
+        </div>
+        <div className={styles.feature}>
+          <span className={styles.check}>✓</span> Multiplication Facts to 12× + Division Facts
+        </div>
+        <div className={styles.feature}>
+          <span className={styles.check}>✓</span> Doubles & Halves + Square Numbers
         </div>
         <div className={styles.feature}>
           <span className={styles.check}>✓</span> Adaptive "Smart Mode"

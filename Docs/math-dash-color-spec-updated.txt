@@ -1,0 +1,139 @@
+﻿Here's a full color system for Math Dash that's playful for kids, modern for the product, and not a clone of Hit the Button / Twinkl.
+I'll give you:
+1. Concept & vibe
+2. Core palette (with hexes + usage)
+3. Semantic colors
+4. Neutral scale
+5. Practical usage notes (for gameplay vs grown-up areas)
+
+1. Concept & Vibe
+Design goals for the palette:
+* Feels fun and energetic for 6-11 year olds, without looking babyish.
+* Works in a clean, minimal UI with big buttons and lots of whitespace.
+* Strong enough contrast for quick recognition under time pressure.
+* Clear semantic signals (correct/wrong/locked) for rapid feedback.
+* Distinct from common "primary school" rainbow palettes by having:
+o A cool, modern primary (blue-violet)
+o A friendly teal secondary
+o Warm, candy-like accents (gold + coral) used sparingly.
+Think: "modern kids arcade + learning dashboard" rather than cartoon classroom.
+
+2. Primary & Secondary System
+Primary Colors (Brand / CTAs / Headers)
+* Primary 500 (Main brand & CTAs)
+#3056D3 - A rich, energetic blue-violet.
+o Use for: Primary buttons, key highlights in the game UI, main nav selection, logo base.
+* Primary Dark (600) (Hover / pressed / emphasis)
+#2338A0
+o Use for: Button hover/active states, focused borders, high-emphasis text on light cards.
+* Primary Light (100) (Soft backgrounds)
+#E0E7FF
+o Use for: Panels behind scoreboards, subtle section backgrounds, progress dashboard tiles.
+* Primary Ultra-Light (50)
+#F3F6FF
+o Use for: Page background tints in "Play" area, hover backgrounds on list rows.
+Secondary Colors (Supportive, friendly)
+* Secondary 500
+#1FB8A6 - Fresh teal that pairs well with the primary.
+o Use for: Secondary buttons, toggles, tags (e.g., mode chips), "Practice mode" emphasis.
+* Secondary Light (100)
+#D2F5F1
+o Use for: Backgrounds for topic cards, avatar halos, "Adaptive mode" highlights.
+* Secondary Pale (50)
+#F0FBFA
+o Use for: Large background washes in kids' screens, banners, progress hints.
+
+3. Accent Colors (Energy, Rewards, Highlights)
+Used sparingly to keep the interface clean and avoid visual overload.
+* Accent Primary - Gold Burst
+#FFB224
+o Use for: Stars, trophies, streak counters, "New high score" ribbons, progress bars.
+* Accent Secondary - Coral Pop
+#FF5A7A
+o Use for: Achievements, small notification dots, limited-time challenges, badge details.
+* Accent Cool - Sky
+#38BDF8
+o Use for: Info highlights, secondary progress indicators, hover outlines on "Skill Radar" cells.
+* Gradient Pair (for Math Dash identity)
+o Gradient Start: #3056D3 (Primary 500)
+o Gradient End: #FF5A7A (Accent Coral)
+o Use for: Hero banners, "Start Dash" button in marketing / onboarding, loading splash.
+This blue → coral gradient reads as "motion / dash / energy" without copying existing competitors' strong yellow/green schemes.
+
+4. Semantic Colors (Clear feedback under time pressure)
+These should be instantly readable for kids, especially in a 60s dash round.
+* Success
+#16A34A (Strong green)
+o Use for: Correct answer flash, success toasts, "Mastered" skill state.
+* Warning
+#FACC15 (Warm amber)
+o Use for: Low time warnings, mild alerts (e.g., "Almost there", streak expiring soon).
+* Error
+#DC2626 (Clear red)
+o Use for: Wrong answer flash, destructive actions (delete profile), connection errors.
+* Info
+#0EA5E9
+o Use for: Helper hints, tooltips in grown-up/teacher area, info banners.
+Note: For kids, keep semantic usage very consistent:
+* Green = "you did it"
+* Red = "that one's not right"
+* Amber = "pay attention"
+* Blue = "extra info / help"
+
+5. Neutral Palette (UI structure & calm)
+Neutrals should keep the UI breathable and let colors do targeted work.
+* Neutral 50 #F9FAFB - App background (esp. teacher/parent dashboards)
+* Neutral 100 #F3F4F6 - Card backgrounds, table rows
+* Neutral 200 #E5E7EB - Borders, separators
+* Neutral 300 #D1D5DB - Muted icons, disabled border
+* Neutral 400 #9CA3AF - Secondary text (timestamps, helper copy)
+* Neutral 500 #6B7280 - Body text on light backgrounds
+* Neutral 700 #374151 - High-emphasis headings on light backgrounds
+* Neutral 900 #111827 - Rare; logo wordmark, strongest headings if needed
+These are intentionally "grown-up clean" so that:
+* Play screens can lean more on Primary/Secondary + accents.
+* Grown-ups/Teacher Area feels more like a modern dashboard with fewer saturated blocks.
+
+6. Accessibility & Contrast Notes
+* Primary 500 (#3056D3) on Neutral 50/100 easily hits WCAG AA for normal text and icons.
+* Buttons:
+o White text on Primary 500, Secondary 500, Accent Coral 500 all pass AA for normal-sized text.
+* Error/Success:
+o White on Error (#DC2626) and Success (#16A34A) are both AA-compliant for standard button text.
+* Avoid using Accent Gold (#FFB224) as a text-on-white color; keep it for icons, fills, and badges.
+* Ensure focus rings and outlines use either Primary Dark or a high-contrast neutral (e.g., Neutral 900 with opacity) to stay visible for keyboard users.
+
+7. Practical Usage by Area
+Kids "Play" Area
+* Background: Neutral 50 or Primary Light 50 (#F3F6FF)
+* Question panel: White or Neutral 50 with Primary 500 headline text.
+* Answer buttons:
+o Default: White background, border #E5E7EB, text Neutral 700.
+o Hover / pressed: Fill Primary Light 100 / Secondary Light 100.
+o Correct: Flash fill Success with a subtle glow.
+o Wrong: Flash fill Error briefly, then highlight the correct button in Success green.
+* Timer bar: Uses Accent Gold for remaining time, shifting toward Warning amber when nearly out.
+* Streak counter, achievements: Use Accent Gold + Coral sparingly to avoid permanent visual noise.
+Topics & Skill Library
+* Topic tiles:
+o Addition & Subtraction Facts (incl. Make 10/20 Number Bonds): Accent Sky #38BDF8
+o Multiplication Facts / Times Tables: Primary 500 with icon on Primary Light 100 circle.
+o Division Facts: Secondary 500
+o Doubles / Halves: Mix of Accent Gold and Secondary 500
+o Square Numbers: Accent Purple (or nearest neutral accent) for differentiation
+* Locked topics: Desaturate + use Neutral 200 overlay and a subtle lock icon; keep text legible but clearly unavailable.
+Progress Dashboard ("Skill Radar")
+* Background: Neutral 50
+* Skill cells:
+o Base cell: Neutral 100
+o Low mastery: Tint with Secondary Pale 50
+o Medium mastery: Primary Light 100
+o High mastery: Primary 500 or Success green, with white text.
+* Achievements & trophies: Primary use Accent Gold, with Accent Coral for rare/"epic" badges.
+Grown-Ups / Teacher Area
+* Overall: Much more neutral-heavy to signal a different mental mode.
+* Background: Neutral 50
+* Cards & panels: White / Neutral 100 with Primary 500 headings and minimal accents.
+* Charts:
+o Lines/bars: Primary 500, Secondary 500, Accent Sky for contrasts.
+o Avoid heavy use of gold/coral here to keep it professional and readable.

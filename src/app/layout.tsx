@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Nunito, Inter } from 'next/font/google';
 import './globals.css';
+import styles from './layout.module.css';
 import { Providers } from './providers';
 
 const nunito = Nunito({ 
@@ -42,7 +43,7 @@ export default function RootLayout({
     <html lang="en" className={`${nunito.variable} ${inter.variable}`}>
       <body>
         <Providers>
-          <main className="min-h-screen flex flex-col">
+          <main className={styles.main}>
             {children}
           </main>
           <div id="modal-root" />
@@ -52,3 +53,4 @@ export default function RootLayout({
     </html>
   );
 }
+

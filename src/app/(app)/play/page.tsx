@@ -16,9 +16,11 @@ import { ResultScreen } from "@/components/game/ResultScreen";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useGameSound } from "@/lib/hooks/useGameSound";
+import styles from './page.module.css';
 
 export default function PlayPage() {
   const router = useRouter();
+
   const hasSavedRef = useRef(false);
   const { activeProfileId } = useUserStore();
   const sessionIdRef = useRef<string>(crypto.randomUUID());
@@ -191,21 +193,21 @@ export default function PlayPage() {
 
   return (
     <GameCanvas>
-      <div className="w-full flex justify-between items-center mb-4" role="status" aria-label="Game Status">
-        <div className="text-xl font-bold" aria-label={`Score: ${score}`}>Score: {score}</div>
-        <div className="text-xl font-mono" role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
+      <div className={styles.header} role="status" aria-label="Game Status">
+        <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
+        <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
       </div>
       
       <TimerBar timeLeft={timeLeft} totalTime={60} />
       
-      <div className="flex-1 flex flex-col items-center justify-center w-full relative" aria-live="polite" aria-atomic="true">
+      <div className={styles.gameArea} aria-live="polite" aria-atomic="true">
         <AnimatePresence mode="wait">
           {currentQuestion && (
             <QuestionDisplay text={currentQuestion.text} />
           )}
         </AnimatePresence>
         
-        <div className="text-3xl font-mono h-12 mb-8 text-primary" aria-label={`Current input: ${input || "empty"}`}>
+        <div className={styles.inputDisplay} aria-label={`Current input: ${input || "empty"}`}>
           {input || "_"}
         </div>
       </div>
@@ -219,3 +221,4 @@ export default function PlayPage() {
     </GameCanvas>
   );
 }
+

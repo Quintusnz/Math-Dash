@@ -147,3 +147,38 @@
 .danger:hover {
   background: #fef2f2;
 }
+
+.sessionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sessionItem {
+  font-size: 0.875rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.sessionHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sessionDate {
+  font-weight: 700;
+}
+
+.sessionScore {
+  color: #16a34a;
+}
+
+.sessionDetails {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+

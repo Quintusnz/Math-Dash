@@ -49,10 +49,10 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
 
 ### Feature 2 – Topic & Skill Library (P0)
 
-- **User Story**: As a parent/teacher, I want a library of topics (tables, bonds, doubles/halves) so that I can target the areas my child or class needs to practise.
+- **User Story**: As a parent/teacher, I want a library of topics (addition/subtraction facts, multiplication/division facts, number-bond style make-10/20 modes, doubles/halves, squares) so that I can target the areas my child or class needs to practise.
 - **Acceptance Criteria**:
-  - Given the user opens the Topics screen, when viewing the library, then topics are grouped by category (e.g., Multiplication, Division, Number Bonds, Doubles/Halves) with clear labels.
-  - Given a topic is selected, when a round is started, then all questions follow the rules for that topic (e.g., 2× table uses multipliers 1–12 and factor 2).
+  - Given the user opens the Topics screen, when viewing the library, then topics are grouped by globally clear categories (Addition & Subtraction Facts, Multiplication Facts/Times Tables, Division Facts, Doubles & Halves, Square Numbers) with clear labels and optional teacher-friendly subtitles (e.g., “Make 10 (Number Bonds)” under Addition & Subtraction).
+  - Given a topic is selected, when a round is started, then all questions follow the rules for that topic (e.g., 2× table uses multipliers 1-12 and factor 2; “Make 10 (Number Bonds)” uses pairs that total 10).
   - Given some topics are premium-only, when a free user sees the list, then premium topics are visibly locked and tapping them triggers an upgrade teaser instead of starting a round.
   - Given a new profile is created, when the Topics screen is first shown, then age-appropriate topics are suggested or pre-highlighted by default.
 - **Priority**: P0 – Essential for targeting practice and future monetization boundaries.
@@ -156,8 +156,8 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
 - **User Story**: As a parent, I want to clearly understand which content is free, what the one‑time upgrade unlocks, and how much it costs so I can make a quick, almost "no‑brainer" purchase decision.
 - **Acceptance Criteria**:
   - Given the user browses topics or features, when some are premium, then they are consistently marked as locked and do not start without going through an adult-gated upgrade flow.
-  - Given a free user is on the Topics screen, when they view multiplication tables, then tables 2, 3, and 4 are fully playable and higher tables (5–12) are visibly locked as part of the paid upgrade.
-  - Given a free user browses other categories (division, number bonds, doubles/halves), when they open them, then at least one starter topic in each category is free and the remainder are marked as part of the paid upgrade.
+  - Given a free user is on the Topics screen, when they view multiplication facts, then tables 2, 3, and 4 are fully playable and higher tables (5-12) are visibly locked as part of the paid upgrade.
+  - Given a free user browses other categories (division facts, addition/subtraction facts including Make 10/20 number bonds, doubles/halves), when they open them, then at least one starter topic in each category is free and the remainder are marked as part of the paid upgrade.
   - Given a parent opens the upgrade screen, when it loads, then it clearly communicates that the core upgrade is a low-cost, one-time unlock of all standard content/features (all tables, all basic topics, adaptive mode, Dash Duel, teacher tools for a limited number of classes, etc.).
   - Given AI-powered features are introduced in future, when a parent views those options, then they are clearly separated as an optional, low-cost recurring subscription layered on top of the one-time core app purchase.
   - Given a child is using the app, when they encounter premium content, then they cannot complete payment flows without adult gate completion.
@@ -248,7 +248,7 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
   - Must perform well in Chrome on Chromebooks and mobile browsers.
   - Future native wrappers must comply with app store policies for children’s apps.
 - [x] **Gaps needing more clarity from stakeholders?**
-  - Exact free vs paid topic and feature split. **(Updated)**: Free tier includes full access to a small starter set in each category (e.g., multiplication tables 2, 3, 4; one starter division topic; bonds to 10; basic doubles/halves). The paid one-time upgrade unlocks all remaining standard topics (5–12 tables, extended bonds, more advanced doubles/halves), adaptive mode, Dash Duel, and teacher tooling for a limited number of classes.
+  - Exact free vs paid topic and feature split. **(Updated)**: Free tier includes full access to a small starter set in each category (e.g., multiplication tables 2, 3, 4; one starter division topic; Make 10 number bonds and simple missing-number facts; basic doubles/halves). The paid one-time upgrade unlocks all remaining standard topics (5–12 tables, broader division facts, Make 20/100 and other addition/subtraction facts, higher doubles/halves), adaptive mode, Dash Duel, and teacher tooling for a limited number of classes.
   - Target markets (home first vs school first) and pricing model. **(Updated)**: Initial target is both home and school in parallel (parents and primary teachers), with a low-cost, one-time purchase for the core app aimed at being a "no-brainer" decision. AI-powered features, if/when launched, will sit on top as an optional, low-cost **credit pack model** (e.g., bundles of AI analyses) to cover ongoing AI and infra costs without requiring a recurring subscription.
   - Prioritisation of teacher features vs consumer features for early releases. **(Partially answered)**: MVP must not lag on home use; early teacher support should focus on easy wins (class codes, simple dashboards) while keeping the core child/parent experience first-class.
   - Level of sophistication desired for adaptivity in phase 1. **(Updated)**: Phase-one adaptivity should be heuristic-based (e.g., simple rules using recent accuracy and volume per fact/topic) and run entirely client-side—no complex ML models or heavy backend requirements initially.

@@ -1,7 +1,7 @@
-# Math Dash – Detailed Requirements Specification
+﻿# Math Dash – Detailed Requirements Specification
 
 > Version: 0.1-draft  
-> Source PRD: `Docs/math-dash-prd.txt`  
+> Source PRD: `Docs/math-dash-prd-updated.md`  
 > Scope: MVP + near-term P1 features as defined in PRD
 
 ---
@@ -75,7 +75,7 @@ This file focuses on implementation-ready functional and non-functional requirem
 - `Topic`
   - `id` (string; globally unique, e.g., `mul_2x`, `bonds_10`).
   - `name` (string; user-facing, e.g., "2x Table").
-  - `category` (enum: `Multiplication`, `Division`, `NumberBonds`, `DoublesHalves`, `Mixed`).
+  - `category` (enum: `AdditionSubtractionFacts`, `MultiplicationFacts`, `DivisionFacts`, `DoublesHalves`, `SquareNumbers`, `Mixed`).
   - `ageBandRecommended` (enum or range; used for defaults, not hard constraints).
   - `isPremium` (boolean; true if locked behind paywall).
   - `description` (short string used in teacher/parent views).
@@ -191,38 +191,40 @@ This file focuses on implementation-ready functional and non-functional requirem
 
 #### 3.2.1 User Stories
 - As a child, I want to easily choose which tables or number facts to practise so that I feel in control of my learning.
-- As a parent/teacher, I want a clear list of topics so I can target specific areas (e.g., 7× table, bonds to 10).
+- As a parent/teacher, I want a clear list of topics so I can target specific areas (e.g., addition/subtraction facts, 7x table, make 10/20).
 
 #### 3.2.2 Topic Catalogue
-- `FR-2.1` The system SHALL expose a structured catalogue of `Topic` entries grouped by category.
+- `FR-2.1` The system SHALL expose a structured catalogue of `Topic` entries grouped by globally clear categories: Addition & Subtraction Facts (including number-bond style modes), Multiplication Facts (Times Tables), Division Facts, Doubles & Halves, and Square Numbers.
 - `FR-2.2` For MVP, the minimum topics SHALL include:
-  - Multiplication tables: `2x` through `12x` as separate topics.
+  - Multiplication facts: `2x` through `12x` as separate topics and a mixed 1-12x mode.
   - Division facts: inverse of the above multiplication tables.
-  - Number bonds: bonds to 10, 20.
-  - Doubles and halves: within at least 20 (e.g., 2–20).
+  - Addition & Subtraction facts: Make 10/20 (Number Bonds), Make 100, and missing-number facts to at least 20 (stretch to 100).
+  - Doubles and halves: doubles/halves to 20 (stretch to 100).
+  - Square numbers: squares up to at least `10x10` (stretch to `12x12`).
 - `FR-2.2a` The free tier SHALL include at least the following starter topics:
-  - Multiplication: 2×, 3×, and 4× tables.
-  - Division: inverse facts corresponding to 2×, 3×, and 4× tables.
-  - Number bonds: bonds to 10.
+  - Multiplication: 2x, 3x, and 4x tables (plus their division counterparts).
+  - Addition & Subtraction: Make 10 (Number Bonds) and simple missing-number facts to 10.
   - Doubles/halves: simple doubles and halves up to at least 10.
 - `FR-2.2b` The paid one-time upgrade SHALL unlock:
-  - All remaining standard multiplication tables (5×–12×) and their division counterparts.
-  - Extended number bonds (e.g., bonds to 20) and extended doubles/halves ranges.
+  - All remaining standard multiplication tables (5x–12x) and their division counterparts.
+  - Extended number-bond style modes (e.g., Make 20/100) and extended doubles/halves ranges (to 100).
+  - Square numbers to 10x10 or 12x12.
   - Any additional standard topics added post-MVP, unless explicitly designated as free.
 - `FR-2.3` Each topic entry SHALL define generation rules, including:
-  - Operand ranges (e.g., `2 × 1..12`).
-  - Allowed operators (×, ÷, +, –).
+  - Operand ranges (e.g., `2 x 1..12`).
+  - Allowed operators (x, ÷, +, –).
   - Answer type (integer only for MVP).
 - `FR-2.4` Topics marked `isPremium=true` SHALL appear visibly locked to free users with a consistent lock icon or badge.
 - `FR-2.5` When a locked topic is tapped by a free user, the system SHALL show an upgrade teaser modal (see Monetization, section 3.10).
+- `FR-2.6` Clarifying note: terms like "number bonds" and "doubles and halves" are surfaced as mode names or subtitles within the Addition & Subtraction Facts (or Doubles & Halves) categories so that parents and kids see globally clear headings first, while teachers still recognise the specialist terminology.
 
 #### 3.2.3 Topic Selection and Defaults
-- `FR-2.6` Topic selection UI SHALL show:
+- `FR-2.7` Topic selection UI SHALL show:
   - Topic name.
   - Simple visual category indicator (color or icon).
   - For players with history, a small indicator of progress (e.g., `Weak/OK/Strong`).
-- `FR-2.7` When a new `PlayerProfile` is created, the system SHALL automatically suggest age-appropriate default topics (e.g., bonds to 10 for `Y1-2`, 2×–5× tables for `Y3-4`).
-- `FR-2.8` The system SHALL remember the last selected topic per `PlayerProfile` and present it as the default on next visit.
+- `FR-2.8` When a new `PlayerProfile` is created, the system SHALL automatically suggest age-appropriate default topics (e.g., Make 10 for `Y1-2`, 2x–5x tables for `Y3-4`).
+- `FR-2.9` The system SHALL remember the last selected topic per `PlayerProfile` and present it as the default on next visit.
 
 ---
 
@@ -284,7 +286,7 @@ This file focuses on implementation-ready functional and non-functional requirem
 ### 3.5 Feature 5 – Progress Dashboard (Skill Radar) (P0)
 
 #### 3.5.1 User Stories
-- As a parent/teacher, I want a quick visual summary of a child’s strengths and weaknesses (e.g., 2× vs 7× tables) so I can focus practice time.
+- As a parent/teacher, I want a quick visual summary of a child’s strengths and weaknesses (e.g., 2x vs 7x tables, make-10/20 facts) so I can focus practice time.
 - As a child, I want to see my progress so that I stay motivated.
 
 #### 3.5.2 Dashboard Overview
@@ -310,7 +312,7 @@ This file focuses on implementation-ready functional and non-functional requirem
   - Recent scores (e.g., last 5 sessions for that topic).
   - Accuracy trend (e.g., line chart or bar chart).
   - Last played date/time.
-- `FR-5.6` If insufficient data exists (e.g., < 10 questions answered), the view SHALL show an encouraging empty state (e.g., "You havent practised this yet. Try a 60s round!").
+- `FR-5.6` If insufficient data exists (e.g., < 10 questions answered), the view SHALL show an encouraging empty state (e.g., "You haven’t practised this yet. Try a 60s round!").
 
 #### 3.5.4 Data Integrity
 - `FR-5.7` Only completed sessions (`isCompleted=true` and `wasAbandoned=false`) SHALL contribute to personal best and key progress metrics.
@@ -322,7 +324,7 @@ This file focuses on implementation-ready functional and non-functional requirem
 
 #### 3.6.1 User Stories
 - As a child, I want the game to get harder when I do well and easier when I struggle so that I stay in the sweet spot of challenge.
-- As a parent/teacher, I want practice sessions to emphasize a childs weak facts without me configuring them manually.
+- As a parent/teacher, I want practice sessions to emphasize a child’s weak facts without me configuring them manually.
 
 #### 3.6.2 Core Behaviour
 - `FR-6.1` The system SHALL provide an "Adaptive" mode (e.g., "Smart Dash") available from the play screen.

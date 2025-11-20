@@ -136,6 +136,11 @@ export class MathDashDB extends Dexie {
       achievements: 'id',
       playerAchievements: '++id, [profileId+achievementId], unlockedAt'
     });
+
+    // Add index on startedAt for ordering recent sessions
+    this.version(6).stores({
+      sessions: 'id, profileId, topicId, synced, startedAt'
+    });
   }
 }
 

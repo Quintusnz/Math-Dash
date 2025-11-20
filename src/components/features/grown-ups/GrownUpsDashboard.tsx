@@ -110,14 +110,14 @@ export default function GrownUpsDashboard() {
                 <div className={styles.statsCard}>
                   <h3>Recent Activity</h3>
                   {recentSessions && recentSessions.length > 0 ? (
-                    <ul className="space-y-2 mt-2">
+                    <ul className={styles.sessionList}>
                       {recentSessions.map(session => (
-                        <li key={session.id} className="text-sm border-b pb-2">
-                          <div className="flex justify-between">
-                            <span className="font-bold">{new Date(session.startedAt).toLocaleDateString()}</span>
-                            <span className="text-green-600">{session.score} pts</span>
+                        <li key={session.id} className={styles.sessionItem}>
+                          <div className={styles.sessionHeader}>
+                            <span className={styles.sessionDate}>{new Date(session.startedAt).toLocaleDateString()}</span>
+                            <span className={styles.sessionScore}>{session.score} pts</span>
                           </div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className={styles.sessionDetails}>
                             {session.questionsCorrect}/{session.questionsAnswered} correct • {session.mode}
                           </div>
                         </li>
@@ -127,6 +127,7 @@ export default function GrownUpsDashboard() {
                     <p className={styles.muted}>No recent sessions found.</p>
                   )}
                 </div>
+
               </div>
             ) : (
               <div className={styles.emptyState}>

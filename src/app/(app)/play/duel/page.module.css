@@ -1,0 +1,291 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--color-neutral-50);
+  padding: var(--space-8);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-8);
+}
+
+.setupGrid {
+  display: flex;
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+  width: 100%;
+  max-width: 56rem; /* 4xl */
+}
+
+.playerCard {
+  flex: 1;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border-width: 2px;
+  border-style: solid;
+}
+
+.playerCardP1 {
+  background-color: var(--color-primary-50);
+  border-color: var(--color-primary-100);
+}
+
+.playerCardP2 {
+  background-color: #FEF2F2; /* red-50 */
+  border-color: #FECACA; /* red-200 */
+}
+
+.playerTitle {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+.playerTitleP1 {
+  color: var(--color-primary-600);
+}
+
+.playerTitleP2 {
+  color: #991B1B; /* red-800 */
+}
+
+.label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  margin-bottom: var(--space-4);
+}
+
+.difficultyGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.difficultyButton {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  text-transform: capitalize;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.difficultyButtonP1 {
+  background-color: var(--color-white);
+  color: var(--color-neutral-500);
+}
+
+.difficultyButtonP1:hover {
+  background-color: var(--color-primary-100);
+}
+
+.difficultyButtonP1Active {
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.difficultyButtonP2 {
+  background-color: var(--color-white);
+  color: var(--color-neutral-500);
+}
+
+.difficultyButtonP2:hover {
+  background-color: #FEE2E2; /* red-100 */
+}
+
+.difficultyButtonP2Active {
+  background-color: #EF4444; /* red-500 */
+  color: var(--color-white);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.vsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vsText {
+  font-size: var(--text-3xl);
+  font-weight: 900;
+  color: var(--color-neutral-300);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.buttonBack {
+  padding: var(--space-4) var(--space-8);
+  color: var(--color-neutral-500);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.buttonBack:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.buttonStart {
+  padding: var(--space-4) var(--space-12);
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.buttonStart:hover {
+  transform: scale(1.05);
+}
+
+/* Result Screen Styles */
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--color-neutral-50);
+  padding: var(--space-8);
+  text-align: center;
+}
+
+.winnerTitle {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-8);
+  color: var(--color-primary-500);
+  font-weight: 700;
+}
+
+.statsGrid {
+  display: flex;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
+  width: 100%;
+  max-width: 28rem; /* max-w-md */
+}
+
+.statCard {
+  flex: 1;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.statCardP1 {
+  background-color: var(--color-primary-50);
+}
+
+.statCardP2 {
+  background-color: #FEF2F2; /* red-50 */
+}
+
+.statTitle {
+  font-weight: 700;
+}
+
+.statTitleP1 {
+  color: var(--color-primary-600);
+}
+
+.statTitleP2 {
+  color: #991B1B; /* red-800 */
+}
+
+.statScore {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+}
+
+.statDetail {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+}
+
+.statSubDetail {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--space-1);
+  text-transform: capitalize;
+}
+
+.resultActions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.buttonRematch {
+  padding: var(--space-3) var(--space-8);
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  border: none;
+  cursor: pointer;
+}
+
+.buttonSettings {
+  padding: var(--space-3) var(--space-8);
+  background-color: var(--color-secondary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  border: none;
+  cursor: pointer;
+}
+
+.buttonHome {
+  padding: var(--space-3) var(--space-8);
+  border: 1px solid var(--color-neutral-200);
+  background-color: var(--color-white);
+  color: var(--color-neutral-900);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  cursor: pointer;
+}
+
+.buttonHome:hover {
+  background-color: var(--color-neutral-100);
+}
+
+/* Timer Layout */
+.timerContainer {
+  width: 100%;
+  max-width: 28rem;
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.timerText {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: var(--text-xl);
+  width: 2rem;
+}
+
+.timerBarWrapper {
+  flex: 1;
+}

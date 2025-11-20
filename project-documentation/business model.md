@@ -1,8 +1,8 @@
-# Math Dash – Business Model & Pricing (Draft)
+﻿# Math Dash – Business Model & Pricing (Draft)
 
 ## 1. Product & Market Positioning
 
-- **Core Product**: Browser-based math fluency game for children 6–11, focused on number facts (times tables, division, number bonds, doubles/halves) with adaptive practice, progress dashboards, and basic classroom tools.
+- **Core Product**: Browser-based math fluency game for children 6–11, focused on math facts (addition/subtraction facts including number-bond style make-10/20, multiplication facts/times tables, division facts, doubles/halves, square numbers) with adaptive practice, progress dashboards, and basic classroom tools.
 - **Target Segments**:
   - **Home**: Parents/caregivers wanting low-friction, effective daily practice.
   - **Schools**: Primary teachers needing warm-ups and tracking for small classes or full cohorts.
@@ -31,13 +31,13 @@ This supports a **low-price / high-volume** strategy for the core business while
   - **EUR €7.99**
 - **Scope**:
   - One-time payment.
-  - Unlocks all standard non-AI features: all tables (2×–12×) and their division counterparts, number bonds (10, 20), extended doubles/halves, adaptive mode, Dash Duel, and basic progress dashboards.
+  - Unlocks all standard non-AI features: all tables (2×–12×) and their division counterparts, Make 10/20/100 number-bond style modes and missing-number facts, extended doubles/halves, adaptive mode, Dash Duel, and basic progress dashboards.
   - Covers all child profiles in a household on all devices associated with the same store account/email.
 - **Free Tier**:
   - Always-available free starter content:
     - Times tables: 2×, 3×, 4×.
     - Division: inverse of 2×, 3×, 4× tables.
-    - Number bonds: bonds to 10.
+    - Addition & Subtraction: Make 10 (Number Bonds) and simple missing-number facts to 10.
     - Doubles/halves: simple ranges up to ~10.
   - Purpose: meaningful free experience + natural upsell path when users want higher tables and more content.
 

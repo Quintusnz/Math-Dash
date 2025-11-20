@@ -1,0 +1,21 @@
+.card {
+  background: var(--surface-card);
+  color: var(--color-neutral-900);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-xl);
+}
+
+.muted {
+  background: linear-gradient(180deg, #ffffff, #f7f9fc);
+}
+
+.elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.surfaceMuted {
+  background: var(--surface-muted);
+  border-color: var(--border-subtle);
+}

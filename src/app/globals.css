@@ -36,6 +36,24 @@
   --color-neutral-900: #111827;
   --color-white: #FFFFFF;
 
+  /* UI surface tokens */
+  --surface-base: var(--color-neutral-50);
+  --surface-card: #FFFFFF;
+  --surface-muted: #F6F7FB;
+  --border-subtle: #E5E7EB;
+  --border-strong: #D1D5DB;
+  --text-muted: #6B7280;
+
+  /* Legacy CSS custom properties used across modules */
+  --card: var(--surface-card);
+  --card-foreground: var(--color-neutral-900);
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --border: var(--border-subtle);
+  --foreground: var(--color-neutral-900);
+  --primary: var(--color-primary-500);
+  --primary-foreground: var(--color-white);
+
   /* -------------------------------------------------------------------------- */
   /*                                 Typography                                 */
   /* -------------------------------------------------------------------------- */
@@ -43,49 +61,86 @@
   --font-heading: 'Nunito', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
+  /* Type scale */
+  --text-display: 3.05rem; /* Hero titles */
+  --text-h1: 2.44rem;
+  --text-h2: 1.95rem;
+  --text-h3: 1.56rem;
+  --text-h4: 1.25rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-caption: 0.75rem;
+  --text-button: 1rem;
 
   /* -------------------------------------------------------------------------- */
   /*                                   Spacing                                  */
   /* -------------------------------------------------------------------------- */
 
-  --space-1: 4px;
-  --space-2: 8px;
+  /* 8px base scale */
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Legacy aliases used across existing CSS (kept for compatibility) */
+  --space-1: var(--space-xs);
+  --space-2: var(--space-sm);
   --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
+  --space-4: var(--space-md);
+  --space-6: var(--space-lg);
+  --space-8: var(--space-xl);
+  --space-12: var(--space-2xl);
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Radius                                   */
+  /*                               Radius & Elevation                           */
   /* -------------------------------------------------------------------------- */
 
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.08);
+  --shadow-md: 0 8px 24px rgba(17, 24, 39, 0.12);
+  --shadow-lg: 0 16px 48px rgba(17, 24, 39, 0.16);
 
   /* -------------------------------------------------------------------------- */
   /*                                 Animations                                 */
   /* -------------------------------------------------------------------------- */
 
-  --ease-spring: cubic-bezier(0.4, 0.0, 0.2, 1);
-  --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --motion-duration-micro: 120ms;
+  --motion-duration-short: 220ms;
+  --motion-duration-medium: 340ms;
+  --motion-duration-long: 600ms;
+
+  --motion-ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --motion-ease-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --motion-ease-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Layout                                   */
+  /* -------------------------------------------------------------------------- */
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
 }
 
 /* Reset & Base Styles */
 body {
   font-family: var(--font-body);
-  background-color: var(--color-neutral-50);
+  background: var(--color-neutral-50);
   color: var(--color-neutral-900);
   margin: 0;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -93,6 +148,16 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   margin: 0;
+}
+
+a {
+  color: var(--color-primary-600);
+  text-decoration: none;
+  transition: color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+a:hover {
+  color: var(--color-primary-500);
 }
 
 button {

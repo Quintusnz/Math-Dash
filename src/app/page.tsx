@@ -1,22 +1,23 @@
-import Link from 'next/link';
+import styles from './page.module.css';
+import { LinkButton } from '@/components/ui/Button';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 gap-8">
-      <h1 className="text-4xl font-bold text-[var(--color-primary-500)]">Math Dash</h1>
-      <div className="flex gap-4">
-        <Link 
-          href="/play" 
-          className="px-8 py-4 bg-[var(--color-primary-500)] text-white rounded-full text-xl font-bold hover:bg-[var(--color-primary-600)] transition-colors"
-        >
-          Play Now
-        </Link>
-        <Link 
-          href="/grown-ups" 
-          className="px-8 py-4 bg-[var(--color-neutral-200)] text-[var(--color-neutral-900)] rounded-full text-xl font-bold hover:bg-[var(--color-neutral-300)] transition-colors"
-        >
-          Grown-Ups
-        </Link>
+    <div className={styles.page}>
+      <div className={styles.heroCard}>
+        <span className={styles.badge}>60-second math missions</span>
+        <h1 className={styles.title}>Math Dash</h1>
+        <p className={styles.lead}>
+          Quick-fire drills for kids, with progress insights for grown-ups.
+        </p>
+        <div className={styles.actions}>
+          <LinkButton href="/play" variant="primary" size="lg">
+            Play Now
+          </LinkButton>
+          <LinkButton href="/grown-ups" variant="secondary" size="lg">
+            Grown-Ups
+          </LinkButton>
+        </div>
       </div>
     </div>
   );

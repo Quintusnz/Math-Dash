@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import styles from './DuelLayout.module.css';
 
 interface DuelLayoutProps {
   player1: ReactNode;
@@ -8,32 +9,30 @@ interface DuelLayoutProps {
 
 export function DuelLayout({ player1, player2, timer }: DuelLayoutProps) {
   return (
-    <div className="flex flex-col h-screen w-full bg-background overflow-hidden">
+    <div className={styles.container}>
       {/* Top Bar with Timer */}
-      <div className="h-16 flex items-center justify-center border-b border-border bg-card z-10 shadow-sm">
+      <div className={styles.topBar}>
         {timer}
       </div>
 
       {/* Split Screen Area */}
-      <div className="flex-1 flex flex-row relative">
+      <div className={styles.splitArea}>
         {/* Player 1 (Left) */}
-        <div className="w-1/2 h-full border-r border-border">
+        <div className={styles.playerLeft}>
           {player1}
         </div>
 
         {/* Player 2 (Right) */}
-        <div className="w-1/2 h-full">
+        <div className={styles.playerRight}>
           {player2}
         </div>
         
         {/* VS Badge (Center Overlay) */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                        bg-accent text-accent-foreground font-black text-xl 
-                        w-12 h-12 rounded-full flex items-center justify-center 
-                        border-4 border-background shadow-lg z-20">
+        <div className={styles.vsBadge}>
           VS
         </div>
       </div>
     </div>
   );
 }
+

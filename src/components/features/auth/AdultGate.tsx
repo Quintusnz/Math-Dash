@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAdminStore } from '@/lib/stores/useAdminStore';
 import styles from './AdultGate.module.css';
+import { Button } from '@/components/ui/Button';
 
 interface AdultGateProps {
   children: React.ReactNode;
@@ -12,14 +13,13 @@ interface AdultGateProps {
 
 export default function AdultGate({ children }: AdultGateProps) {
   const router = useRouter();
-  const { isVerified, verify, checkExpiry } = useAdminStore();
+  const { verify, checkExpiry } = useAdminStore();
   const [showGate, setShowGate] = useState(true);
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState(false);
   const [challenge, setChallenge] = useState<{ a: number; b: number } | null>(null);
 
   useEffect(() => {
-    // Check if we have a valid session
     const isValid = checkExpiry();
     if (isValid) {
       setShowGate(false);
@@ -30,8 +30,6 @@ export default function AdultGate({ children }: AdultGateProps) {
   }, [checkExpiry]);
 
   const generateChallenge = () => {
-    // Generate numbers between 11 and 19 for 'a' and 3 and 9 for 'b'
-    // This ensures it's slightly beyond basic 1-10 tables but solvable
     const a = Math.floor(Math.random() * 9) + 11;
     const b = Math.floor(Math.random() * 7) + 3;
     setChallenge({ a, b });
@@ -50,7 +48,6 @@ export default function AdultGate({ children }: AdultGateProps) {
     } else {
       setError(true);
       setAnswer('');
-      // Generate a new challenge on failure to prevent guessing
       setTimeout(generateChallenge, 500);
     }
   };
@@ -67,7 +64,7 @@ export default function AdultGate({ children }: AdultGateProps) {
     <AnimatePresence>
       {showGate && (
         <div className={styles.overlay}>
-          <motion.div 
+          <motion.div
             className={styles.modal}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -98,19 +95,16 @@ export default function AdultGate({ children }: AdultGateProps) {
               </div>
 
               <div className={styles.actions}>
-                <button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={handleCancel}
-                  className={`${styles.button} ${styles.cancelButton}`}
+                  variant="secondary"
                 >
                   Go Back
-                </button>
-                <button 
-                  type="submit"
-                  className={`${styles.button} ${styles.submitButton}`}
-                >
+                </Button>
+                <Button type="submit">
                   Continue
-                </button>
+                </Button>
               </div>
             </form>
           </motion.div>
