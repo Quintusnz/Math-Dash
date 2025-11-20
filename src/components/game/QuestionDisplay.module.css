@@ -1,0 +1,14 @@
+.container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.text {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--foreground);
+  text-align: center;
+}

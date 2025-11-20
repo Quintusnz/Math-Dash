@@ -1,0 +1,88 @@
+{
+  "name": "Math Dash Design Tokens",
+  "version": "1.0.0",
+  "tokens": {
+    "color": {
+      "primary": {
+        "500": { "value": "#3056D3", "type": "color", "description": "Main brand & CTAs" },
+        "600": { "value": "#2338A0", "type": "color", "description": "Hover / pressed / emphasis" },
+        "100": { "value": "#E0E7FF", "type": "color", "description": "Soft backgrounds" },
+        "50": { "value": "#F3F6FF", "type": "color", "description": "Page background tints" }
+      },
+      "secondary": {
+        "500": { "value": "#1FB8A6", "type": "color", "description": "Fresh teal, supportive" },
+        "100": { "value": "#D2F5F1", "type": "color", "description": "Backgrounds for topic cards" },
+        "50": { "value": "#F0FBFA", "type": "color", "description": "Large background washes" }
+      },
+      "accent": {
+        "gold": { "value": "#FFB224", "type": "color", "description": "Stars, trophies, streak counters" },
+        "coral": { "value": "#FF5A7A", "type": "color", "description": "Achievements, notifications" },
+        "sky": { "value": "#38BDF8", "type": "color", "description": "Info highlights" }
+      },
+      "neutral": {
+        "50": { "value": "#F9FAFB", "type": "color", "description": "App background" },
+        "100": { "value": "#F3F4F6", "type": "color", "description": "Card backgrounds" },
+        "200": { "value": "#E5E7EB", "type": "color", "description": "Borders, separators" },
+        "300": { "value": "#D1D5DB", "type": "color", "description": "Muted icons" },
+        "400": { "value": "#9CA3AF", "type": "color", "description": "Secondary text" },
+        "500": { "value": "#6B7280", "type": "color", "description": "Body text" },
+        "700": { "value": "#374151", "type": "color", "description": "High-emphasis headings" },
+        "900": { "value": "#111827", "type": "color", "description": "Logo wordmark" }
+      },
+      "semantic": {
+        "success": { "value": "#16A34A", "type": "color" },
+        "warning": { "value": "#FACC15", "type": "color" },
+        "error": { "value": "#DC2626", "type": "color" },
+        "info": { "value": "#0EA5E9", "type": "color" }
+      },
+      "gradient": {
+        "brand": { "value": "linear-gradient(to right, #3056D3, #FF5A7A)", "type": "color" }
+      }
+    },
+    "font": {
+      "family": {
+        "heading": { "value": "Nunito, sans-serif", "type": "fontFamilies" },
+        "body": { "value": "Inter, sans-serif", "type": "fontFamilies" },
+        "mono": { "value": "JetBrains Mono, monospace", "type": "fontFamilies" }
+      },
+      "size": {
+        "display": { "value": "3.05rem", "type": "fontSizes" },
+        "h1": { "value": "2.44rem", "type": "fontSizes" },
+        "h2": { "value": "1.95rem", "type": "fontSizes" },
+        "h3": { "value": "1.56rem", "type": "fontSizes" },
+        "body": { "value": "1rem", "type": "fontSizes" },
+        "sm": { "value": "0.875rem", "type": "fontSizes" }
+      },
+      "weight": {
+        "regular": { "value": 400, "type": "fontWeights" },
+        "bold": { "value": 700, "type": "fontWeights" },
+        "extrabold": { "value": 800, "type": "fontWeights" }
+      }
+    },
+    "spacing": {
+      "xs": { "value": "4px", "type": "spacing" },
+      "sm": { "value": "8px", "type": "spacing" },
+      "md": { "value": "16px", "type": "spacing" },
+      "lg": { "value": "24px", "type": "spacing" },
+      "xl": { "value": "32px", "type": "spacing" },
+      "2xl": { "value": "48px", "type": "spacing" }
+    },
+    "radius": {
+      "sm": { "value": "4px", "type": "borderRadius" },
+      "md": { "value": "8px", "type": "borderRadius" },
+      "lg": { "value": "16px", "type": "borderRadius" },
+      "full": { "value": "9999px", "type": "borderRadius" }
+    },
+    "animation": {
+      "duration": {
+        "fast": { "value": "150ms", "type": "time" },
+        "normal": { "value": "300ms", "type": "time" },
+        "slow": { "value": "500ms", "type": "time" }
+      },
+      "easing": {
+        "spring": { "value": "cubic-bezier(0.4, 0.0, 0.2, 1)", "type": "cubicBezier" },
+        "bounce": { "value": "cubic-bezier(0.175, 0.885, 0.32, 1.275)", "type": "cubicBezier" }
+      }
+    }
+  }
+}

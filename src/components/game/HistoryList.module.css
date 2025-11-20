@@ -1,0 +1,40 @@
+.container {
+  margin-top: var(--space-xl);
+  width: 100%;
+  max-width: 400px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.score {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.date {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}

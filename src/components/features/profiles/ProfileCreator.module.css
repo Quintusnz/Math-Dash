@@ -1,0 +1,78 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+.input, .select {
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.avatarGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-xs);
+}
+
+.avatarBtn {
+  font-size: 1.5rem;
+  padding: var(--space-xs);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.avatarBtn:hover {
+  background: var(--accent);
+}
+
+.selected {
+  border-color: var(--primary);
+  background: var(--primary-foreground);
+  transform: scale(1.1);
+}
+
+.submitBtn {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+}
