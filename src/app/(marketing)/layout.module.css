@@ -1,0 +1,133 @@
+.shell {
+  min-height: 100vh;
+  background: radial-gradient(120% 120% at 50% 0%, #e7edff 0%, #f5f7fc 50%, #f9fafb 100%);
+  color: var(--color-neutral-900);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerInner {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 800;
+  font-size: var(--text-body-lg);
+  color: var(--color-primary-600);
+  text-decoration: none;
+}
+
+.brand img {
+  height: 36px;
+  width: auto;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-left: auto;
+}
+
+.navLink {
+  color: var(--color-neutral-700);
+  font-weight: 600;
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  transition: color var(--motion-duration-short) var(--motion-ease-standard),
+    background-color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.navLink:hover {
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
+}
+
+.cta {
+  margin-left: var(--space-md);
+}
+
+.main {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-3xl) var(--space-xl) var(--space-4xl);
+}
+
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-xl) var(--space-xl) var(--space-2xl);
+  background: #ffffff;
+}
+
+.footerInner {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.footerMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+}
+
+.footerMeta img {
+  height: 32px;
+  width: auto;
+}
+
+.footerLinks {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.footerLink {
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footerLink:hover {
+  color: var(--color-primary-600);
+}
+
+@media (max-width: 768px) {
+  .headerInner {
+    padding: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: space-between;
+    order: 2;
+  }
+
+  .cta {
+    margin-left: 0;
+  }
+
+  .main {
+    padding: var(--space-2xl) var(--space-md);
+  }
+}
