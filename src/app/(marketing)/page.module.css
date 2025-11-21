@@ -250,7 +250,17 @@
   color: var(--text-muted);
 }
 
+.cardContentRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  height: 100%;
+}
 
+.span3 {
+  grid-column: span 3;
+}
 
 .cardIconFeedback {
   position: absolute;
@@ -292,6 +302,14 @@
   color: var(--color-secondary-500);
   opacity: 0.2;
   flex-shrink: 0;
+  transform: rotate(-6deg);
+  transition: transform var(--motion-duration-medium) var(--motion-ease-spring),
+              opacity var(--motion-duration-medium) var(--motion-ease-standard);
+}
+
+.bentoCard:hover .cardIconPrivacy {
+  transform: rotate(0deg) scale(1.15);
+  opacity: 0.5;
 }
 
 /* Visuals */

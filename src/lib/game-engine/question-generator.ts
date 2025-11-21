@@ -5,7 +5,9 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export function generateQuestion(
   difficulty: Difficulty = 'easy', 
-  weakFacts: MasteryRecord[] = []
+  weakFacts: MasteryRecord[] = [],
+  allowedOperations: Question['type'][] = ['addition', 'subtraction', 'multiplication', 'division'],
+  selectedNumbers: number[] = []
 ): Question {
   // 30% chance to pick a weak fact if available
   if (weakFacts.length > 0 && Math.random() < 0.3) {
@@ -29,39 +31,91 @@ export function generateQuestion(
       else if (sym === '×') { answer = num1 * num2; type = 'multiplication'; }
       else if (sym === '÷') { answer = num1 / num2; type = 'division'; }
       
-      return {
-        id: crypto.randomUUID(),
-        text: `${num1} ${sym} ${num2}`,
-        answer,
-        type,
-        fact: weakFact.fact
-      };
+      // Only use weak fact if it matches allowed operations AND selected numbers (if any)
+      const matchesNumbers = selectedNumbers.length === 0 || 
+        (type === 'addition' && (selectedNumbers.includes(num1) || selectedNumbers.includes(num2))) ||
+        (type === 'multiplication' && (selectedNumbers.includes(num1) || selectedNumbers.includes(num2))) ||
+        (type === 'subtraction' && selectedNumbers.includes(num2)) || // Practice subtracting X
+        (type === 'division' && selectedNumbers.includes(num2)); // Practice dividing by X
+
+      if (allowedOperations.includes(type) && matchesNumbers) {
+        return {
+          id: crypto.randomUUID(),
+          text: `${num1} ${sym} ${num2}`,
+          answer,
+          type,
+          fact: weakFact.fact
+        };
+      }
     }
   }
 
-  const type = getRandomType(difficulty);
+  const type = getRandomType(difficulty, allowedOperations);
   let num1, num2, answer;
 
+  // Helper to get a number from selected list or random
+  const getTargetNumber = () => {
+    if (selectedNumbers.length > 0) {
+      return selectedNumbers[Math.floor(Math.random() * selectedNumbers.length)];
+    }
+    return null;
+  };
+
   switch (type) {
-    case 'addition':
-      [num1, num2] = getNumbers(difficulty);
+    case 'addition': {
+      const target = getTargetNumber();
+      if (target !== null) {
+        num1 = target;
+        [num2] = getNumbers(difficulty); // Get random other number
+        // Randomize order
+        if (Math.random() > 0.5) [num1, num2] = [num2, num1];
+      } else {
+        [num1, num2] = getNumbers(difficulty);
+      }
       answer = num1 + num2;
       break;
-    case 'subtraction':
-      [num1, num2] = getNumbers(difficulty);
-      // Ensure positive result for now
-      if (num1 < num2) [num1, num2] = [num2, num1];
+    }
+    case 'subtraction': {
+      const target = getTargetNumber();
+      if (target !== null) {
+        // Practice subtracting BY target (e.g. X - 5)
+        num2 = target;
+        const [other] = getNumbers(difficulty);
+        num1 = other + num2; // Ensure positive result
+      } else {
+        [num1, num2] = getNumbers(difficulty);
+        if (num1 < num2) [num1, num2] = [num2, num1];
+      }
       answer = num1 - num2;
       break;
-    case 'multiplication':
-      [num1, num2] = getNumbers(difficulty, true); // Smaller numbers for multiplication
+    }
+    case 'multiplication': {
+      const target = getTargetNumber();
+      if (target !== null) {
+        num1 = target;
+        // For multiplication, we usually practice 1-12 tables against 1-12
+        num2 = Math.floor(Math.random() * 12) + 1;
+        if (Math.random() > 0.5) [num1, num2] = [num2, num1];
+      } else {
+        [num1, num2] = getNumbers(difficulty, true);
+      }
       answer = num1 * num2;
       break;
-    case 'division':
-      // Generate multiplication first then reverse it
-      [num2, answer] = getNumbers(difficulty, true);
-      num1 = num2 * answer;
+    }
+    case 'division': {
+      const target = getTargetNumber();
+      if (target !== null) {
+        // Practice dividing BY target (e.g. X / 5)
+        num2 = target;
+        // Answer should be within reasonable range (1-12)
+        answer = Math.floor(Math.random() * 12) + 1;
+        num1 = num2 * answer;
+      } else {
+        [num2, answer] = getNumbers(difficulty, true);
+        num1 = num2 * answer;
+      }
       break;
+    }
     default:
       num1 = 1; num2 = 1; answer = 2;
   }
@@ -78,12 +132,9 @@ export function generateQuestion(
   };
 }
 
-function getRandomType(difficulty: Difficulty): Question['type'] {
-  const types: Question['type'][] = ['addition', 'subtraction'];
-  if (difficulty !== 'easy') types.push('multiplication');
-  if (difficulty === 'hard') types.push('division');
-  
-  return types[Math.floor(Math.random() * types.length)];
+function getRandomType(difficulty: Difficulty, allowedOperations: Question['type'][]): Question['type'] {
+  if (allowedOperations.length === 0) return 'addition';
+  return allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
 }
 
 function getNumbers(difficulty: Difficulty, isMultiplication = false): [number, number] {

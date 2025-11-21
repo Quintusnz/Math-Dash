@@ -13,6 +13,7 @@ import { TimerBar } from "@/components/game/TimerBar";
 import { QuestionDisplay } from "@/components/game/QuestionDisplay";
 import { Numpad } from "@/components/game/Numpad";
 import { ResultScreen } from "@/components/game/ResultScreen";
+import { GameSetup } from "@/components/game/setup/GameSetup";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useGameSound } from "@/lib/hooks/useGameSound";
@@ -31,6 +32,7 @@ export default function PlayPage() {
 
   const { 
     status, 
+    config,
     timeLeft, 
     score, 
     currentQuestion, 
@@ -42,7 +44,8 @@ export default function PlayPage() {
     setQuestion, 
     appendInput, 
     clearInput, 
-    submitAnswer 
+    submitAnswer,
+    endGame
   } = useGameStore();
 
   // Game Loop & Timer
@@ -58,20 +61,28 @@ export default function PlayPage() {
     return () => clearInterval(interval);
   }, [status, tick]);
 
+  // Check for Sprint Mode End Condition
+  useEffect(() => {
+    if (status === 'playing' && config.mode === 'sprint') {
+      if (questionsCorrect >= config.questionCount) {
+        endGame();
+      }
+    }
+  }, [status, config.mode, config.questionCount, questionsCorrect, endGame]);
+
   // Low time warning
   useEffect(() => {
-    if (status === 'playing' && timeLeft <= 5 && timeLeft > 0) {
+    if (status === 'playing' && config.mode === 'timed' && timeLeft <= 5 && timeLeft > 0) {
       play('TICK');
     }
-  }, [timeLeft, status, play]);
+  }, [timeLeft, status, play, config.mode]);
 
-  // Initial Start
+  // Initialize Game Session when status changes to playing
   useEffect(() => {
-    // Initialize Engagement Manager (seed achievements)
-    EngagementManager.initialize();
-
-    // Only start if we are truly idle to prevent reset on hot reload
-    if (status === 'idle') {
+    if (status === 'playing' && questionsAnswered === 0) {
+      // Initialize Engagement Manager (seed achievements)
+      EngagementManager.initialize();
+      
       hasSavedRef.current = false;
       sessionIdRef.current = crypto.randomUUID();
       setUnlockedAchievements([]);
@@ -80,14 +91,16 @@ export default function PlayPage() {
       if (activeProfileId) {
         MasteryTracker.getWeakFacts(activeProfileId).then(facts => {
           weakFactsRef.current = facts;
+          // Generate first question AFTER loading weak facts to potentially use one
+          setQuestion(generateQuestion(config.difficulty, facts, config.operations, config.selectedNumbers));
         });
+      } else {
+        setQuestion(generateQuestion(config.difficulty, [], config.operations, config.selectedNumbers));
       }
 
-      startGame();
-      setQuestion(generateQuestion('easy'));
       questionStartTimeRef.current = Date.now();
     }
-  }, [status, startGame, setQuestion, activeProfileId]);
+  }, [status, activeProfileId, config, setQuestion, questionsAnswered]);
 
   // Save Session on Finish
   useEffect(() => {
@@ -100,8 +113,8 @@ export default function PlayPage() {
         score,
         questionsAnswered,
         questionsCorrect,
-        mode: 'dash-classic',
-        durationSeconds: 60 - timeLeft // Assuming 60s round
+        mode: config.mode,
+        durationSeconds: config.mode === 'timed' ? config.duration - timeLeft : 0 // Approximate
       }).then(({ newAchievements }) => {
         if (newAchievements.length > 0) {
           setUnlockedAchievements(newAchievements);
@@ -109,7 +122,7 @@ export default function PlayPage() {
         }
       }).catch(console.error);
     }
-  }, [status, score, questionsAnswered, questionsCorrect, activeProfileId, timeLeft, play]);
+  }, [status, score, questionsAnswered, questionsCorrect, activeProfileId, timeLeft, play, config]);
 
   // Handle Answer Submission
   const handleSubmit = () => {
@@ -130,7 +143,7 @@ export default function PlayPage() {
     if (isCorrect) {
       play('CORRECT');
       // Generate next question
-      setQuestion(generateQuestion('easy', weakFactsRef.current));
+      setQuestion(generateQuestion(config.difficulty, weakFactsRef.current, config.operations, config.selectedNumbers));
       questionStartTimeRef.current = Date.now();
     } else {
       play('WRONG');
@@ -164,6 +177,10 @@ export default function PlayPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [status, appendInput, clearInput, handleSubmit, play, vibrate]);
 
+  if (status === 'idle') {
+    return <GameSetup onStart={() => {}} />;
+  }
+
   if (status === 'finished') {
     return (
       <ResultScreen 
@@ -184,7 +201,7 @@ export default function PlayPage() {
           }
           
           startGame();
-          setQuestion(generateQuestion('easy', weakFactsRef.current));
+          // Question generation happens in the useEffect when status becomes playing
         }}
         onHome={() => router.push('/')}
       />
@@ -195,10 +212,22 @@ export default function PlayPage() {
     <GameCanvas>
       <div className={styles.header} role="status" aria-label="Game Status">
         <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
-        <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
+        {config.mode === 'timed' && (
+          <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
+        )}
+        {config.mode === 'sprint' && (
+          <div className={styles.timer} role="timer" aria-label="Questions remaining">
+            {questionsCorrect} / {config.questionCount}
+          </div>
+        )}
       </div>
       
-      <TimerBar timeLeft={timeLeft} totalTime={60} />
+      {config.mode === 'timed' && (
+        <TimerBar timeLeft={timeLeft} totalTime={config.duration} />
+      )}
+      {config.mode === 'sprint' && (
+        <TimerBar timeLeft={questionsCorrect} totalTime={config.questionCount} />
+      )}
       
       <div className={styles.gameArea} aria-live="polite" aria-atomic="true">
         <AnimatePresence mode="wait">
