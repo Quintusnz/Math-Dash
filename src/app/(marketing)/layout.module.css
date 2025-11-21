@@ -1,22 +1,25 @@
 .shell {
   min-height: 100vh;
-  background: radial-gradient(120% 120% at 50% 0%, #e7edff 0%, #f5f7fc 50%, #f9fafb 100%);
+  background: 
+    radial-gradient(circle at 15% 0%, rgba(48, 86, 211, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 0%, rgba(31, 184, 166, 0.08) 0%, transparent 40%),
+    var(--color-neutral-50);
   color: var(--color-neutral-900);
 }
 
 .header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.86);
-  border-bottom: 1px solid var(--border-subtle);
+  z-index: 100;
+  width: 100%;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
 }
 
 .headerInner {
-  max-width: var(--container-xl);
-  margin: 0 auto;
-  padding: var(--space-md) var(--space-xl);
+  padding: var(--space-sm) var(--space-lg);
   display: flex;
   align-items: center;
   gap: var(--space-lg);

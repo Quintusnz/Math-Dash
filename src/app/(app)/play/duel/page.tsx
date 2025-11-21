@@ -232,7 +232,6 @@ export default function DuelPage() {
           onClear={() => clearInput('p1')}
           onSubmit={handleP1Submit}
           disabled={status !== 'playing'}
-          color="bg-blue-50/30"
         />
       }
       player2={
@@ -245,7 +244,6 @@ export default function DuelPage() {
           onClear={() => clearInput('p2')}
           onSubmit={handleP2Submit}
           disabled={status !== 'playing'}
-          color="bg-red-50/30"
         />
       }
     />

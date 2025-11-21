@@ -17,7 +17,6 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             <Link href="/about" className={styles.navLink}>About</Link>
             <Link href="/pricing" className={styles.navLink}>Pricing</Link>
             <Link href="/grown-ups" className={styles.navLink}>Grown-Ups</Link>
-            <Link href="/play" className={styles.navLink}>Play</Link>
             <span className={styles.cta}>
               <LinkButton href="/play" size="md">Start Playing</LinkButton>
             </span>
