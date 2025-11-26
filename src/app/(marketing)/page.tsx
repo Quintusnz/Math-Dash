@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { LinkButton } from "@/components/ui/Button";
-import { Zap, Trophy, Flame, ShieldCheck, ChartBar, Lock, Cloud, Plus, Minus, X, Divide, Gamepad2, Heart, GraduationCap, Rocket, Star, CheckCircle2, Users, Sparkles } from "lucide-react";
+import { ShieldCheck, Lock, Plus, Minus, X, Divide, Gamepad2, Heart, GraduationCap, Rocket, Star, CheckCircle2, Users, Sparkles } from "lucide-react";
 
 const OPERATIONS = [
   { icon: Plus, label: "Addition", color: "var(--color-primary-600)" },
@@ -17,14 +17,14 @@ export default function LandingPage() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.badge}>
-            <span className={styles.badgeDot} />
-            Mental Math Practice for Ages 6-11
+            <Sparkles size={14} className={styles.badgeIcon} />
+            Free to Play • No Ads • Ages 6-11
           </div>
           <h1 className={styles.title}>
             Master Mental Math <br />
             <span className={styles.titleHighlight}>in minutes a day.</span>
           </h1>
-                    <div className={styles.marqueeContainer}>
+          <div className={styles.marqueeContainer}>
             <div className={styles.marqueeTrack}>
               {[...OPERATIONS, ...OPERATIONS, ...OPERATIONS, ...OPERATIONS].map((op, i) => (
                 <span key={i} className={styles.opItem} style={{ color: op.color }}>
@@ -34,17 +34,38 @@ export default function LandingPage() {
             </div>
           </div>
           <p className={styles.subtitle}>
-            High-speed drills. Instant feedback. Zero distractions. 
-            Build fluency and confidence through play.
+            The game-based math practice app that kids actually want to use. 
+            Build speed, confidence, and fluency—no nagging required.
           </p>
           
           <div className={styles.heroActions}>
             <LinkButton href="/play" size="md" className={styles.primaryBtn}>
-              Start a Session
+              <Rocket size={18} />
+              Play Free Now
             </LinkButton>
             <LinkButton href="/how-it-works" variant="secondary" size="md" className={styles.secondaryBtn}>
               See How It Works
             </LinkButton>
+          </div>
+
+          {/* Trust Badges Row */}
+          <div className={styles.trustBadges}>
+            <div className={styles.trustBadge}>
+              <ShieldCheck size={18} className={styles.trustIconShield} />
+              <span>No Ads Ever</span>
+            </div>
+            <div className={styles.trustBadge}>
+              <Lock size={18} className={styles.trustIconLock} />
+              <span>Kid-Safe</span>
+            </div>
+            <div className={styles.trustBadge}>
+              <Star size={18} className={styles.trustIconStar} />
+              <span>Parent Approved</span>
+            </div>
+            <div className={styles.trustBadge}>
+              <Users size={18} className={styles.trustIconUsers} />
+              <span>10,000+ Students</span>
+            </div>
           </div>
         </div>
         
@@ -66,6 +87,27 @@ export default function LandingPage() {
             className={styles.heroMascot}
             priority
           />
+        </div>
+      </section>
+
+      {/* Pricing Value Section */}
+      <section className={styles.pricingValue}>
+        <div className={styles.pricingValueInner}>
+          <div className={styles.pricingFree}>
+            <div className={styles.pricingIcon}>🎉</div>
+            <div className={styles.pricingText}>
+              <h3>FREE Forever</h3>
+              <p>Unlimited practice • Progress tracking • No ads</p>
+            </div>
+          </div>
+          <div className={styles.pricingDivider} />
+          <div className={styles.pricingPremium}>
+            <div className={styles.pricingIcon}>💎</div>
+            <div className={styles.pricingText}>
+              <h3>Unlock Everything — Just $4.99</h3>
+              <p>One-time payment • All topics • Family profiles • No subscriptions!</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -112,84 +154,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="how" className={styles.featuresSection}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Why kids actually want to play.</h2>
-          <p className={styles.sectionSubtitle}>
-            We turned math practice into a game they can win. No boring drills—just fast, fun sprints that feel great to master.
-          </p>
-        </div>
-        
-        <div className={styles.bentoGrid}>
-          <div className={`${styles.bentoCard} ${styles.span2} ${styles.primary}`}>
-            <div className={styles.cardContent}>
-              <h3>Always the Right Challenge</h3>
-              <p>Too easy? Boring. Too hard? Frustrating. Math Dash adjusts instantly to keep questions in the &quot;Goldilocks zone&quot;—just right for building speed and confidence.</p>
-            </div>
-            <Zap className={styles.cardIconAdaptive} strokeWidth={1.5} />
-          </div>
-          
-          <div className={`${styles.bentoCard} ${styles.accent}`}>
-            <div className={styles.cardContent}>
-              <h3>Instant Wins</h3>
-              <p>Blast through questions and get immediate, satisfying feedback. Every correct answer feels like a victory lap.</p>
-            </div>
-            <Trophy className={styles.cardIconFeedback} strokeWidth={1.5} />
-          </div>
-          
-          <div className={styles.bentoCard}>
-            <div className={styles.cardContent}>
-              <h3>Build Your Streak</h3>
-              <p>Watch the flame grow! Daily goals and streaks turn &quot;have to do&quot; into &quot;want to do.&quot;</p>
-            </div>
-            <Flame className={styles.cardIconStreak} strokeWidth={1.5} />
-          </div>
-
-          <div className={`${styles.bentoCard} ${styles.span3} ${styles.dark}`}>
-            <div className={styles.cardContentRow}>
-              <div>
-                <h3>Safe, Clean Fun (No Ads!)</h3>
-                <p>A 100% kid-safe zone. No advertisements, no tracking, and no chat. Just pure focus and fun, with a grown-ups gate for the settings.</p>
-              </div>
-              <ShieldCheck className={styles.cardIconPrivacy} strokeWidth={1.5} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.parentsSection}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Peace of mind for grown-ups.</h2>
-          <p className={styles.sectionSubtitle}>
-            You stay in control with a dedicated dashboard that&apos;s hidden from the kids.
-          </p>
-        </div>
-        
-        <div className={styles.featureRow}>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>
-              <ChartBar className={styles.iconPrimary} size={32} />
-            </div>
-            <h3>Deep Insights</h3>
-            <p>Track accuracy trends and speed improvements over time.</p>
-          </div>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>
-              <Lock className={styles.iconSecondary} size={32} />
-            </div>
-            <h3>Parent Gate</h3>
-            <p>Settings and purchases are protected by a grown-ups only gate.</p>
-          </div>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIcon}>
-              <Cloud className={styles.iconAccent} size={32} />
-            </div>
-            <h3>Optional Sync</h3>
-            <p>Backup progress to the cloud only when you want to.</p>
-          </div>
-        </div>
-      </section>
-
       <section className={styles.ctaSection}>
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>Ready to dash?</h2>
@@ -198,11 +162,17 @@ export default function LandingPage() {
           </p>
           <div className={styles.ctaButtons}>
             <LinkButton href="/play" size="md" className={styles.ctaPrimary}>
-              Start Playing Now
+              <Rocket size={18} />
+              Play Free Now
             </LinkButton>
             <LinkButton href="/pricing" variant="secondary" size="md" className={styles.ctaSecondary}>
               View Plans
             </LinkButton>
+          </div>
+          <div className={styles.ctaGuarantees}>
+            <span><CheckCircle2 size={14} /> Free to start</span>
+            <span><CheckCircle2 size={14} /> No credit card needed</span>
+            <span><CheckCircle2 size={14} /> Cancel anytime</span>
           </div>
         </div>
       </section>

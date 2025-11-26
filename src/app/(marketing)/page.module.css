@@ -31,7 +31,7 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  background: var(--color-primary-100);
+  background: linear-gradient(135deg, var(--color-secondary-50), var(--color-primary-50));
   color: var(--color-primary-600);
   border-radius: var(--radius-full);
   font-size: var(--text-body-sm);
@@ -39,9 +39,19 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   width: fit-content;
-  border: 1px solid var(--color-primary-200);
+  border: 1px solid var(--color-secondary-100);
   box-shadow: var(--shadow-sm);
   animation: pulseScale 3s ease-in-out infinite;
+}
+
+.badgeIcon {
+  color: var(--color-accent-gold);
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
 }
 
 .badgeDot {
@@ -82,21 +92,69 @@
 
 .primaryBtn {
   box-shadow: var(--shadow-md);
-  transition: transform var(--motion-duration-short) var(--motion-ease-spring);
-  min-height: 38px !important;
-  padding: var(--space-xs) var(--space-lg) !important;
-  font-size: var(--text-body) !important;
+  transition: transform var(--motion-duration-short) var(--motion-ease-spring),
+              box-shadow var(--motion-duration-short) var(--motion-ease-standard);
+  min-height: 44px !important;
+  padding: var(--space-sm) var(--space-xl) !important;
+  font-size: var(--text-body-lg) !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-sm);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)) !important;
+  animation: ctaPulse 3s ease-in-out infinite;
+}
+
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 4px 20px -4px rgba(48, 86, 211, 0.4); }
+  50% { box-shadow: 0 8px 30px -4px rgba(48, 86, 211, 0.6); }
 }
 
 .primaryBtn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
   box-shadow: var(--shadow-lg);
 }
 
 .secondaryBtn {
-  min-height: 38px !important;
-  padding: var(--space-xs) var(--space-lg) !important;
-  font-size: var(--text-body) !important;
+  min-height: 44px !important;
+  padding: var(--space-sm) var(--space-xl) !important;
+  font-size: var(--text-body-lg) !important;
+  font-weight: 600 !important;
+}
+
+/* Trust Badges */
+.trustBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.trustBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-neutral-600);
+}
+
+.trustIconShield {
+  color: var(--color-success);
+}
+
+.trustIconLock {
+  color: var(--color-secondary-500);
+}
+
+.trustIconStar {
+  color: var(--color-accent-gold);
+}
+
+.trustIconUsers {
+  color: var(--color-primary-500);
 }
 
 .trustRow {
@@ -191,6 +249,83 @@
   font-weight: 800;
   font-size: var(--text-body-lg);
   white-space: nowrap;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             Pricing Value                                  */
+/* -------------------------------------------------------------------------- */
+
+.pricingValue {
+  margin-top: calc(var(--space-4xl) * -1);
+  padding: 0;
+}
+
+.pricingValueInner {
+  background: linear-gradient(135deg, var(--color-white), var(--color-neutral-50));
+  border: 2px solid var(--color-primary-100);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) var(--space-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xl);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.pricingValueInner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 50%, rgba(48, 86, 211, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 50%, rgba(31, 184, 166, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.pricingFree,
+.pricingPremium {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.pricingIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.pricingText h3 {
+  font-size: var(--text-body-lg);
+  font-weight: 800;
+  color: var(--color-neutral-900);
+  margin-bottom: 2px;
+}
+
+.pricingFree .pricingText h3 {
+  color: var(--color-success);
+}
+
+.pricingPremium .pricingText h3 {
+  color: var(--color-primary-600);
+}
+
+.pricingText p {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-600);
+}
+
+.pricingDivider {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--color-primary-200), transparent);
+  border-radius: var(--radius-full);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -495,16 +630,20 @@
 }
 
 .ctaPrimary {
-  background: var(--color-white);
-  color: var(--color-primary-600);
+  background: var(--color-white) !important;
+  color: var(--color-primary-600) !important;
   border: none;
-  min-height: 38px !important;
-  padding: var(--space-xs) var(--space-lg) !important;
-  font-size: var(--text-body) !important;
+  min-height: 44px !important;
+  padding: var(--space-sm) var(--space-xl) !important;
+  font-size: var(--text-body-lg) !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .ctaPrimary:hover {
-  background: var(--color-neutral-50);
+  background: var(--color-neutral-50) !important;
   transform: translateY(-2px);
 }
 
@@ -513,13 +652,29 @@
   color: var(--color-white);
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(4px);
-  min-height: 38px !important;
-  padding: var(--space-xs) var(--space-lg) !important;
-  font-size: var(--text-body) !important;
+  min-height: 44px !important;
+  padding: var(--space-sm) var(--space-xl) !important;
+  font-size: var(--text-body-lg) !important;
 }
 
 .ctaSecondary:hover {
   background: rgba(255, 255, 255, 0.25);
+}
+
+.ctaGuarantees {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.ctaGuarantees span {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-body-sm);
+  opacity: 0.9;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -716,6 +871,45 @@
 
   .heroActions {
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .trustBadges {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .trustBadge {
+    font-size: var(--text-caption);
+  }
+
+  .pricingValue {
+    padding: var(--space-md);
+  }
+
+  .pricingValueInner {
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .pricingHighlight {
+    font-size: var(--text-h3);
+  }
+
+  .pricingDetails {
+    text-align: center;
+    padding-left: 0;
+    border-left: none;
+    padding-top: var(--space-sm);
+    border-top: 2px solid rgba(31, 184, 166, 0.3);
+  }
+
+  .ctaGuarantees {
+    flex-direction: column;
+    gap: var(--space-xs);
   }
 
   .trustRow {
