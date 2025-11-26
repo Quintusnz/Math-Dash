@@ -16,9 +16,12 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           <nav className={styles.nav}>
             <Link href="/about" className={styles.navLink}>About</Link>
             <Link href="/pricing" className={styles.navLink}>Pricing</Link>
+            <Link href="/kids" className={styles.navLink}>For Kids</Link>
+            <Link href="/parents" className={styles.navLink}>For Parents</Link>
+            <Link href="/teachers" className={styles.navLink}>For Teachers</Link>
             <Link href="/grown-ups" className={styles.navLink}>Grown-Ups</Link>
             <span className={styles.cta}>
-              <LinkButton href="/play" size="md">Start Playing</LinkButton>
+              <LinkButton href="/play" size="md" className={styles.navCta}>Start Playing</LinkButton>
             </span>
           </nav>
         </div>
@@ -35,6 +38,9 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           <div className={styles.footerLinks}>
             <Link href="/about" className={styles.footerLink}>About</Link>
             <Link href="/pricing" className={styles.footerLink}>Pricing</Link>
+            <Link href="/kids" className={styles.footerLink}>For Kids</Link>
+            <Link href="/parents" className={styles.footerLink}>For Parents</Link>
+            <Link href="/teachers" className={styles.footerLink}>For Teachers</Link>
             <Link href="/grown-ups" className={styles.footerLink}>Grown-Ups</Link>
             <Link href="/play" className={styles.footerLink}>Play</Link>
           </div>

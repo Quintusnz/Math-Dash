@@ -1,0 +1,65 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Styles -->
+  <style>
+    .outline { stroke: #172554; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+    .fill-dark { fill: #1f2937; }
+    .fill-blue { fill: #2563eb; }
+    .fill-teal { fill: #34d399; }
+    .fill-yellow { fill: #facc15; }
+  </style>
+
+  <!-- Legs -->
+  <path d="M150 300 L 140 350 A 10 10 0 0 0 150 370 L 180 370 A 10 10 0 0 0 190 360 L 180 300" class="fill-blue outline" />
+  <path d="M250 300 L 260 350 A 10 10 0 0 1 250 370 L 220 370 A 10 10 0 0 1 210 360 L 220 300" class="fill-blue outline" />
+
+  <!-- Arms -->
+  <!-- Right Arm (Down) -->
+  <path d="M280 230 Q 340 230 340 280" stroke="#2563eb" stroke-width="35" stroke-linecap="round" class="outline" />
+  <circle cx="340" cy="280" r="20" class="fill-blue outline" />
+  
+  <!-- Left Arm (Raised) -->
+  <path d="M120 230 Q 60 230 60 180" stroke="#2563eb" stroke-width="35" stroke-linecap="round" class="outline" />
+  <circle cx="60" cy="170" r="25" class="fill-blue outline" />
+
+  <!-- Body -->
+  <rect x="120" y="200" width="160" height="120" rx="30" class="fill-dark outline" />
+  
+  <!-- Chest Emblem -->
+  <circle cx="200" cy="260" r="35" class="fill-blue outline" />
+  <path d="M195 245 L 215 245 L 200 260 L 210 260 L 190 280 L 200 265 L 185 265 Z" class="fill-yellow" stroke="#172554" stroke-width="4" stroke-linejoin="round" />
+
+  <!-- Head Group -->
+  <g>
+    <!-- Antenna -->
+    <line x1="200" y1="90" x2="200" y2="60" class="outline" />
+    <circle cx="200" cy="50" r="12" class="fill-teal outline" />
+
+    <!-- Ears -->
+    <path d="M90 130 L 80 130 A 10 10 0 0 0 80 170 L 90 170 Z" class="fill-blue outline" />
+    <path d="M310 130 L 320 130 A 10 10 0 0 1 320 170 L 310 170 Z" class="fill-blue outline" />
+
+    <!-- Head Shape -->
+    <rect x="90" y="90" width="220" height="140" rx="45" class="fill-dark outline" />
+
+    <!-- Visor/Face Area -->
+    <rect x="110" y="115" width="180" height="90" rx="25" class="fill-blue outline" />
+    
+    <!-- Screen (Dark inside visor) -->
+    <rect x="125" y="125" width="150" height="70" rx="15" class="fill-dark" />
+
+    <!-- Eyes -->
+    <!-- Left Eye -->
+    <g transform="translate(160, 160)">
+      <rect x="-12" y="-4" width="24" height="8" rx="2" class="fill-teal" />
+      <rect x="-4" y="-12" width="8" height="24" rx="2" class="fill-teal" />
+    </g>
+    <!-- Right Eye -->
+    <g transform="translate(240, 160)">
+      <rect x="-12" y="-4" width="24" height="8" rx="2" class="fill-teal" />
+      <rect x="-4" y="-12" width="8" height="24" rx="2" class="fill-teal" />
+    </g>
+
+    <!-- Smile -->
+    <path d="M185 205 Q 200 215 215 205" stroke="#172554" stroke-width="4" stroke-linecap="round" fill="none" />
+  </g>
+</svg>

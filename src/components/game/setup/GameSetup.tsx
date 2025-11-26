@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useGameStore, Operation, GameMode } from "@/lib/stores/useGameStore";
-import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap } from "lucide-react";
+import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap, Calculator, List, Mic, Check } from "lucide-react";
 import styles from "./GameSetup.module.css";
 
 interface GameSetupProps {
@@ -32,8 +32,13 @@ export function GameSetup({ onStart }: GameSetupProps) {
     setStep(3);
   };
 
-  const handleSettingsNext = () => {
+  const handleInputModeSelect = (inputMode: 'numpad' | 'choice' | 'voice') => {
+    setConfig({ inputMode });
     setStep(4);
+  };
+
+  const handleSettingsNext = () => {
+    setStep(5);
   };
 
   const handleStart = () => {
@@ -48,6 +53,75 @@ export function GameSetup({ onStart }: GameSetupProps) {
     if (op === 'addition') return "Practice adding by...";
     if (op === 'subtraction') return "Practice subtracting by...";
     return "Select numbers";
+  };
+
+  const formatNumber = (num: number) => {
+    const op = config.operations[0];
+    if (op === 'multiplication') return `×${num}`;
+    if (op === 'division') return `÷${num}`;
+    if (op === 'addition') return `+${num}`;
+    if (op === 'subtraction') return `-${num}`;
+    return num.toString();
+  };
+
+  const handleSelectAll = () => {
+    setConfig({ selectedNumbers: Array.from({ length: 12 }, (_, i) => i + 1) });
+  };
+
+  const handleClearSelection = () => {
+    setConfig({ selectedNumbers: [] });
+  };
+
+  const getSummaryText = () => {
+    if (!config.selectedNumbers?.length) return <span className={styles.placeholderText}>Select at least one number</span>;
+    
+    const count = config.selectedNumbers.length;
+    const op = config.operations[0];
+    const noun = op === 'multiplication' ? 'tables' : 'numbers';
+    
+    const formattedNumbers = config.selectedNumbers
+      .sort((a, b) => a - b)
+      .map(num => formatNumber(num))
+      .join(', ');
+
+    return (
+      <>
+        <strong>{count}</strong> {noun} selected: {formattedNumbers}
+      </>
+    );
+  };
+
+  const renderNumberSelection = () => {
+    const op = config.operations[0];
+    const isTimesTable = op === 'multiplication' || op === 'division';
+    
+    return (
+      <div className={styles.numbersContainer}>
+        <div className={styles.selectionControls}>
+          <button onClick={handleSelectAll} className={styles.textButton}>Select All</button>
+          <button onClick={handleClearSelection} className={styles.textButton}>Clear</button>
+        </div>
+        <div className={styles.numberGrid}>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
+            <button
+              key={num}
+              className={`${styles.numberCard} ${config.selectedNumbers?.includes(num) ? styles.selected : ''}`}
+              onClick={() => handleNumberToggle(num)}
+            >
+              {config.selectedNumbers?.includes(num) && (
+                <div className={styles.checkBadge}>
+                  <Check size={14} strokeWidth={4} />
+                </div>
+              )}
+              {formatNumber(num)}
+            </button>
+          ))}
+        </div>
+        <div className={styles.selectionSummary}>
+          {getSummaryText()}
+        </div>
+      </div>
+    );
   };
 
   const steps = [
@@ -92,19 +166,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
       id: 'numbers',
       title: getNumberGridTitle(),
       subtitle: "Select one or more to practice.",
-      content: (
-        <div className={styles.numberGrid}>
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
-            <button
-              key={num}
-              className={`${styles.numberCard} ${config.selectedNumbers?.includes(num) ? styles.selected : ''}`}
-              onClick={() => handleNumberToggle(num)}
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      ),
+      content: renderNumberSelection(),
       canProceed: (config.selectedNumbers?.length || 0) > 0
     },
     {
@@ -136,6 +198,31 @@ export function GameSetup({ onStart }: GameSetupProps) {
             <InfinityIcon size={48} className={styles.cardIcon} />
             <span className={styles.cardLabel}>Zen Practice</span>
             <p className={styles.modeDescription}>No timer, no pressure. Just focus on getting them right.</p>
+          </button>
+        </div>
+      )
+    },
+    {
+      id: 'input',
+      title: "How do you want to answer?",
+      subtitle: "Choose your input method.",
+      content: (
+        <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+          <button 
+            className={`${styles.card} ${config.inputMode === 'numpad' ? styles.selected : ''}`}
+            onClick={() => handleInputModeSelect('numpad')}
+          >
+            <Calculator size={48} className={styles.cardIcon} />
+            <span className={styles.cardLabel}>Number Pad</span>
+            <p className={styles.modeDescription}>Type your answers using a keypad.</p>
+          </button>
+          <button 
+            className={`${styles.card} ${config.inputMode === 'choice' ? styles.selected : ''}`}
+            onClick={() => handleInputModeSelect('choice')}
+          >
+            <List size={48} className={styles.cardIcon} />
+            <span className={styles.cardLabel}>Multiple Choice</span>
+            <p className={styles.modeDescription}>Pick the correct answer from 5 options.</p>
           </button>
         </div>
       )
@@ -214,6 +301,12 @@ export function GameSetup({ onStart }: GameSetupProps) {
               {config.mode === 'timed' ? `Dash Blitz (${config.duration}s)` : 
                config.mode === 'sprint' ? `Sprint (${config.questionCount} Qs)` : 
                'Zen Practice'}
+            </span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.summaryLabel}>Input</span>
+            <span className={styles.summaryValue}>
+              {config.inputMode === 'choice' ? 'Multiple Choice' : 'Number Pad'}
             </span>
           </div>
         </div>

@@ -37,25 +37,25 @@ export function SkillRadar({ data = MOCK_DATA }: SkillRadarProps) {
       <div className={styles.chartWrapper}>
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
-            <PolarGrid stroke="var(--border)" />
+            <PolarGrid stroke="#e5e7eb" />
             <PolarAngleAxis 
               dataKey="subject" 
-              tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }} 
+              tick={{ fill: '#6b7280', fontSize: 12 }} 
             />
             <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
             <Radar
               name="Skills"
               dataKey="score"
-              stroke="var(--primary)"
-              fill="var(--primary)"
+              stroke="#4f46e5"
+              fill="#4f46e5"
               fillOpacity={0.5}
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: 'var(--card)', 
-                borderColor: 'var(--border)',
+                backgroundColor: 'white', 
+                borderColor: '#e5e7eb',
                 borderRadius: '8px',
-                color: 'var(--card-foreground)'
+                color: '#111827'
               }}
             />
           </RadarChart>

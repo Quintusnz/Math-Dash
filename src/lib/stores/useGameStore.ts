@@ -4,12 +4,14 @@ export type GameStatus = 'idle' | 'playing' | 'paused' | 'finished'
 
 export type Operation = 'addition' | 'subtraction' | 'multiplication' | 'division';
 export type GameMode = 'timed' | 'sprint' | 'practice';
+export type InputMode = 'numpad' | 'choice';
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export interface GameConfig {
   operations: Operation[];
   selectedNumbers: number[];
   mode: GameMode;
+  inputMode: InputMode;
   difficulty: Difficulty;
   duration: number; // seconds (for timed mode)
   questionCount: number; // number of questions (for sprint mode)
@@ -55,6 +57,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     operations: ['addition'],
     selectedNumbers: [],
     mode: 'timed',
+    inputMode: 'numpad',
     difficulty: 'medium',
     duration: 60,
     questionCount: 20

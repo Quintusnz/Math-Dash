@@ -19,13 +19,13 @@
 
 .title {
   font-size: var(--text-h2);
-  color: var(--color-neutral-900);
+  color: var(--foreground);
   margin-bottom: var(--space-sm);
 }
 
 .subtitle {
   font-size: var(--text-body-lg);
-  color: var(--text-muted);
+  color: var(--muted-foreground);
   margin-bottom: var(--space-xl);
 }
 
@@ -93,19 +93,26 @@
 }
 
 .backButton {
-  color: var(--text-muted);
-  font-weight: 600;
+  background: var(--surface-card);
+  color: var(--color-neutral-700);
+  padding: var(--space-md) var(--space-2xl);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-body-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--motion-duration-short);
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-lg);
-  transition: background var(--motion-duration-short);
+  gap: var(--space-sm);
+  border: 2px solid var(--border-subtle);
 }
 
 .backButton:hover {
   background: var(--surface-muted);
   color: var(--color-neutral-900);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-neutral-300);
 }
 
 .nextButton {
@@ -188,16 +195,88 @@
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-md);
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
+}
+
+.numbersContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.selectionControls {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  width: 100%;
+  max-width: 600px;
+  justify-content: flex-end;
+}
+
+.textButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: 600;
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  transition: all var(--motion-duration-short);
+  backdrop-filter: blur(4px);
+}
+
+.textButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.selectionSummary {
+  margin-top: var(--space-lg);
+  font-size: var(--text-body);
+  color: white;
+  font-weight: 500;
+  min-height: 1.5em;
+  text-align: center;
+  max-width: 600px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.placeholderText {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+.checkBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: white;
+  color: var(--color-primary-600);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
 }
 
 .numberCard {
   background: var(--surface-card);
   border: 2px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md);
-  font-size: var(--text-h3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  font-size: var(--text-h2);
   font-weight: 700;
   color: var(--color-neutral-700);
   cursor: pointer;
@@ -206,6 +285,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .numberCard:hover {

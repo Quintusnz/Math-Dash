@@ -66,6 +66,12 @@
   margin-left: var(--space-md);
 }
 
+.navCta {
+  min-height: 38px !important;
+  padding: var(--space-xs) var(--space-lg) !important;
+  font-size: var(--text-body) !important;
+}
+
 .main {
   max-width: var(--container-xl);
   margin: 0 auto;

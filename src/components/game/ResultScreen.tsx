@@ -10,15 +10,34 @@ interface ResultScreenProps {
   correct: number;
   total: number;
   achievements?: Achievement[];
+  isHighScore?: boolean;
   onPlayAgain: () => void;
   onHome: () => void;
 }
 
-export function ResultScreen({ score, correct, total, achievements, onPlayAgain, onHome }: ResultScreenProps) {
+export function ResultScreen({ score, correct, total, achievements, isHighScore, onPlayAgain, onHome }: ResultScreenProps) {
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
 
   return (
     <div className={styles.screen}>
+      {isHighScore && (
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={styles.mascotContainer}
+        >
+          <motion.img 
+            src="/mascots/dashy-sprint.png" 
+            alt="Dashy Mascot" 
+            className={styles.mascot}
+            animate={{ y: [0, -30, 0] }}
+            transition={{ 
+              y: { repeat: Infinity, duration: 0.6, ease: "easeInOut" }
+            }}
+          />
+          <div className={styles.highScoreLabel}>New High Score!</div>
+        </motion.div>
+      )}
       <Card className={styles.card} elevated>
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}

@@ -130,3 +130,35 @@
   color: var(--text-muted);
 }
 
+.mascotContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  z-index: 10;
+}
+
+.mascot {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.highScoreLabel {
+  background: var(--color-accent-500);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  margin-top: var(--space-2);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+

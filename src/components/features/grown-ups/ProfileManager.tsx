@@ -5,9 +5,52 @@ import { db } from '@/lib/db';
 import { useState } from 'react';
 import styles from './ProfileManager.module.css';
 
+const AVATARS = [
+  '🐶', '🐱', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', 
+  '🐷', '🐸', '🐵', '🦄', '🐲', '🦖', '🤖', '👽', '👻', '🦸', 
+  '🧚', '🧜', '🧙', '🦉', '🦋', '🐞', '🦈', '🐙', '🐬', '🐳'
+];
+const AGE_BANDS = ['4-6', '7-9', '10-12'];
+
 export function ProfileManager() {
   const profiles = useLiveQuery(() => db.profiles.toArray());
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [newProfile, setNewProfile] = useState({
+    name: '',
+    ageBand: AGE_BANDS[0],
+    avatarId: AVATARS[0]
+  });
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newProfile.name.trim()) return;
+
+    try {
+      await db.profiles.add({
+        id: crypto.randomUUID(),
+        displayName: newProfile.name,
+        ageBand: newProfile.ageBand,
+        avatarId: newProfile.avatarId,
+        preferences: {
+          theme: 'default',
+          soundEnabled: true,
+          hapticsEnabled: true
+        },
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      setIsCreating(false);
+      setNewProfile({
+        name: '',
+        ageBand: AGE_BANDS[0],
+        avatarId: AVATARS[0]
+      });
+    } catch (error) {
+      console.error('Failed to create profile:', error);
+      alert('Failed to create profile');
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure? This will delete all progress for this profile.')) return;
@@ -45,7 +88,73 @@ export function ProfileManager() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.title}>Manage Profiles</h2>
+        {!isCreating && (
+          <button 
+            onClick={() => setIsCreating(true)}
+            className={styles.createButton}
+          >
+            Create Profile
+          </button>
+        )}
       </div>
+
+      {isCreating && (
+        <form onSubmit={handleCreate} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Name</label>
+            <input
+              type="text"
+              value={newProfile.name}
+              onChange={e => setNewProfile({...newProfile, name: e.target.value})}
+              className={styles.input}
+              placeholder="Enter name"
+              autoFocus
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Age Band</label>
+            <select
+              value={newProfile.ageBand}
+              onChange={e => setNewProfile({...newProfile, ageBand: e.target.value})}
+              className={styles.select}
+            >
+              {AGE_BANDS.map(band => (
+                <option key={band} value={band}>{band}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Avatar</label>
+            <div className={styles.avatarGrid}>
+              {AVATARS.map(avatar => (
+                <button
+                  key={avatar}
+                  type="button"
+                  onClick={() => setNewProfile({...newProfile, avatarId: avatar})}
+                  className={`${styles.avatarOption} ${newProfile.avatarId === avatar ? styles.selected : ''}`}
+                >
+                  {avatar}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.formActions}>
+            <button type="submit" className={styles.createButton}>
+              Save Profile
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setIsCreating(false)}
+              className={styles.cancelButton}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
 
       <div className={styles.list}>
         {profiles.length === 0 && (

@@ -9,6 +9,12 @@ interface TimerBarProps {
 export function TimerBar({ timeLeft, totalTime }: TimerBarProps) {
   const percentage = Math.max(0, (timeLeft / totalTime) * 100);
   
+  const getBarColor = () => {
+    if (percentage <= 10) return 'var(--color-error)';
+    if (percentage <= 40) return 'var(--color-warning)';
+    return 'var(--primary)';
+  };
+
   return (
     <div 
       className={styles.container}
@@ -20,11 +26,11 @@ export function TimerBar({ timeLeft, totalTime }: TimerBarProps) {
     >
       <motion.div 
         className={styles.bar}
-        animate={{ width: `${percentage}%` }}
-        transition={{ duration: 1, ease: "linear" }}
-        style={{
-            backgroundColor: percentage < 20 ? 'var(--destructive)' : 'var(--primary)'
+        animate={{ 
+          width: `${percentage}%`,
+          backgroundColor: getBarColor()
         }}
+        transition={{ duration: 1, ease: "linear" }}
       />
     </div>
   );

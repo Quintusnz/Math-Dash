@@ -7,11 +7,12 @@ import { generateQuestion } from "@/lib/game-engine/question-generator";
 import { saveGameSession } from "@/lib/game-engine/session-manager";
 import { MasteryTracker } from "@/lib/game-engine/mastery-tracker";
 import { EngagementManager } from "@/lib/game-engine/engagement-manager";
-import { MasteryRecord, Achievement } from "@/lib/db";
+import { db, MasteryRecord, Achievement } from "@/lib/db";
 import { GameCanvas } from "@/components/game/GameCanvas";
 import { TimerBar } from "@/components/game/TimerBar";
 import { QuestionDisplay } from "@/components/game/QuestionDisplay";
 import { Numpad } from "@/components/game/Numpad";
+import { MultipleChoiceInput } from "@/components/game/MultipleChoiceInput";
 import { ResultScreen } from "@/components/game/ResultScreen";
 import { GameSetup } from "@/components/game/setup/GameSetup";
 import { AnimatePresence } from "motion/react";
@@ -28,6 +29,9 @@ export default function PlayPage() {
   const weakFactsRef = useRef<MasteryRecord[]>([]);
   const questionStartTimeRef = useRef<number>(Date.now());
   const [unlockedAchievements, setUnlockedAchievements] = useState<Achievement[]>([]);
+  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [isHighScore, setIsHighScore] = useState(false);
   const { play, vibrate } = useGameSound();
 
   const { 
@@ -42,6 +46,7 @@ export default function PlayPage() {
     startGame, 
     tick, 
     setQuestion, 
+    setInput,
     appendInput, 
     clearInput, 
     submitAnswer,
@@ -105,6 +110,22 @@ export default function PlayPage() {
   // Save Session on Finish
   useEffect(() => {
     if (status === 'finished' && !hasSavedRef.current) {
+      // Check for high score
+      const checkHighScore = async () => {
+        if (activeProfileId) {
+           const previousBest = await db.sessions
+            .where('profileId').equals(activeProfileId)
+            .filter(s => s.mode === config.mode)
+            .reverse()
+            .sortBy('score');
+           
+           if (previousBest.length === 0 || score > previousBest[0].score) {
+             setIsHighScore(true);
+           }
+        }
+      };
+      checkHighScore();
+
       play('GAME_OVER');
       hasSavedRef.current = true;
       saveGameSession({
@@ -141,16 +162,37 @@ export default function PlayPage() {
     }
 
     if (isCorrect) {
+      setFeedback('correct');
       play('CORRECT');
-      // Generate next question
-      setQuestion(generateQuestion(config.difficulty, weakFactsRef.current, config.operations, config.selectedNumbers));
-      questionStartTimeRef.current = Date.now();
+      
+      // Delay next question to show feedback
+      setTimeout(() => {
+        setFeedback(null);
+        setSelectedAnswer(null);
+        // Generate next question
+        setQuestion(generateQuestion(config.difficulty, weakFactsRef.current, config.operations, config.selectedNumbers));
+        questionStartTimeRef.current = Date.now();
+      }, 500);
     } else {
+      setFeedback('incorrect');
       play('WRONG');
       vibrate([50, 50, 50]);
-      // Shake effect or error feedback could go here
-      clearInput();
+      
+      setTimeout(() => {
+        setFeedback(null);
+        setSelectedAnswer(null);
+        clearInput();
+      }, 500);
     }
+  };
+
+  const handleDirectAnswer = (answer: number) => {
+    setInput(answer.toString());
+    setSelectedAnswer(answer);
+    // Use setTimeout to ensure state update propagates if needed, though Zustand is sync.
+    // But mainly to allow any UI updates if we were showing the number.
+    // Here we just submit immediately.
+    setTimeout(() => handleSubmit(), 0);
   };
 
   // Keyboard Support
@@ -158,6 +200,11 @@ export default function PlayPage() {
     if (status !== 'playing') return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Only enable keyboard for numpad mode or if we want to support it generally
+      // But for multiple choice, maybe 1-5?
+      // For now, keep it simple.
+      if (config.inputMode !== 'numpad') return;
+
       if (e.key >= '0' && e.key <= '9') {
         play('CLICK');
         vibrate(10);
@@ -175,21 +222,23 @@ export default function PlayPage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [status, appendInput, clearInput, handleSubmit, play, vibrate]);
+  }, [status, appendInput, clearInput, handleSubmit, play, vibrate, config.inputMode]);
+
+  let content;
 
   if (status === 'idle') {
-    return <GameSetup onStart={() => {}} />;
-  }
-
-  if (status === 'finished') {
-    return (
+    content = <GameSetup onStart={() => {}} />;
+  } else if (status === 'finished') {
+    content = (
       <ResultScreen 
         score={score}
         correct={questionsCorrect}
         total={questionsAnswered}
         achievements={unlockedAchievements}
+        isHighScore={isHighScore}
         onPlayAgain={() => {
           hasSavedRef.current = false;
+          setIsHighScore(false);
           sessionIdRef.current = crypto.randomUUID();
           questionStartTimeRef.current = Date.now();
           setUnlockedAchievements([]);
@@ -201,53 +250,69 @@ export default function PlayPage() {
           }
           
           startGame();
-          // Question generation happens in the useEffect when status becomes playing
         }}
         onHome={() => router.push('/')}
       />
     );
+  } else {
+    content = (
+      <GameCanvas>
+        <div className={styles.header} role="status" aria-label="Game Status">
+          <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
+          {config.mode === 'timed' && (
+            <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
+          )}
+          {config.mode === 'sprint' && (
+            <div className={styles.timer} role="timer" aria-label="Questions remaining">
+              {questionsCorrect} / {config.questionCount}
+            </div>
+          )}
+        </div>
+        
+        {config.mode === 'timed' && (
+          <TimerBar timeLeft={timeLeft} totalTime={config.duration} />
+        )}
+        {config.mode === 'sprint' && (
+          <TimerBar timeLeft={questionsCorrect} totalTime={config.questionCount} />
+        )}
+        
+        <div className={styles.gameArea} aria-live="polite" aria-atomic="true">
+          <AnimatePresence mode="wait">
+            {currentQuestion && (
+              <QuestionDisplay text={currentQuestion.text} />
+            )}
+          </AnimatePresence>
+          
+          {config.inputMode === 'numpad' && (
+            <div className={styles.inputDisplay} aria-label={`Current input: ${input || "empty"}`}>
+              {input || "_"}
+            </div>
+          )}
+        </div>
+
+        {config.inputMode === 'choice' ? (
+          <MultipleChoiceInput 
+            correctAnswer={currentQuestion?.answer || 0}
+            onAnswer={handleDirectAnswer}
+            disabled={status !== 'playing' || feedback !== null}
+            selectedAnswer={selectedAnswer}
+            feedback={feedback}
+          />
+        ) : (
+          <Numpad 
+            onPress={appendInput} 
+            onClear={clearInput} 
+            onSubmit={handleSubmit}
+            disabled={status !== 'playing'}
+          />
+        )}
+      </GameCanvas>
+    );
   }
 
   return (
-    <GameCanvas>
-      <div className={styles.header} role="status" aria-label="Game Status">
-        <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
-        {config.mode === 'timed' && (
-          <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
-        )}
-        {config.mode === 'sprint' && (
-          <div className={styles.timer} role="timer" aria-label="Questions remaining">
-            {questionsCorrect} / {config.questionCount}
-          </div>
-        )}
-      </div>
-      
-      {config.mode === 'timed' && (
-        <TimerBar timeLeft={timeLeft} totalTime={config.duration} />
-      )}
-      {config.mode === 'sprint' && (
-        <TimerBar timeLeft={questionsCorrect} totalTime={config.questionCount} />
-      )}
-      
-      <div className={styles.gameArea} aria-live="polite" aria-atomic="true">
-        <AnimatePresence mode="wait">
-          {currentQuestion && (
-            <QuestionDisplay text={currentQuestion.text} />
-          )}
-        </AnimatePresence>
-        
-        <div className={styles.inputDisplay} aria-label={`Current input: ${input || "empty"}`}>
-          {input || "_"}
-        </div>
-      </div>
-
-      <Numpad 
-        onPress={appendInput} 
-        onClear={clearInput} 
-        onSubmit={handleSubmit}
-        disabled={status !== 'playing'}
-      />
-    </GameCanvas>
+    <div className={styles.pageWrapper}>
+      {content}
+    </div>
   );
 }
-

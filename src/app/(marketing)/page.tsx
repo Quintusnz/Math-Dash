@@ -1,7 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./page.module.css";
 import { LinkButton } from "@/components/ui/Button";
-import { Zap, Trophy, Flame, ShieldCheck, ChartBar, Lock, Cloud, Plus, Minus, X, Divide } from "lucide-react";
+import { Zap, Trophy, Flame, ShieldCheck, ChartBar, Lock, Cloud, Plus, Minus, X, Divide, Gamepad2, Heart, GraduationCap, Rocket, Star, CheckCircle2, Users, Sparkles } from "lucide-react";
+
+const OPERATIONS = [
+  { icon: Plus, label: "Addition", color: "var(--color-primary-600)" },
+  { icon: Minus, label: "Subtraction", color: "var(--color-accent-coral)" },
+  { icon: X, label: "Multiplication", color: "var(--color-accent-gold)" },
+  { icon: Divide, label: "Division", color: "var(--color-secondary-500)" },
+];
 
 export default function LandingPage() {
   return (
@@ -10,36 +18,31 @@ export default function LandingPage() {
         <div className={styles.heroContent}>
           <div className={styles.badge}>
             <span className={styles.badgeDot} />
-            Math Practice for Ages 6-11
+            Mental Math Practice for Ages 6-11
           </div>
           <h1 className={styles.title}>
-            Master mental math in <br />
-            <span className={styles.titleHighlight}>minutes a day.</span>
+            Master Mental Math <br />
+            <span className={styles.titleHighlight}>in minutes a day.</span>
           </h1>
-          <div className={styles.operationsList}>
-            <span className={styles.opItem} style={{ color: 'var(--color-primary-600)' }}>
-              <Plus size={20} strokeWidth={3} /> Addition
-            </span>
-            <span className={styles.opItem} style={{ color: 'var(--color-accent-coral)' }}>
-              <Minus size={20} strokeWidth={3} /> Subtraction
-            </span>
-            <span className={styles.opItem} style={{ color: 'var(--color-accent-gold)' }}>
-              <X size={20} strokeWidth={3} /> Multiplication
-            </span>
-            <span className={styles.opItem} style={{ color: 'var(--color-secondary-500)' }}>
-              <Divide size={20} strokeWidth={3} /> Division
-            </span>
+                    <div className={styles.marqueeContainer}>
+            <div className={styles.marqueeTrack}>
+              {[...OPERATIONS, ...OPERATIONS, ...OPERATIONS, ...OPERATIONS].map((op, i) => (
+                <span key={i} className={styles.opItem} style={{ color: op.color }}>
+                  <op.icon size={20} strokeWidth={3} /> {op.label}
+                </span>
+              ))}
+            </div>
           </div>
           <p className={styles.subtitle}>
             High-speed drills. Instant feedback. Zero distractions. 
-            The offline-first app that builds fluency and confidence through play.
+            Build fluency and confidence through play.
           </p>
           
           <div className={styles.heroActions}>
-            <LinkButton href="/play" size="lg" className={styles.primaryBtn}>
+            <LinkButton href="/play" size="md" className={styles.primaryBtn}>
               Start a Session
             </LinkButton>
-            <LinkButton href="/how-it-works" variant="secondary" size="lg" className={styles.secondaryBtn}>
+            <LinkButton href="/how-it-works" variant="secondary" size="md" className={styles.secondaryBtn}>
               See How It Works
             </LinkButton>
           </div>
@@ -55,6 +58,57 @@ export default function LandingPage() {
             className={styles.heroLogo}
             priority
           />
+          <Image
+            src="/mascots/dashy-sprint.png"
+            alt="Dashy the Squirrel ready to sprint"
+            width={280}
+            height={280}
+            className={styles.heroMascot}
+            priority
+          />
+        </div>
+      </section>
+
+      {/* Cohort Selection Section */}
+      <section className={styles.cohortSection}>
+        <div className={styles.cohortHeader}>
+          <h2 className={styles.cohortTitle}>Who&apos;s joining the adventure?</h2>
+          <p className={styles.cohortSubtitle}>We&apos;ve got something special for everyone!</p>
+        </div>
+        
+        <div className={styles.cohortGrid}>
+          <Link href="/kids" className={`${styles.cohortCard} ${styles.cohortKids}`}>
+            <div className={styles.cohortIconWrapper}>
+              <Gamepad2 size={48} strokeWidth={2} />
+            </div>
+            <div className={styles.cohortContent}>
+              <h3>I&apos;m a Learner!</h3>
+              <p>Ready to become a math champion? Let&apos;s dash! 🚀</p>
+            </div>
+            <span className={styles.cohortArrow}>→</span>
+          </Link>
+
+          <Link href="/parents" className={`${styles.cohortCard} ${styles.cohortParents}`}>
+            <div className={styles.cohortIconWrapper}>
+              <Heart size={48} strokeWidth={2} />
+            </div>
+            <div className={styles.cohortContent}>
+              <h3>I&apos;m a Parent</h3>
+              <p>See how Math Dash helps your child build confidence</p>
+            </div>
+            <span className={styles.cohortArrow}>→</span>
+          </Link>
+
+          <Link href="/teachers" className={`${styles.cohortCard} ${styles.cohortTeachers}`}>
+            <div className={styles.cohortIconWrapper}>
+              <GraduationCap size={48} strokeWidth={2} />
+            </div>
+            <div className={styles.cohortContent}>
+              <h3>I&apos;m a Teacher</h3>
+              <p>Discover how Math Dash transforms classroom practice</p>
+            </div>
+            <span className={styles.cohortArrow}>→</span>
+          </Link>
         </div>
       </section>
 
@@ -143,10 +197,10 @@ export default function LandingPage() {
             Join thousands of students mastering math one sprint at a time.
           </p>
           <div className={styles.ctaButtons}>
-            <LinkButton href="/play" size="lg" className={styles.ctaPrimary}>
+            <LinkButton href="/play" size="md" className={styles.ctaPrimary}>
               Start Playing Now
             </LinkButton>
-            <LinkButton href="/pricing" variant="secondary" size="lg" className={styles.ctaSecondary}>
+            <LinkButton href="/pricing" variant="secondary" size="md" className={styles.ctaSecondary}>
               View Plans
             </LinkButton>
           </div>
