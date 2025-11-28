@@ -26,12 +26,26 @@ export function ProfileManager() {
     e.preventDefault();
     if (!newProfile.name.trim()) return;
 
+    // Generate a unique play code
+    const generateCode = () => {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 4; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return `DASH-${code}`;
+    };
+
     try {
       await db.profiles.add({
         id: crypto.randomUUID(),
         displayName: newProfile.name,
         ageBand: newProfile.ageBand,
         avatarId: newProfile.avatarId,
+        playCode: generateCode(),
+        isGuest: false,
+        classroomId: null,
+        syncStatus: 'local',
         preferences: {
           theme: 'default',
           soundEnabled: true,

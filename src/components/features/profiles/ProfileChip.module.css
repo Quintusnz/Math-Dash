@@ -1,0 +1,179 @@
+.container {
+  position: relative;
+  z-index: 100;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--surface-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  cursor: default;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.chip.clickable {
+  cursor: pointer;
+}
+
+.chip.clickable:hover {
+  background: var(--color-neutral-50);
+  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-md);
+}
+
+.chip.clickable:active {
+  transform: scale(0.98);
+}
+
+/* Sizes */
+.chip.sm {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-caption);
+  gap: var(--space-xs);
+}
+
+.chip.sm .avatar {
+  font-size: 1rem;
+}
+
+.chip.md {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-body-sm);
+}
+
+.chip.md .avatar {
+  font-size: 1.25rem;
+}
+
+.avatar {
+  line-height: 1;
+}
+
+.name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--color-neutral-400);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: 0;
+  min-width: 220px;
+  background: var(--surface-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.dropdownHeader {
+  padding: var(--space-md);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-neutral-500);
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.profileList {
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: var(--surface-card);
+}
+
+.profileOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.profileOption:hover {
+  background: var(--color-neutral-100);
+}
+
+.profileOption.current {
+  background: var(--color-primary-50);
+  border: 2px solid var(--color-primary-200);
+}
+
+.profileOption.current:hover {
+  background: var(--color-primary-100);
+}
+
+.optionAvatar {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.optionName {
+  flex: 1;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.checkIcon {
+  color: var(--color-primary-500);
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0;
+}
+
+.addPlayerButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  width: 100%;
+  background: var(--surface-card);
+  border: none;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-primary-500);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addPlayerButton:hover {
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+}

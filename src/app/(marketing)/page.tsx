@@ -104,7 +104,7 @@ export default function LandingPage() {
           <div className={styles.pricingPremium}>
             <div className={styles.pricingIcon}>💎</div>
             <div className={styles.pricingText}>
-              <h3>Unlock Everything — Just $4.99</h3>
+              <h3>Unlock Everything — Just $6.99</h3>
               <p>One-time payment • All topics • Family profiles • No subscriptions!</p>
             </div>
           </div>

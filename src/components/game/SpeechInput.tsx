@@ -1,247 +1,331 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { getClosestNumber, generateNumberGrammar } from "@/lib/game-engine/speech-utils";
+"use client";
+
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Mic, MicOff, Loader2, Volume2 } from "lucide-react";
+import {
+  parseWithExpectedAnswer,
+  getClosestNumber,
+  shouldAcceptResult,
+  numberToWords,
+  type ParseResult,
+} from "@/lib/game-engine/speech-utils";
 import styles from "./SpeechInput.module.css";
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 interface SpeechInputProps {
   onAnswer: (answer: number) => void;
   disabled?: boolean;
+  expectedAnswer?: number;
+  showHint?: boolean;
 }
 
-type ListeningState = "idle" | "listening" | "processing" | "error" | "unsupported";
-type Feedback = "none" | "correct" | "incorrect";
+type Status = "idle" | "starting" | "listening" | "processing" | "error" | "unsupported";
 
-/**
- * Hands-free voice input:
- * - Auto-starts when enabled; restarts on end.
- * - Displays what it heard (final best guess).
- * - Flashes green for correct, red for incorrect; advances on correct via onAnswer.
- * - Lightweight: Web Speech API + our number parser; no push-to-talk.
- */
-export function SpeechInput({ onAnswer, disabled }: SpeechInputProps) {
-  const [listeningState, setListeningState] = useState<ListeningState>("idle");
+// ============================================================================
+// HELPERS
+// ============================================================================
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getRecognitionConstructor(): (new () => any) | null {
+  if (typeof window === "undefined") return null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const win = window as any;
+  return win.SpeechRecognition || win.webkitSpeechRecognition || null;
+}
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
+export function SpeechInput({
+  onAnswer,
+  disabled = false,
+  expectedAnswer,
+  showHint = true,
+}: SpeechInputProps) {
+  const [status, setStatus] = useState<Status>("idle");
   const [transcript, setTranscript] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [supported, setSupported] = useState(true);
-  const [feedback, setFeedback] = useState<Feedback>("none");
+  const [parsedNumber, setParsedNumber] = useState<number | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
-  const shouldListenRef = useRef<boolean>(false);
-  const restartTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const fatalRef = useRef<boolean>(false);
-  const backoffRef = useRef<number>(600); // ms backoff for transient errors
+  const isActiveRef = useRef(false);
+  const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const networkErrorsRef = useRef(0);
 
-  const cleanupRecognition = useCallback(() => {
-    if (restartTimerRef.current) clearTimeout(restartTimerRef.current);
+  // Clear any pending restart
+  const clearRestart = useCallback(() => {
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
+  }, []);
+
+  // Stop recognition
+  const stopRecognition = useCallback(() => {
+    clearRestart();
+    isActiveRef.current = false;
+    
     if (recognitionRef.current) {
       try {
-        recognitionRef.current.onresult = null;
-        recognitionRef.current.onend = null;
-        recognitionRef.current.onerror = null;
-        recognitionRef.current.stop();
+        recognitionRef.current.abort();
       } catch {
-        // ignore
+        // Ignore
       }
       recognitionRef.current = null;
     }
-  }, []);
+  }, [clearRestart]);
 
-  const initRecognition = useCallback(() => {
-    if (typeof window === "undefined") return null;
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    const SpeechGrammarList =
-      (window as any).SpeechGrammarList || (window as any).webkitSpeechGrammarList;
-
-    if (!SpeechRecognition) {
-      setSupported(false);
-      setListeningState("unsupported");
-      setError("Speech recognition not supported in this browser.");
-      return null;
+  // Start recognition
+  const startRecognition = useCallback(() => {
+    const RecognitionCtor = getRecognitionConstructor();
+    
+    if (!RecognitionCtor) {
+      setStatus("unsupported");
+      setErrorMsg("Voice not supported. Try Chrome or Edge.");
+      return;
     }
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = navigator.language || "en-US";
-    recognition.interimResults = true;
-    recognition.continuous = false;
-    recognition.maxAlternatives = 3;
+    // Clean up first
+    stopRecognition();
+    
+    isActiveRef.current = true;
+    setStatus("starting");
+    setErrorMsg(null);
 
-    if (SpeechGrammarList) {
-      try {
-        const list = new SpeechGrammarList();
-        list.addFromString(generateNumberGrammar(), 1);
-        recognition.grammars = list;
-      } catch {
-        // ignore grammar failure
-      }
-    }
-
-    return recognition;
-  }, []);
-
-  const startListening = useCallback(() => {
-    if (disabled || !supported) return;
-
-    // ensure fresh instance
-    cleanupRecognition();
-    const recognition = initRecognition();
-    if (!recognition) return;
-
+    const recognition = new RecognitionCtor();
     recognitionRef.current = recognition;
-    shouldListenRef.current = true;
-    setError(null);
-    setFeedback("none");
-    fatalRef.current = false;
 
+    // Configure
+    recognition.lang = "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 5;
+
+    // Event: Started successfully
     recognition.onstart = () => {
-      setListeningState("listening");
+      console.log("[Voice] Started listening");
+      setStatus("listening");
+      networkErrorsRef.current = 0;
     };
 
+    // Event: Audio started (mic is working)
+    recognition.onaudiostart = () => {
+      console.log("[Voice] Audio capture started");
+    };
+
+    // Event: Sound detected
+    recognition.onsoundstart = () => {
+      console.log("[Voice] Sound detected");
+    };
+
+    // Event: Speech detected  
+    recognition.onspeechstart = () => {
+      console.log("[Voice] Speech detected");
+    };
+
+    // Event: Got results
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
-      const finals: string[] = [];
-      const alts: string[] = [];
-      for (let i = 0; i < event.results.length; i++) {
-        const res = event.results[i];
-        for (let j = 0; j < res.length; j++) {
-          alts.push(res[j].transcript.trim().toLowerCase());
-        }
-        if (res.isFinal) {
-          finals.push(res[0].transcript.trim().toLowerCase());
-        }
-      }
-      const candidates = (finals.length ? finals : alts).slice(-3);
-      const bestHeard = candidates[candidates.length - 1] || "";
-      if (bestHeard) setTranscript(bestHeard);
+      console.log("[Voice] Got result event:", event);
+      const results = event.results;
+      const lastResult = results[results.length - 1];
+      
+      // Get transcript
+      const text = lastResult[0].transcript.trim();
+      console.log("[Voice] Heard:", text, "Final:", lastResult.isFinal);
+      setTranscript(text);
 
-      let bestMatch: { num: number; conf: number } | null = null;
-      for (const c of candidates) {
-        const parsed = getClosestNumber(c);
-        if (parsed && (!bestMatch || parsed.confidence > bestMatch.conf)) {
-          bestMatch = { num: parsed.number, conf: parsed.confidence };
-        }
+      // Only process final results
+      if (!lastResult.isFinal) return;
+
+      // Collect all alternatives
+      const alternatives: string[] = [];
+      for (let i = 0; i < lastResult.length; i++) {
+        alternatives.push(lastResult[i].transcript.trim().toLowerCase());
       }
 
-      if (bestMatch) {
-        if (bestMatch.conf >= 0.65) {
-          setFeedback("correct");
-          setListeningState("processing");
-          onAnswer(bestMatch.num);
-          // show briefly then clear
-          setTimeout(() => {
-            setFeedback("none");
-            setTranscript("");
-          }, 900);
-        } else {
-          setFeedback("incorrect");
-          setTimeout(() => setFeedback("none"), 800);
-        }
+      // Parse with expected answer biasing
+      let result: ParseResult;
+      if (expectedAnswer !== undefined) {
+        result = parseWithExpectedAnswer(text, expectedAnswer, alternatives);
+      } else {
+        const parsed = getClosestNumber(text);
+        result = {
+          number: parsed?.number ?? NaN,
+          confidence: parsed?.confidence ?? 0,
+          matchedExpected: false,
+          rawText: text,
+        };
+      }
+
+      console.log("[Voice] Parsed:", result);
+
+      if (!isNaN(result.number)) {
+        setParsedNumber(result.number);
+      }
+
+      // Check if we should accept
+      if (shouldAcceptResult(result, expectedAnswer !== undefined)) {
+        setStatus("processing");
+        console.log("[Voice] Accepted:", result.number);
+        
+        // Small delay for UX, then submit
+        setTimeout(() => {
+          onAnswer(result.number);
+          setTranscript("");
+          setParsedNumber(null);
+        }, 200);
       }
     };
 
+    // Event: Error
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onerror = (event: any) => {
-      let message = "Voice input error. Trying again...";
-
-      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-        message = "Microphone access denied. Allow mic in the browser and retry.";
-        fatalRef.current = true;
-        shouldListenRef.current = false;
-      } else if (event.error === "no-speech" || event.error === "aborted") {
-        // transient, will restart with small backoff
-        shouldListenRef.current = true;
-      } else if (event.error === "network") {
-        // Chrome returns network for speech service hiccups; back off a bit more
-        message = "Network issue with speech. Retrying...";
-        shouldListenRef.current = true;
-        backoffRef.current = Math.min(backoffRef.current * 1.5, 5000);
-      } else {
-        shouldListenRef.current = true;
+      console.log("[Voice] Error:", event.error);
+      
+      switch (event.error) {
+        case "not-allowed":
+          setErrorMsg("Please allow microphone access.");
+          setStatus("error");
+          isActiveRef.current = false;
+          return;
+          
+        case "audio-capture":
+          setErrorMsg("No microphone found.");
+          setStatus("error");
+          isActiveRef.current = false;
+          return;
+          
+        case "network":
+          networkErrorsRef.current++;
+          if (networkErrorsRef.current >= 3) {
+            setErrorMsg("Voice needs internet connection.");
+            setStatus("error");
+            isActiveRef.current = false;
+            return;
+          }
+          // Will retry via onend
+          break;
+          
+        case "no-speech":
+        case "aborted":
+          // Normal, will restart via onend
+          break;
+          
+        default:
+          console.log("[Voice] Unknown error:", event.error);
       }
-
-      setError(message);
-      setListeningState(fatalRef.current ? "error" : "idle");
     };
 
+    // Event: Ended - restart if still active
     recognition.onend = () => {
-      // restart if we should keep listening and not disabled
-      if (shouldListenRef.current && !disabled && supported && !fatalRef.current) {
-        if (restartTimerRef.current) clearTimeout(restartTimerRef.current);
-        restartTimerRef.current = setTimeout(() => {
-          startListening();
-        }, backoffRef.current);
+      console.log("[Voice] Ended, active:", isActiveRef.current);
+      recognitionRef.current = null;
+      
+      if (isActiveRef.current && !disabled) {
+        // Restart after a short delay
+        restartTimeoutRef.current = setTimeout(() => {
+          if (isActiveRef.current) {
+            startRecognition();
+          }
+        }, 300);
       } else {
-        setListeningState((prev) => (prev === "processing" ? "idle" : prev));
+        setStatus("idle");
       }
     };
 
+    // Actually start
     try {
       recognition.start();
-    } catch {
-      setError("Could not start mic. Check permissions and try again.");
-      fatalRef.current = true;
-      setListeningState("error");
+      console.log("[Voice] Called start()");
+    } catch (err) {
+      console.error("[Voice] Start failed:", err);
+      setErrorMsg("Could not start voice. Try refreshing.");
+      setStatus("error");
+      isActiveRef.current = false;
     }
-  }, [cleanupRecognition, disabled, initRecognition, onAnswer, supported]);
+  }, [disabled, expectedAnswer, onAnswer, stopRecognition]);
 
-  // Auto start when enabled; stop when disabled/unmounted
+  // Start/stop based on disabled prop
   useEffect(() => {
-    if (!disabled) {
-      shouldListenRef.current = true;
-      startListening();
-    } else {
-      shouldListenRef.current = false;
-      cleanupRecognition();
-      setListeningState("idle");
+    if (disabled) {
+      stopRecognition();
+      setStatus("idle");
       setTranscript("");
+      setParsedNumber(null);
+    } else {
+      startRecognition();
     }
-    return () => {
-      shouldListenRef.current = false;
-      cleanupRecognition();
-    };
-  }, [disabled, startListening, cleanupRecognition]);
 
+    return () => {
+      stopRecognition();
+    };
+  }, [disabled, startRecognition, stopRecognition]);
+
+  // Reset display when question changes
+  useEffect(() => {
+    setTranscript("");
+    setParsedNumber(null);
+    setErrorMsg(null);
+  }, [expectedAnswer]);
+
+  // Get hint text
+  const hint = showHint && expectedAnswer !== undefined 
+    ? numberToWords(expectedAnswer)[0] 
+    : null;
+
+  // Render
   return (
     <div className={styles.container}>
+      {/* Mic icon */}
       <div
-        className={`${styles.listenIndicator} ${
-          listeningState === "listening" ? styles.active : ""
-        } ${feedback === "correct" ? styles.correct : ""} ${
-          feedback === "incorrect" ? styles.incorrect : ""
-        }`}
-        aria-label={
-          listeningState === "listening"
-            ? "Listening"
-            : listeningState === "processing"
-            ? "Processing"
-            : "Idle"
-        }
+        className={`${styles.micIndicator} ${status === "listening" ? styles.active : ""}`}
+        role="status"
+        aria-label={status === "listening" ? "Listening" : "Voice input"}
       >
-        {listeningState === "processing" ? (
-          <Loader2 size={32} className={styles.spin} />
+        {status === "processing" ? (
+          <Loader2 size={36} className={styles.spin} />
+        ) : status === "error" || status === "unsupported" ? (
+          <MicOff size={36} />
         ) : (
-          <div className={styles.pulse} />
+          <Mic size={36} />
         )}
+        {status === "listening" && <div className={styles.pulseRing} />}
       </div>
 
-      <div className={styles.status}>
-        {supported ? (
-          error ? (
-            <span style={{ color: "var(--color-error)" }}>{error}</span>
-          ) : listeningState === "listening" ? (
-            "Listening... say the answer"
-          ) : listeningState === "processing" ? (
-            "Processing..."
-          ) : (
-            "Voice ready"
-          )
-        ) : (
-          "Speech not supported in this browser"
-        )}
+      {/* Status message */}
+      <div className={`${styles.status} ${errorMsg ? styles.error : ""}`}>
+        {errorMsg ? errorMsg : 
+         status === "starting" ? "Starting microphone..." :
+         status === "listening" ? "🎤 Listening... say the answer!" :
+         status === "processing" ? "Got it!" :
+         status === "unsupported" ? "Voice not supported" :
+         "Voice ready"}
       </div>
 
-      <div className={styles.transcript}>
-        {transcript && <span className={styles.heardLabel}>Heard:</span>}
-        {transcript}
-      </div>
+      {/* Transcript */}
+      {transcript && (
+        <div className={styles.transcript}>
+          <span className={styles.heardLabel}>Heard:</span>
+          <span className={styles.heardText}>&ldquo;{transcript}&rdquo;</span>
+          {parsedNumber !== null && (
+            <span className={styles.parsedNumber}>→ {parsedNumber}</span>
+          )}
+        </div>
+      )}
+
+      {/* Hint */}
+      {hint && status === "listening" && !transcript && (
+        <div className={styles.hint}>
+          <Volume2 size={16} />
+          <span>Say: &ldquo;{hint}&rdquo;</span>
+        </div>
+      )}
     </div>
   );
 }

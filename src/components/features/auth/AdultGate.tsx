@@ -7,6 +7,14 @@ import { useAdminStore } from '@/lib/stores/useAdminStore';
 import styles from './AdultGate.module.css';
 import { Button } from '@/components/ui/Button';
 
+// Re-export auth components
+export { AuthFlow } from './AuthFlow';
+export { WelcomeScreen } from './WelcomeScreen';
+export { CreatePlayerFlow } from './CreatePlayerFlow';
+export { EnterCodeScreen } from './EnterCodeScreen';
+export { ProfileSelector } from './ProfileSelector';
+export { PlayCodeDisplay } from './PlayCodeDisplay';
+
 interface AdultGateProps {
   children: React.ReactNode;
 }

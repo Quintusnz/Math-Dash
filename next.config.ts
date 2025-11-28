@@ -20,6 +20,15 @@ const bundleAnalyzer = withBundleAnalyzer({
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.qrserver.com',
+        pathname: '/v1/create-qr-code/**',
+      },
+    ],
+  },
 };
 
 export default withPWA(bundleAnalyzer(nextConfig));

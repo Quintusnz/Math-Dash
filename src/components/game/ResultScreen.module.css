@@ -7,6 +7,14 @@
   gap: var(--space-2xl);
   padding: var(--space-2xl) var(--space-md) var(--space-3xl);
   background: radial-gradient(120% 120% at 50% 10%, #e8ecff 0%, #f7f8fb 50%, #f9fafb 100%);
+  position: relative;
+}
+
+.topBar {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  z-index: 10;
 }
 
 .card {
@@ -78,10 +86,15 @@
 }
 
 .actions {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-md);
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  justify-content: center;
   margin-top: var(--space-lg);
+}
+
+.actions > * {
+  min-width: 140px;
 }
 
 .achievementsContainer {

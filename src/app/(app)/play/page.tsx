@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useGameStore } from "@/lib/stores/useGameStore";
-import { useUserStore } from "@/lib/stores/useUserStore";
+import { useProfileStore } from "@/lib/stores/useProfileStore";
 import { generateQuestion } from "@/lib/game-engine/question-generator";
 import { saveGameSession } from "@/lib/game-engine/session-manager";
 import { MasteryTracker } from "@/lib/game-engine/mastery-tracker";
@@ -13,18 +13,22 @@ import { TimerBar } from "@/components/game/TimerBar";
 import { QuestionDisplay } from "@/components/game/QuestionDisplay";
 import { Numpad } from "@/components/game/Numpad";
 import { MultipleChoiceInput } from "@/components/game/MultipleChoiceInput";
+import { VoskSpeechInput } from "@/components/game/VoskSpeechInput";
 import { ResultScreen } from "@/components/game/ResultScreen";
 import { GameSetup } from "@/components/game/setup/GameSetup";
+import { AuthGuard } from "@/components/features/auth";
+import { ProfileChip } from "@/components/features/profiles/ProfileChip";
 import { AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useGameSound } from "@/lib/hooks/useGameSound";
 import styles from './page.module.css';
 
-export default function PlayPage() {
+function PlayContent() {
   const router = useRouter();
 
   const hasSavedRef = useRef(false);
-  const { activeProfileId } = useUserStore();
+  const { activeProfile } = useProfileStore();
+  const activeProfileId = activeProfile?.id || null;
   const sessionIdRef = useRef<string>(crypto.randomUUID());
   const weakFactsRef = useRef<MasteryRecord[]>([]);
   const questionStartTimeRef = useRef<number>(Date.now());
@@ -92,15 +96,30 @@ export default function PlayPage() {
       sessionIdRef.current = crypto.randomUUID();
       setUnlockedAchievements([]);
       
+      // Determine if we're using number range (for add/sub) or selected numbers (mult/div)
+      const usesNumberRange = config.operations[0] === 'addition' || config.operations[0] === 'subtraction';
+      
       // Load weak facts if we have a profile
       if (activeProfileId) {
         MasteryTracker.getWeakFacts(activeProfileId).then(facts => {
           weakFactsRef.current = facts;
           // Generate first question AFTER loading weak facts to potentially use one
-          setQuestion(generateQuestion(config.difficulty, facts, config.operations, config.selectedNumbers));
+          setQuestion(generateQuestion({
+            difficulty: config.difficulty,
+            weakFacts: facts,
+            allowedOperations: config.operations,
+            selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
+            numberRange: usesNumberRange ? config.numberRange : undefined
+          }));
         });
       } else {
-        setQuestion(generateQuestion(config.difficulty, [], config.operations, config.selectedNumbers));
+        setQuestion(generateQuestion({
+          difficulty: config.difficulty,
+          weakFacts: [],
+          allowedOperations: config.operations,
+          selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
+          numberRange: usesNumberRange ? config.numberRange : undefined
+        }));
       }
 
       questionStartTimeRef.current = Date.now();
@@ -135,7 +154,13 @@ export default function PlayPage() {
         questionsAnswered,
         questionsCorrect,
         mode: config.mode,
-        durationSeconds: config.mode === 'timed' ? config.duration - timeLeft : 0 // Approximate
+        durationSeconds: config.mode === 'timed' ? config.duration - timeLeft : 0,
+        config: {
+          operations: config.operations,
+          inputMethod: config.inputMode,
+          difficulty: config.difficulty,
+          selectedNumbers: config.selectedNumbers
+        }
       }).then(({ newAchievements }) => {
         if (newAchievements.length > 0) {
           setUnlockedAchievements(newAchievements);
@@ -148,18 +173,26 @@ export default function PlayPage() {
   // Handle Answer Submission
   const handleSubmit = () => {
     const timeTaken = Date.now() - questionStartTimeRef.current;
+    const givenAnswer = parseInt(input, 10); // Capture the answer before submit clears it
     const isCorrect = submitAnswer();
     
-    // Record attempt
+    // Record attempt with the actual answer given
     if (currentQuestion && activeProfileId) {
       MasteryTracker.recordAttempt(
         activeProfileId,
         sessionIdRef.current,
         currentQuestion,
         isCorrect,
-        timeTaken
+        timeTaken,
+        isNaN(givenAnswer) ? undefined : givenAnswer
       ).catch(console.error);
     }
+
+    // Shorter feedback delay for voice mode (speed matters!)
+    const feedbackDelay = config.inputMode === 'voice' ? 200 : 500;
+    
+    // Determine if we're using number range (for add/sub) or selected numbers (mult/div)
+    const usesNumberRange = config.operations[0] === 'addition' || config.operations[0] === 'subtraction';
 
     if (isCorrect) {
       setFeedback('correct');
@@ -170,9 +203,15 @@ export default function PlayPage() {
         setFeedback(null);
         setSelectedAnswer(null);
         // Generate next question
-        setQuestion(generateQuestion(config.difficulty, weakFactsRef.current, config.operations, config.selectedNumbers));
+        setQuestion(generateQuestion({
+          difficulty: config.difficulty,
+          weakFacts: weakFactsRef.current,
+          allowedOperations: config.operations,
+          selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
+          numberRange: usesNumberRange ? config.numberRange : undefined
+        }));
         questionStartTimeRef.current = Date.now();
-      }, 500);
+      }, feedbackDelay);
     } else {
       setFeedback('incorrect');
       play('WRONG');
@@ -182,7 +221,7 @@ export default function PlayPage() {
         setFeedback(null);
         setSelectedAnswer(null);
         clearInput();
-      }, 500);
+      }, feedbackDelay);
     }
   };
 
@@ -251,6 +290,13 @@ export default function PlayPage() {
           
           startGame();
         }}
+        onNewGame={() => {
+          hasSavedRef.current = false;
+          setIsHighScore(false);
+          setUnlockedAchievements([]);
+          // Reset to idle status to show GameSetup
+          useGameStore.setState({ status: 'idle' });
+        }}
         onHome={() => router.push('/')}
       />
     );
@@ -258,15 +304,18 @@ export default function PlayPage() {
     content = (
       <GameCanvas>
         <div className={styles.header} role="status" aria-label="Game Status">
-          <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
-          {config.mode === 'timed' && (
-            <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
-          )}
-          {config.mode === 'sprint' && (
-            <div className={styles.timer} role="timer" aria-label="Questions remaining">
-              {questionsCorrect} / {config.questionCount}
-            </div>
-          )}
+          <div className={styles.leftStats}>
+            <div className={styles.score} aria-label={`Score: ${score}`}>Score: {score}</div>
+            {config.mode === 'timed' && (
+              <div className={styles.timer} role="timer" aria-label={`${timeLeft} seconds remaining`}>{timeLeft}s</div>
+            )}
+            {config.mode === 'sprint' && (
+              <div className={styles.timer} role="timer" aria-label="Questions remaining">
+                {questionsCorrect} / {config.questionCount}
+              </div>
+            )}
+          </div>
+          <ProfileChip size="sm" showSwitcher={false} />
         </div>
         
         {config.mode === 'timed' && (
@@ -290,12 +339,21 @@ export default function PlayPage() {
           )}
         </div>
 
+        {/* Input Methods */}
         {config.inputMode === 'choice' ? (
           <MultipleChoiceInput 
             correctAnswer={currentQuestion?.answer || 0}
             onAnswer={handleDirectAnswer}
             disabled={status !== 'playing' || feedback !== null}
             selectedAnswer={selectedAnswer}
+            feedback={feedback}
+          />
+        ) : config.inputMode === 'voice' ? (
+          <VoskSpeechInput
+            onAnswer={handleDirectAnswer}
+            disabled={status !== 'playing' || feedback !== null}
+            expectedAnswer={currentQuestion?.answer}
+            showHint={true}
             feedback={feedback}
           />
         ) : (
@@ -314,5 +372,13 @@ export default function PlayPage() {
     <div className={styles.pageWrapper}>
       {content}
     </div>
+  );
+}
+
+export default function PlayPage() {
+  return (
+    <AuthGuard>
+      <PlayContent />
+    </AuthGuard>
   );
 }

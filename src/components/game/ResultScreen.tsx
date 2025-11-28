@@ -4,6 +4,8 @@ import styles from './ResultScreen.module.css';
 import { Achievement } from "@/lib/db";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { ProfileChip } from "@/components/features/profiles/ProfileChip";
+import { RotateCcw, Settings, Home } from "lucide-react";
 
 interface ResultScreenProps {
   score: number;
@@ -12,14 +14,18 @@ interface ResultScreenProps {
   achievements?: Achievement[];
   isHighScore?: boolean;
   onPlayAgain: () => void;
+  onNewGame: () => void;
   onHome: () => void;
 }
 
-export function ResultScreen({ score, correct, total, achievements, isHighScore, onPlayAgain, onHome }: ResultScreenProps) {
+export function ResultScreen({ score, correct, total, achievements, isHighScore, onPlayAgain, onNewGame, onHome }: ResultScreenProps) {
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
 
   return (
     <div className={styles.screen}>
+      <div className={styles.topBar}>
+        <ProfileChip size="md" />
+      </div>
       {isHighScore && (
         <motion.div
           initial={{ y: 50, opacity: 0 }}
@@ -86,9 +92,15 @@ export function ResultScreen({ score, correct, total, achievements, isHighScore,
 
           <div className={styles.actions}>
             <Button onClick={onPlayAgain} size="lg">
+              <RotateCcw size={18} />
               Play Again
             </Button>
-            <Button variant="secondary" onClick={onHome} size="lg">
+            <Button variant="secondary" onClick={onNewGame} size="lg">
+              <Settings size={18} />
+              New Game
+            </Button>
+            <Button variant="ghost" onClick={onHome} size="lg">
+              <Home size={18} />
               Home
             </Button>
           </div>

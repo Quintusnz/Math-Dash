@@ -4,12 +4,33 @@ export type GameStatus = 'idle' | 'playing' | 'paused' | 'finished'
 
 export type Operation = 'addition' | 'subtraction' | 'multiplication' | 'division';
 export type GameMode = 'timed' | 'sprint' | 'practice';
-export type InputMode = 'numpad' | 'choice';
+export type InputMode = 'numpad' | 'choice' | 'voice';
 export type Difficulty = 'easy' | 'medium' | 'hard';
+
+// Number Range types for Addition/Subtraction
+export type RangePreset = 'starter' | 'builder' | 'challenge' | 'pro' | 'custom';
+export type RangeType = 'operand' | 'answer';
+
+export interface NumberRange {
+  preset: RangePreset;
+  min: number;
+  max: number;
+  rangeType: RangeType; // 'operand' = each number 0-X, 'answer' = results 0-X
+  allowNegatives: boolean; // For subtraction - default false
+}
+
+// Preset configurations
+export const NUMBER_RANGE_PRESETS: Record<Exclude<RangePreset, 'custom'>, { min: number; max: number; label: string; stars: number; yearHint: string }> = {
+  starter: { min: 0, max: 10, label: 'Starter', stars: 1, yearHint: 'Years 1–2' },
+  builder: { min: 0, max: 20, label: 'Builder', stars: 2, yearHint: 'Years 2–3' },
+  challenge: { min: 0, max: 50, label: 'Challenge', stars: 3, yearHint: 'Years 3–4' },
+  pro: { min: 0, max: 100, label: 'Pro', stars: 4, yearHint: 'Years 5–6' },
+};
 
 export interface GameConfig {
   operations: Operation[];
-  selectedNumbers: number[];
+  selectedNumbers: number[]; // Used for multiplication/division (times tables)
+  numberRange: NumberRange; // Used for addition/subtraction
   mode: GameMode;
   inputMode: InputMode;
   difficulty: Difficulty;
@@ -56,6 +77,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   config: {
     operations: ['addition'],
     selectedNumbers: [],
+    numberRange: {
+      preset: 'starter',
+      min: 0,
+      max: 10,
+      rangeType: 'operand',
+      allowNegatives: false,
+    },
     mode: 'timed',
     inputMode: 'numpad',
     difficulty: 'medium',

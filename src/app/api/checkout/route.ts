@@ -16,7 +16,7 @@ export async function POST(req: Request) {
               description: 'Unlock all topics, adaptive mode, and unlimited profiles.',
               images: ['https://mathdash.app/images/premium-cover.png'], // Placeholder
             },
-            unit_amount: 799, // $7.99
+            unit_amount: 699, // $6.99
           },
           quantity: 1,
         },

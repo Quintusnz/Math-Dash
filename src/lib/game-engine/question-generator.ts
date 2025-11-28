@@ -1,14 +1,26 @@
-import { Question } from "../stores/useGameStore";
+import { Question, NumberRange, RangeType } from "../stores/useGameStore";
 import { MasteryRecord } from "../db";
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
-export function generateQuestion(
-  difficulty: Difficulty = 'easy', 
-  weakFacts: MasteryRecord[] = [],
-  allowedOperations: Question['type'][] = ['addition', 'subtraction', 'multiplication', 'division'],
-  selectedNumbers: number[] = []
-): Question {
+// Options for question generation
+export interface QuestionGeneratorOptions {
+  difficulty?: Difficulty;
+  weakFacts?: MasteryRecord[];
+  allowedOperations?: Question['type'][];
+  selectedNumbers?: number[]; // For multiplication/division (times tables)
+  numberRange?: NumberRange;  // For addition/subtraction
+}
+
+export function generateQuestion(options: QuestionGeneratorOptions = {}): Question {
+  const {
+    difficulty = 'easy',
+    weakFacts = [],
+    allowedOperations = ['addition', 'subtraction', 'multiplication', 'division'],
+    selectedNumbers = [],
+    numberRange
+  } = options;
+
   // 30% chance to pick a weak fact if available
   if (weakFacts.length > 0 && Math.random() < 0.3) {
     const weakFact = weakFacts[Math.floor(Math.random() * weakFacts.length)];
@@ -31,14 +43,19 @@ export function generateQuestion(
       else if (sym === '×') { answer = num1 * num2; type = 'multiplication'; }
       else if (sym === '÷') { answer = num1 / num2; type = 'division'; }
       
-      // Only use weak fact if it matches allowed operations AND selected numbers (if any)
+      // For add/sub with number range, check if weak fact fits the range
+      const isAddSub = type === 'addition' || type === 'subtraction';
+      const matchesRange = !numberRange || !isAddSub || 
+        (numberRange.rangeType === 'operand' 
+          ? (num1 >= numberRange.min && num1 <= numberRange.max && num2 >= numberRange.min && num2 <= numberRange.max)
+          : (answer >= numberRange.min && answer <= numberRange.max));
+      
+      // Only use weak fact if it matches allowed operations AND selected numbers/range
       const matchesNumbers = selectedNumbers.length === 0 || 
-        (type === 'addition' && (selectedNumbers.includes(num1) || selectedNumbers.includes(num2))) ||
         (type === 'multiplication' && (selectedNumbers.includes(num1) || selectedNumbers.includes(num2))) ||
-        (type === 'subtraction' && selectedNumbers.includes(num2)) || // Practice subtracting X
         (type === 'division' && selectedNumbers.includes(num2)); // Practice dividing by X
 
-      if (allowedOperations.includes(type) && matchesNumbers) {
+      if (allowedOperations.includes(type) && (isAddSub ? matchesRange : matchesNumbers)) {
         return {
           id: crypto.randomUUID(),
           text: `${num1} ${sym} ${num2}`,
@@ -50,8 +67,8 @@ export function generateQuestion(
     }
   }
 
-  const type = getRandomType(difficulty, allowedOperations);
-  let num1, num2, answer;
+  const type = getRandomType(allowedOperations);
+  let num1: number, num2: number, answer: number;
 
   // Helper to get a number from selected list or random
   const getTargetNumber = () => {
@@ -63,30 +80,46 @@ export function generateQuestion(
 
   switch (type) {
     case 'addition': {
-      const target = getTargetNumber();
-      if (target !== null) {
-        num1 = target;
-        [num2] = getNumbers(difficulty); // Get random other number
-        // Randomize order
-        if (Math.random() > 0.5) [num1, num2] = [num2, num1];
+      if (numberRange) {
+        // Use number range for addition
+        const result = generateAdditionWithRange(numberRange);
+        num1 = result.num1;
+        num2 = result.num2;
+        answer = result.answer;
       } else {
-        [num1, num2] = getNumbers(difficulty);
+        // Legacy behavior with selected numbers
+        const target = getTargetNumber();
+        if (target !== null) {
+          num1 = target;
+          [num2] = getNumbers(difficulty);
+          if (Math.random() > 0.5) [num1, num2] = [num2, num1];
+        } else {
+          [num1, num2] = getNumbers(difficulty);
+        }
+        answer = num1 + num2;
       }
-      answer = num1 + num2;
       break;
     }
     case 'subtraction': {
-      const target = getTargetNumber();
-      if (target !== null) {
-        // Practice subtracting BY target (e.g. X - 5)
-        num2 = target;
-        const [other] = getNumbers(difficulty);
-        num1 = other + num2; // Ensure positive result
+      if (numberRange) {
+        // Use number range for subtraction
+        const result = generateSubtractionWithRange(numberRange);
+        num1 = result.num1;
+        num2 = result.num2;
+        answer = result.answer;
       } else {
-        [num1, num2] = getNumbers(difficulty);
-        if (num1 < num2) [num1, num2] = [num2, num1];
+        // Legacy behavior with selected numbers
+        const target = getTargetNumber();
+        if (target !== null) {
+          num2 = target;
+          const [other] = getNumbers(difficulty);
+          num1 = other + num2;
+        } else {
+          [num1, num2] = getNumbers(difficulty);
+          if (num1 < num2) [num1, num2] = [num2, num1];
+        }
+        answer = num1 - num2;
       }
-      answer = num1 - num2;
       break;
     }
     case 'multiplication': {
@@ -132,7 +165,61 @@ export function generateQuestion(
   };
 }
 
-function getRandomType(difficulty: Difficulty, allowedOperations: Question['type'][]): Question['type'] {
+/**
+ * Generate addition question based on number range
+ */
+function generateAdditionWithRange(range: NumberRange): { num1: number; num2: number; answer: number } {
+  const { min, max, rangeType } = range;
+  
+  if (rangeType === 'answer') {
+    // Answer must be within range - work backwards
+    const answer = Math.floor(Math.random() * (max - min + 1)) + min;
+    // Split the answer into two parts
+    const num1 = Math.floor(Math.random() * (answer + 1)); // 0 to answer
+    const num2 = answer - num1;
+    return { num1, num2, answer };
+  } else {
+    // Operand range - each number within range
+    const num1 = Math.floor(Math.random() * (max - min + 1)) + min;
+    const num2 = Math.floor(Math.random() * (max - min + 1)) + min;
+    return { num1, num2, answer: num1 + num2 };
+  }
+}
+
+/**
+ * Generate subtraction question based on number range
+ */
+function generateSubtractionWithRange(range: NumberRange): { num1: number; num2: number; answer: number } {
+  const { min, max, rangeType, allowNegatives } = range;
+  
+  if (rangeType === 'answer') {
+    // Answer must be within range
+    const answerMin = allowNegatives ? min : Math.max(0, min);
+    const answerMax = max;
+    const answer = Math.floor(Math.random() * (answerMax - answerMin + 1)) + answerMin;
+    
+    // num1 - num2 = answer, so num1 = answer + num2
+    // Pick num2 randomly, but keep num1 reasonable (within 0-100 or so)
+    const maxNum2 = Math.min(max, 100 - answer); // Keep num1 <= 100
+    const num2 = Math.floor(Math.random() * (maxNum2 + 1));
+    const num1 = answer + num2;
+    
+    return { num1, num2, answer };
+  } else {
+    // Operand range - each operand within range
+    let num1 = Math.floor(Math.random() * (max - min + 1)) + min;
+    let num2 = Math.floor(Math.random() * (max - min + 1)) + min;
+    
+    // Ensure positive result unless negatives allowed
+    if (!allowNegatives && num1 < num2) {
+      [num1, num2] = [num2, num1];
+    }
+    
+    return { num1, num2, answer: num1 - num2 };
+  }
+}
+
+function getRandomType(allowedOperations: Question['type'][]): Question['type'] {
   if (allowedOperations.length === 0) return 'addition';
   return allowedOperations[Math.floor(Math.random() * allowedOperations.length)];
 }
@@ -147,4 +234,19 @@ function getNumbers(difficulty: Difficulty, isMultiplication = false): [number, 
   const n1 = Math.floor(Math.random() * max) + 1;
   const n2 = Math.floor(Math.random() * max) + 1;
   return [n1, n2];
+}
+
+// Legacy function signature for backwards compatibility
+export function generateQuestionLegacy(
+  difficulty: Difficulty = 'easy', 
+  weakFacts: MasteryRecord[] = [],
+  allowedOperations: Question['type'][] = ['addition', 'subtraction', 'multiplication', 'division'],
+  selectedNumbers: number[] = []
+): Question {
+  return generateQuestion({
+    difficulty,
+    weakFacts,
+    allowedOperations,
+    selectedNumbers
+  });
 }

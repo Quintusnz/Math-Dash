@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
-import { useGameStore, Operation, GameMode } from "@/lib/stores/useGameStore";
-import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap, Calculator, List, Mic, Check } from "lucide-react";
+import { useGameStore, Operation, GameMode, NumberRange, NUMBER_RANGE_PRESETS } from "@/lib/stores/useGameStore";
+import { useVoskModel } from "@/lib/hooks/useVoskModel";
+import { ProfileChip } from "@/components/features/profiles/ProfileChip";
+import { NumberRangeSelector } from "./NumberRangeSelector";
+import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap, Calculator, List, Mic, Check, Download, Loader2 } from "lucide-react";
 import styles from "./GameSetup.module.css";
 
 interface GameSetupProps {
@@ -13,10 +17,25 @@ interface GameSetupProps {
 export function GameSetup({ onStart }: GameSetupProps) {
   const [step, setStep] = useState(0);
   const { config, setConfig, startGame } = useGameStore();
+  const { status: voskStatus, progress: voskProgress, startLoading: startVoskLoading } = useVoskModel();
+
+  // Start loading Vosk when voice is selected
+  useEffect(() => {
+    if (config.inputMode === 'voice' && voskStatus === 'idle') {
+      startVoskLoading();
+    }
+  }, [config.inputMode, voskStatus, startVoskLoading]);
 
   const handleOperationSelect = (op: Operation) => {
     setConfig({ operations: [op], selectedNumbers: [] });
     setStep(1);
+  };
+
+  // Check if current operation uses number range (addition/subtraction) vs number selection (mult/div)
+  const usesNumberRange = config.operations[0] === 'addition' || config.operations[0] === 'subtraction';
+
+  const handleNumberRangeChange = (range: NumberRange) => {
+    setConfig({ numberRange: range });
   };
 
   const handleNumberToggle = (num: number) => {
@@ -34,6 +53,10 @@ export function GameSetup({ onStart }: GameSetupProps) {
 
   const handleInputModeSelect = (inputMode: 'numpad' | 'choice' | 'voice') => {
     setConfig({ inputMode });
+    // Start loading Vosk immediately when voice is selected
+    if (inputMode === 'voice' && voskStatus === 'idle') {
+      startVoskLoading();
+    }
     setStep(4);
   };
 
@@ -41,7 +64,12 @@ export function GameSetup({ onStart }: GameSetupProps) {
     setStep(5);
   };
 
+  // Check if we can start the game
+  const canStart = config.inputMode !== 'voice' || voskStatus === 'ready';
+  const isVoiceLoading = config.inputMode === 'voice' && voskStatus === 'loading';
+
   const handleStart = () => {
+    if (!canStart) return;
     startGame();
     onStart();
   };
@@ -162,7 +190,20 @@ export function GameSetup({ onStart }: GameSetupProps) {
         </div>
       )
     },
-    {
+    // Step 1: Number Range for addition/subtraction OR Number Selection for mult/div
+    usesNumberRange ? {
+      id: 'numberRange',
+      title: "Pick Your Number Zone",
+      subtitle: "Choose your challenge level.",
+      content: (
+        <NumberRangeSelector
+          operation={config.operations[0] as 'addition' | 'subtraction'}
+          value={config.numberRange}
+          onChange={handleNumberRangeChange}
+        />
+      ),
+      canProceed: true // Always can proceed with preset selected
+    } : {
       id: 'numbers',
       title: getNumberGridTitle(),
       subtitle: "Select one or more to practice.",
@@ -207,7 +248,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
       title: "How do you want to answer?",
       subtitle: "Choose your input method.",
       content: (
-        <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+        <div className={styles.grid} style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
           <button 
             className={`${styles.card} ${config.inputMode === 'numpad' ? styles.selected : ''}`}
             onClick={() => handleInputModeSelect('numpad')}
@@ -224,6 +265,24 @@ export function GameSetup({ onStart }: GameSetupProps) {
             <span className={styles.cardLabel}>Multiple Choice</span>
             <p className={styles.modeDescription}>Pick the correct answer from 5 options.</p>
           </button>
+          <button 
+            className={`${styles.card} ${config.inputMode === 'voice' ? styles.selected : ''}`}
+            onClick={() => handleInputModeSelect('voice')}
+          >
+            {config.inputMode === 'voice' && voskStatus === 'loading' ? (
+              <Download size={48} className={`${styles.cardIcon} ${styles.spin}`} />
+            ) : (
+              <Mic size={48} className={styles.cardIcon} />
+            )}
+            <span className={styles.cardLabel}>Voice</span>
+            <p className={styles.modeDescription}>
+              {config.inputMode === 'voice' && voskStatus === 'loading' 
+                ? `Downloading... ${voskProgress > 0 ? `${voskProgress}%` : ''}`
+                : config.inputMode === 'voice' && voskStatus === 'ready'
+                ? 'Ready! ✓'
+                : 'Say your answers out loud! 🎤'}
+            </p>
+          </button>
         </div>
       )
     },
@@ -239,15 +298,33 @@ export function GameSetup({ onStart }: GameSetupProps) {
                 <span>Duration</span>
                 <span className={styles.sliderValue}>{config.duration}s</span>
               </div>
-              <input
-                type="range"
-                min="30"
-                max="90"
-                step="10"
-                value={config.duration}
-                onChange={(e) => setConfig({ duration: parseInt(e.target.value) })}
-                className={styles.slider}
-              />
+              <div className={styles.sliderRow}>
+                <button
+                  className={styles.adjustButton}
+                  onClick={() => setConfig({ duration: Math.max(30, config.duration - 10) })}
+                  disabled={config.duration <= 30}
+                  aria-label="Decrease duration"
+                >
+                  <Minus size={44} strokeWidth={3} />
+                </button>
+                <input
+                  type="range"
+                  min="30"
+                  max="90"
+                  step="10"
+                  value={config.duration}
+                  onChange={(e) => setConfig({ duration: parseInt(e.target.value) })}
+                  className={styles.slider}
+                />
+                <button
+                  className={styles.adjustButton}
+                  onClick={() => setConfig({ duration: Math.min(90, config.duration + 10) })}
+                  disabled={config.duration >= 90}
+                  aria-label="Increase duration"
+                >
+                  <Plus size={44} strokeWidth={3} />
+                </button>
+              </div>
             </>
           )}
           {config.mode === 'sprint' && (
@@ -256,15 +333,33 @@ export function GameSetup({ onStart }: GameSetupProps) {
                 <span>Questions</span>
                 <span className={styles.sliderValue}>{config.questionCount}</span>
               </div>
-              <input
-                type="range"
-                min="10"
-                max="50"
-                step="5"
-                value={config.questionCount}
-                onChange={(e) => setConfig({ questionCount: parseInt(e.target.value) })}
-                className={styles.slider}
-              />
+              <div className={styles.sliderRow}>
+                <button
+                  className={styles.adjustButton}
+                  onClick={() => setConfig({ questionCount: Math.max(10, config.questionCount - 5) })}
+                  disabled={config.questionCount <= 10}
+                  aria-label="Decrease questions"
+                >
+                  <Minus size={44} strokeWidth={3} />
+                </button>
+                <input
+                  type="range"
+                  min="10"
+                  max="50"
+                  step="5"
+                  value={config.questionCount}
+                  onChange={(e) => setConfig({ questionCount: parseInt(e.target.value) })}
+                  className={styles.slider}
+                />
+                <button
+                  className={styles.adjustButton}
+                  onClick={() => setConfig({ questionCount: Math.min(50, config.questionCount + 5) })}
+                  disabled={config.questionCount >= 50}
+                  aria-label="Increase questions"
+                >
+                  <Plus size={44} strokeWidth={3} />
+                </button>
+              </div>
             </>
           )}
           {config.mode === 'practice' && (
@@ -279,43 +374,88 @@ export function GameSetup({ onStart }: GameSetupProps) {
       id: 'ready',
       title: "Ready to Dash?",
       subtitle: "Double check your setup.",
+      mascot: (
+        <motion.div
+          className={styles.mascotContainer}
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <motion.div
+            className={styles.mascotReady}
+            animate={{ 
+              y: [0, -8, 0],
+              rotate: [0, -2, 0, 2, 0]
+            }}
+            transition={{ 
+              duration: 1.5, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          >
+            <Image
+              src="/mascots/mascot dashy - stance is ready for a sprint with a determined look.png"
+              alt="Dashy ready to sprint"
+              width={160}
+              height={160}
+              className={styles.mascotImage}
+              priority
+            />
+          </motion.div>
+          <motion.div
+            className={styles.readyPulse}
+            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      ),
       content: (
         <div className={styles.summary}>
-          <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Operation</span>
-            <span className={styles.summaryValue} style={{ textTransform: 'capitalize' }}>
-              {config.operations[0]}
-            </span>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Operation</span>
+              <span className={styles.summaryValue} style={{ textTransform: 'capitalize' }}>
+                {config.operations[0]}
+              </span>
+            </div>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>
+                {usesNumberRange ? 'Number Zone' : 'Focus Numbers'}
+              </span>
+              <span className={styles.summaryValue}>
+                {usesNumberRange 
+                  ? config.numberRange.preset === 'custom'
+                    ? `Custom (${config.numberRange.min}–${config.numberRange.max})`
+                    : `${NUMBER_RANGE_PRESETS[config.numberRange.preset as Exclude<typeof config.numberRange.preset, 'custom'>].label} (up to ${config.numberRange.max})`
+                  : config.selectedNumbers?.length 
+                    ? config.selectedNumbers.sort((a, b) => a - b).join(', ') 
+                    : 'All'}
+              </span>
+            </div>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Mode</span>
+              <span className={styles.summaryValue}>
+                {config.mode === 'timed' ? `Dash Blitz (${config.duration}s)` : 
+                 config.mode === 'sprint' ? `Sprint (${config.questionCount} Qs)` : 
+                 'Zen Practice'}
+              </span>
+            </div>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Input</span>
+              <span className={styles.summaryValue}>
+                {config.inputMode === 'choice' ? 'Multiple Choice' : 
+                 config.inputMode === 'voice' ? 'Voice' : 'Number Pad'}
+              </span>
+            </div>
           </div>
-          <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Focus Numbers</span>
-            <span className={styles.summaryValue}>
-              {config.selectedNumbers?.length 
-                ? config.selectedNumbers.sort((a, b) => a - b).join(', ') 
-                : 'All'}
-            </span>
-          </div>
-          <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Mode</span>
-            <span className={styles.summaryValue}>
-              {config.mode === 'timed' ? `Dash Blitz (${config.duration}s)` : 
-               config.mode === 'sprint' ? `Sprint (${config.questionCount} Qs)` : 
-               'Zen Practice'}
-            </span>
-          </div>
-          <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Input</span>
-            <span className={styles.summaryValue}>
-              {config.inputMode === 'choice' ? 'Multiple Choice' : 'Number Pad'}
-            </span>
-          </div>
-        </div>
       )
     }
   ];
 
   return (
     <div className={styles.container}>
+      <div className={styles.profileHeader}>
+        <ProfileChip size="md" />
+      </div>
       <AnimatePresence mode="wait">
         <motion.div
           key={step}
@@ -325,12 +465,16 @@ export function GameSetup({ onStart }: GameSetupProps) {
           transition={{ duration: 0.3 }}
           className={styles.stepContainer}
         >
-          <div>
+          {'mascot' in steps[step] && steps[step].mascot}
+          
+          <div className={styles.stepHeader}>
             <h2 className={styles.title}>{steps[step].title}</h2>
             <p className={styles.subtitle}>{steps[step].subtitle}</p>
           </div>
           
-          {steps[step].content}
+          <div className={styles.stepContent}>
+            {steps[step].content}
+          </div>
 
           <div className={styles.actions}>
             {step > 0 ? (
@@ -340,8 +484,21 @@ export function GameSetup({ onStart }: GameSetupProps) {
             ) : <div />}
             
             {step === steps.length - 1 ? (
-              <button className={styles.nextButton} onClick={handleStart}>
-                Start Game <Play size={20} fill="currentColor" />
+              <button 
+                className={`${styles.nextButton} ${isVoiceLoading ? styles.loading : ''}`} 
+                onClick={handleStart}
+                disabled={!canStart}
+              >
+                {isVoiceLoading ? (
+                  <>
+                    <Loader2 size={20} className={styles.spin} />
+                    Loading Voice... {voskProgress > 0 ? `${voskProgress}%` : ''}
+                  </>
+                ) : (
+                  <>
+                    Start Game <Play size={20} fill="currentColor" />
+                  </>
+                )}
               </button>
             ) : (
               step > 0 && (

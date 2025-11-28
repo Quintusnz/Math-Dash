@@ -75,10 +75,14 @@ export default function GrownUpsDashboard() {
         const profileId = crypto.randomUUID();
         await db.profiles.add({
           id: profileId,
+          playCode: 'DASH-DEMO',
           displayName: 'Johnny',
           ageBand: '7-9',
           avatarId: '🦁',
+          isGuest: false,
+          classroomId: null,
           preferences: { theme: 'default', soundEnabled: true, hapticsEnabled: true },
+          syncStatus: 'local',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         });

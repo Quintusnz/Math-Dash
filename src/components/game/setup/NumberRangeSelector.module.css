@@ -1,0 +1,523 @@
+/* NumberRangeSelector.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 700px;
+}
+
+/* Preset Grid - 2x2 on mobile, 4x1 on larger */
+.presetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .presetGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+  }
+}
+
+/* Preset Tile */
+.presetTile {
+  background: var(--surface-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+  position: relative;
+  min-height: 160px;
+  text-align: center;
+}
+
+.presetTile:hover {
+  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-md);
+}
+
+.presetTile:focus-visible {
+  outline: 3px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+
+.presetTile.selected {
+  border-color: var(--color-primary-500);
+  border-width: 3px;
+  background: var(--color-primary-50);
+  box-shadow: 0 0 0 4px var(--color-primary-100);
+}
+
+.selectedBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  background: var(--color-primary-500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* Star row */
+.starRow {
+  display: flex;
+  gap: 2px;
+  margin-bottom: var(--space-2xs);
+}
+
+.star {
+  color: var(--color-accent-gold);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+}
+
+/* Tile content */
+.tileLabel {
+  font-family: var(--font-heading);
+  font-size: var(--text-body);
+  font-weight: 800;
+  color: var(--color-neutral-900);
+  letter-spacing: 0.02em;
+}
+
+.presetTile.selected .tileLabel {
+  color: var(--color-primary-700);
+}
+
+.rangeLabel {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-primary-600);
+}
+
+.exampleList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--space-xs);
+}
+
+.example {
+  font-size: var(--text-caption);
+  color: var(--color-neutral-500);
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.yearHint {
+  font-size: var(--text-caption);
+  color: var(--color-neutral-400);
+  font-style: italic;
+  margin-top: auto;
+}
+
+/* Custom indicator */
+.customIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--color-primary-50);
+  border: 2px solid var(--color-primary-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.customLabel {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.editButton {
+  background: var(--color-primary-500);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--motion-duration-short);
+}
+
+.editButton:hover {
+  background: var(--color-primary-600);
+}
+
+/* More options button */
+.moreOptionsButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: transparent;
+  border: none;
+  color: var(--color-neutral-500);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--motion-duration-short);
+}
+
+.moreOptionsButton:hover {
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
+}
+
+/* Custom Range Panel (Bottom Sheet) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface-card);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  z-index: 101;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    left: 50%;
+    right: auto;
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+    border-radius: var(--radius-xl);
+    max-width: 480px;
+    width: 90%;
+    max-height: 80vh;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  background: var(--surface-card);
+  z-index: 1;
+}
+
+.panelTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-h4);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-neutral-500);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--motion-duration-short);
+}
+
+.closeButton:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.panelContent {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sectionLabel {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+/* Radio Group */
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.radioLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--motion-duration-short);
+}
+
+.radioLabel:hover {
+  background: var(--color-neutral-50);
+}
+
+.radioInput {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: 50%;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.radioInput:checked {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+}
+
+.radioInput:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+.radioInput:focus-visible {
+  outline: 3px solid var(--color-primary-200);
+  outline-offset: 2px;
+}
+
+.radioText {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.4;
+}
+
+/* Range Inputs */
+.rangeInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.inputLabel {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+}
+
+.stepperRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.stepperButton {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-primary-100);
+  border: 2px solid var(--color-primary-200);
+  color: var(--color-primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--motion-duration-short);
+  flex-shrink: 0;
+}
+
+.stepperButton:hover:not(:disabled) {
+  background: var(--color-primary-200);
+  transform: scale(1.05);
+}
+
+.stepperButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.numberInput {
+  flex: 1;
+  height: 44px;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: var(--text-h4);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+}
+
+.numberInput:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+}
+
+/* Checkbox */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: background var(--motion-duration-short);
+}
+
+.checkboxLabel:hover {
+  background: var(--color-neutral-50);
+}
+
+.checkboxInput {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-sm);
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.checkboxInput:checked {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+}
+
+.checkboxInput:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkboxText {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-700);
+}
+
+/* Preview section */
+.previewSection {
+  background: var(--surface-muted);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.previewProblems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.previewProblem {
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-600);
+  background: var(--surface-card);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Panel Actions */
+.panelActions {
+  padding: var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.applyButton {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-primary-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--motion-duration-short);
+}
+
+.applyButton:hover {
+  background: var(--color-primary-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.resetButton {
+  width: 100%;
+  padding: var(--space-md);
+  background: transparent;
+  color: var(--color-neutral-600);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--motion-duration-short);
+}
+
+.resetButton:hover {
+  background: var(--color-neutral-50);
+  border-color: var(--color-neutral-300);
+}

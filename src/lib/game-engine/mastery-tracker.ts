@@ -8,9 +8,10 @@ export class MasteryTracker {
     sessionId: string,
     question: Question, 
     isCorrect: boolean, 
-    timeMs: number
+    timeMs: number,
+    givenAnswer?: number
   ) {
-    // 1. Log the raw attempt
+    // 1. Log the raw attempt with the actual answer given
     await db.attempts.add({
       sessionId,
       questionId: question.id,
@@ -18,7 +19,8 @@ export class MasteryTracker {
       operation: question.type,
       isCorrect,
       responseTimeMs: timeMs,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      givenAnswer
     });
 
     // 2. Update the aggregated mastery record

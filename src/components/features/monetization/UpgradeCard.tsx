@@ -60,7 +60,7 @@ export function UpgradeCard() {
         disabled={loading}
         className={styles.button}
       >
-        {loading ? 'Loading...' : 'Upgrade for $7.99'}
+        {loading ? 'Loading...' : 'Upgrade for $6.99'}
       </button>
       
       <p className={styles.disclaimer}>

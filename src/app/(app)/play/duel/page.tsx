@@ -63,7 +63,7 @@ export default function DuelPage() {
     const isCorrect = submitAnswer('p1');
     if (isCorrect) {
       play('CORRECT');
-      setQuestion('p1', generateQuestion(player1.difficulty));
+      setQuestion('p1', generateQuestion({ difficulty: player1.difficulty }));
     } else {
       play('WRONG');
       vibrate(50);
@@ -76,7 +76,7 @@ export default function DuelPage() {
     const isCorrect = submitAnswer('p2');
     if (isCorrect) {
       play('CORRECT');
-      setQuestion('p2', generateQuestion(player2.difficulty));
+      setQuestion('p2', generateQuestion({ difficulty: player2.difficulty }));
     } else {
       play('WRONG');
       vibrate(50);
@@ -86,8 +86,8 @@ export default function DuelPage() {
 
   const handleStart = () => {
     startGame();
-    setQuestion('p1', generateQuestion(player1.difficulty));
-    setQuestion('p2', generateQuestion(player2.difficulty));
+    setQuestion('p1', generateQuestion({ difficulty: player1.difficulty }));
+    setQuestion('p2', generateQuestion({ difficulty: player2.difficulty }));
   };
 
   if (status === 'setup') {

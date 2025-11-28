@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db, Profile } from '@/lib/db';
 import { useUserStore } from '@/lib/stores/useUserStore';
+import { generatePlayCode } from '@/lib/auth/play-code';
 import { motion } from 'motion/react';
 import styles from './ProfileCreator.module.css';
 
@@ -16,16 +17,22 @@ export function ProfileCreator({ onCreated }: { onCreated?: () => void }) {
     e.preventDefault();
     if (!name.trim()) return;
 
+    const playCode = await generatePlayCode();
+    
     const newProfile: Profile = {
       id: crypto.randomUUID(),
+      playCode,
       displayName: name,
       avatarId: avatar,
       ageBand,
+      isGuest: false,
+      classroomId: null,
       preferences: {
         theme: 'default',
         soundEnabled: true,
         hapticsEnabled: true
       },
+      syncStatus: 'local',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
