@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lock, Sparkles, X } from 'lucide-react';
 import Link from 'next/link';
+import { useCurrency } from '@/lib/hooks/useCurrency';
 import styles from './LockedContentModal.module.css';
 
 interface LockedContentModalProps {
@@ -23,6 +24,7 @@ export function LockedContentModal({
   operation
 }: LockedContentModalProps) {
   const [mounted, setMounted] = useState(false);
+  const { corePricing } = useCurrency();
 
   useEffect(() => {
     setMounted(true);
@@ -88,7 +90,7 @@ export function LockedContentModal({
             <div className={styles.actions}>
               <Link href="/grown-ups?tab=premium" className={styles.upgradeButton}>
                 <Sparkles size={18} />
-                Unlock for $6.99
+                Unlock for {corePricing.displayPrice}
               </Link>
               <button className={styles.laterButton} onClick={onClose}>
                 Maybe Later

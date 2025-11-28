@@ -7,7 +7,7 @@ import { generateQuestion } from "@/lib/game-engine/question-generator";
 import { saveGameSession } from "@/lib/game-engine/session-manager";
 import { MasteryTracker } from "@/lib/game-engine/mastery-tracker";
 import { EngagementManager } from "@/lib/game-engine/engagement-manager";
-import { db, MasteryRecord, Achievement } from "@/lib/db";
+import { db, MasteryRecord, Achievement, WeeklyGoal } from "@/lib/db";
 import { GameCanvas } from "@/components/game/GameCanvas";
 import { TimerBar } from "@/components/game/TimerBar";
 import { QuestionDisplay } from "@/components/game/QuestionDisplay";
@@ -33,6 +33,7 @@ function PlayContent() {
   const weakFactsRef = useRef<MasteryRecord[]>([]);
   const questionStartTimeRef = useRef<number>(Date.now());
   const [unlockedAchievements, setUnlockedAchievements] = useState<Achievement[]>([]);
+  const [weeklyGoalData, setWeeklyGoalData] = useState<{ goal: WeeklyGoal; justCompleted: boolean } | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isHighScore, setIsHighScore] = useState(false);
@@ -161,10 +162,21 @@ function PlayContent() {
           difficulty: config.difficulty,
           selectedNumbers: config.selectedNumbers
         }
-      }).then(({ newAchievements }) => {
+      }).then(({ newAchievements, weeklyGoalJustCompleted }) => {
         if (newAchievements.length > 0) {
           setUnlockedAchievements(newAchievements);
           play('WIN'); // Play win sound if achievements unlocked
+        }
+        // Fetch the updated weekly goal to display on result screen
+        if (activeProfileId && activeProfileId !== 'guest') {
+          import('@/lib/game-engine/weekly-goal-tracker').then(({ WeeklyGoalTracker }) => {
+            WeeklyGoalTracker.getWeeklyGoal(activeProfileId).then(goal => {
+              setWeeklyGoalData({ goal, justCompleted: weeklyGoalJustCompleted });
+              if (weeklyGoalJustCompleted) {
+                play('WIN'); // Play celebration sound for goal completion
+              }
+            }).catch(console.error);
+          });
         }
       }).catch(console.error);
     }
@@ -275,9 +287,12 @@ function PlayContent() {
         total={questionsAnswered}
         achievements={unlockedAchievements}
         isHighScore={isHighScore}
+        weeklyGoal={weeklyGoalData?.goal}
+        weeklyGoalJustCompleted={weeklyGoalData?.justCompleted}
         onPlayAgain={() => {
           hasSavedRef.current = false;
           setIsHighScore(false);
+          setWeeklyGoalData(null);
           sessionIdRef.current = crypto.randomUUID();
           questionStartTimeRef.current = Date.now();
           setUnlockedAchievements([]);
@@ -294,10 +309,11 @@ function PlayContent() {
           hasSavedRef.current = false;
           setIsHighScore(false);
           setUnlockedAchievements([]);
+          setWeeklyGoalData(null);
           // Reset to idle status to show GameSetup
           useGameStore.setState({ status: 'idle' });
         }}
-        onHome={() => router.push('/')}
+        onHome={() => router.push('/dashboard')}
       />
     );
   } else {

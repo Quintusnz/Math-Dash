@@ -143,6 +143,21 @@
   color: var(--text-muted);
 }
 
+/* Weekly Goal Progress Section */
+.weeklyGoalContainer {
+  margin: var(--space-lg) 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.weeklyGoalTitle {
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  color: var(--color-primary-700);
+  margin: 0;
+  text-align: center;
+}
+
 .mascotContainer {
   display: flex;
   flex-direction: column;

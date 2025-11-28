@@ -1,5 +1,6 @@
 import styles from "./page.module.css";
 import { LinkButton } from "@/components/ui/Button";
+import { PricingPlans } from "./PricingPlans";
 import { 
   Check, 
   X, 
@@ -17,52 +18,6 @@ import {
   Lock
 } from "lucide-react";
 import Image from "next/image";
-
-const plans = [
-  {
-    name: "Free",
-    tagline: "Everything you need to start",
-    price: "$0",
-    cadence: "forever",
-    badge: null,
-    icon: Heart,
-    color: "secondary",
-    features: [
-      { text: "Unlimited 60-second practice sessions", included: true },
-      { text: "All 4 operations (+ − × ÷)", included: true },
-      { text: "Offline-first play", included: true },
-      { text: "Up to 3 player profiles", included: true },
-      { text: "Basic progress tracking", included: true },
-      { text: "Grown-ups gate for settings", included: true },
-      { text: "Skill radar & deep analytics", included: false },
-      { text: "Cloud sync across devices", included: false },
-      { text: "All difficulty levels", included: false },
-    ],
-    cta: { label: "Play Free Now", href: "/play" },
-  },
-  {
-    name: "Premium",
-    tagline: "Unlock the full experience",
-    price: "$4.99",
-    cadence: "one-time",
-    badge: "Best Value",
-    icon: Crown,
-    color: "primary",
-    features: [
-      { text: "Everything in Free, plus:", included: true, highlight: true },
-      { text: "Skill radar & progress analytics", included: true },
-      { text: "Deep practice history", included: true },
-      { text: "Cloud sync across devices", included: true },
-      { text: "All difficulty levels unlocked", included: true },
-      { text: "Up to 6 player profiles", included: true },
-      { text: "Family progress dashboard", included: true },
-      { text: "Priority support", included: true },
-      { text: "All future updates included", included: true },
-    ],
-    cta: { label: "Unlock Premium", href: "/grown-ups?tab=premium" },
-    primary: true,
-  },
-];
 
 const guarantees = [
   { icon: Shield, title: "No Hidden Fees", description: "One-time payment. No subscriptions, no surprises." },
@@ -130,63 +85,7 @@ export default function PricingPage() {
       </section>
 
       {/* Plans Section */}
-      <section className={styles.plansSection}>
-        <div className={styles.plansGrid}>
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`${styles.planCard} ${plan.primary ? styles.planPrimary : styles.planSecondary}`}
-            >
-              {plan.badge && (
-                <div className={styles.planBadge}>
-                  <Star size={12} /> {plan.badge}
-                </div>
-              )}
-              
-              <div className={styles.planHeader}>
-                <div className={styles.planIconWrapper} data-color={plan.color}>
-                  <plan.icon size={24} />
-                </div>
-                <div>
-                  <h3 className={styles.planName}>{plan.name}</h3>
-                  <p className={styles.planTagline}>{plan.tagline}</p>
-                </div>
-              </div>
-              
-              <div className={styles.planPricing}>
-                <span className={styles.planPrice}>{plan.price}</span>
-                <span className={styles.planCadence}>{plan.cadence}</span>
-              </div>
-
-              <ul className={styles.featureList}>
-                {plan.features.map((feature, i) => (
-                  <li 
-                    key={i} 
-                    className={`${styles.featureItem} ${'highlight' in feature && feature.highlight ? styles.featureHighlight : ''} ${!feature.included ? styles.featureDisabled : ''}`}
-                  >
-                    {feature.included ? (
-                      <Check size={16} className={styles.featureCheck} />
-                    ) : (
-                      <X size={16} className={styles.featureX} />
-                    )}
-                    <span>{feature.text}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <LinkButton 
-                href={plan.cta.href} 
-                size="lg" 
-                variant={plan.primary ? "primary" : "secondary"}
-                className={plan.primary ? styles.primaryCta : styles.secondaryCta}
-              >
-                {plan.primary && <Rocket size={18} />}
-                {plan.cta.label}
-              </LinkButton>
-            </div>
-          ))}
-        </div>
-      </section>
+      <PricingPlans />
 
       {/* Guarantees Section */}
       <section className={styles.guaranteesSection}>

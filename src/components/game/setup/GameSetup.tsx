@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useGameStore, Operation, GameMode, NumberRange, NUMBER_RANGE_PRESETS } from "@/lib/stores/useGameStore";
 import { useVoskModel } from "@/lib/hooks/useVoskModel";
 import { usePremiumAccess } from "@/lib/hooks/usePremiumAccess";
+import { useCurrency } from "@/lib/hooks/useCurrency";
 import { isNumberLocked, FREE_NUMBERS, PREMIUM_NUMBERS, getPremiumDescription } from "@/lib/constants/content-access";
 import { ProfileChip } from "@/components/features/profiles/ProfileChip";
 import { NumberRangeSelector } from "./NumberRangeSelector";
@@ -25,6 +26,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
   const { config, setConfig, startGame } = useGameStore();
   const { status: voskStatus, progress: voskProgress, startLoading: startVoskLoading } = useVoskModel();
   const { isPremium, isDevOverride } = usePremiumAccess();
+  const { corePricing } = useCurrency();
 
   // Start loading Vosk when voice is selected
   useEffect(() => {
@@ -190,7 +192,7 @@ export function GameSetup({ onStart }: GameSetupProps) {
           >
             <Lock size={16} />
             <span>Unlock All Tables</span>
-            <span className={styles.unlockPrice}>$6.99</span>
+            <span className={styles.unlockPrice}>{corePricing.displayPrice}</span>
           </button>
         )}
       </div>

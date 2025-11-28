@@ -1,5 +1,13 @@
 import Dexie, { Table } from 'dexie';
 
+export interface WeeklyGoal {
+  targetDays: number;        // Default: 3 (configurable by parent)
+  currentDays: number;       // Days practiced this week
+  weekStart: string;         // ISO date of Monday (YYYY-MM-DD)
+  practicedDates: string[];  // List of dates practiced this week (YYYY-MM-DD)
+  lastCompletedWeek?: string; // Last week the goal was achieved (YYYY-MM-DD of Monday)
+}
+
 export interface Profile {
   id: string;
   playCode: string | null; // Format: DASH-XXXX (null for guests)
@@ -20,6 +28,8 @@ export interface Profile {
     best: number;
     lastActiveDate: string; // YYYY-MM-DD
   };
+  // Weekly goal tracking
+  weeklyGoal?: WeeklyGoal;
   stats?: {
     totalQuestions: number;
     totalCorrect: number;

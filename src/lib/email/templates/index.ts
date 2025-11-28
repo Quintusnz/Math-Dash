@@ -1,0 +1,1 @@
+export { PurchaseConfirmationEmail } from './PurchaseConfirmationEmail';

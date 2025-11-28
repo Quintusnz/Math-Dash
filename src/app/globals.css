@@ -201,3 +201,52 @@ button {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                Dark Theme                                  */
+/* -------------------------------------------------------------------------- */
+
+:root.theme-dark {
+  /* Surface colors for dark mode */
+  --surface-base: #0f172a;
+  --surface-card: #1e293b;
+  --surface-glass: rgba(30, 41, 59, 0.8);
+  --surface-muted: #1e293b;
+  
+  /* Borders */
+  --border-subtle: #334155;
+  --border-strong: #475569;
+  
+  /* Text */
+  --text-muted: #94a3b8;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-700: #334155;
+  --color-neutral-900: #f8fafc;
+  
+  /* Primary colors (slightly brighter for dark mode) */
+  --color-primary-50: rgba(48, 86, 211, 0.15);
+  --color-primary-100: rgba(48, 86, 211, 0.25);
+  --color-primary-500: #6366f1;
+  --color-primary-600: #818cf8;
+  
+  /* Legacy aliases */
+  --card: var(--surface-card);
+  --card-foreground: #f8fafc;
+  --muted: var(--surface-muted);
+  --muted-foreground: var(--text-muted);
+  --border: var(--border-subtle);
+  --foreground: #f8fafc;
+  --primary: var(--color-primary-500);
+  --primary-foreground: var(--color-white);
+}
+
+:root.theme-dark body {
+  background: var(--surface-base);
+  color: #f8fafc;
+}
+

@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
 import { HistoryList } from "./HistoryList";
 import styles from './ResultScreen.module.css';
-import { Achievement } from "@/lib/db";
+import { Achievement, WeeklyGoal } from "@/lib/db";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ProfileChip } from "@/components/features/profiles/ProfileChip";
+import { WeeklyGoalDisplay } from "@/components/features/engagement";
 import { RotateCcw, Settings, Home } from "lucide-react";
 
 interface ResultScreenProps {
@@ -13,12 +14,25 @@ interface ResultScreenProps {
   total: number;
   achievements?: Achievement[];
   isHighScore?: boolean;
+  weeklyGoal?: WeeklyGoal;
+  weeklyGoalJustCompleted?: boolean;
   onPlayAgain: () => void;
   onNewGame: () => void;
   onHome: () => void;
 }
 
-export function ResultScreen({ score, correct, total, achievements, isHighScore, onPlayAgain, onNewGame, onHome }: ResultScreenProps) {
+export function ResultScreen({ 
+  score, 
+  correct, 
+  total, 
+  achievements, 
+  isHighScore, 
+  weeklyGoal,
+  weeklyGoalJustCompleted,
+  onPlayAgain, 
+  onNewGame, 
+  onHome 
+}: ResultScreenProps) {
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
 
   return (
@@ -87,6 +101,21 @@ export function ResultScreen({ score, correct, total, achievements, isHighScore,
                   </div>
                 ))}
               </div>
+            </motion.div>
+          )}
+
+          {/* Weekly Goal Progress */}
+          {weeklyGoal && (
+            <motion.div
+              initial={{ y: 16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.35, duration: 0.3 }}
+              className={styles.weeklyGoalContainer}
+            >
+              <h3 className={styles.weeklyGoalTitle}>
+                {weeklyGoalJustCompleted ? '🎉 Weekly Goal Achieved!' : 'Weekly Goal Progress'}
+              </h3>
+              <WeeklyGoalDisplay weeklyGoal={weeklyGoal} />
             </motion.div>
           )}
 

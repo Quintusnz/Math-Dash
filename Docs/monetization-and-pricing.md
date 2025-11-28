@@ -32,17 +32,21 @@
 ## 3. Pricing Guidelines (Draft)
 
 - **Home License – Core App**
-  - Target price (Tier 1 markets):
-    - USD $7.99
-    - GBP £6.99
-    - EUR €7.99
+  - Target price (Tier 1 markets: US, UK, EU, Australia, New Zealand):
+    - USD $6.99 (United States)
+    - GBP £5.99 (United Kingdom)
+    - EUR €6.99 (Eurozone)
+    - AUD A$10.99 (Australia)
+    - NZD NZ$11.99 (New Zealand)
   - Regional pricing later at ~50–70% of Tier 1.
 
 - **Teacher / Small‑School License – Core App**
-  - Simple per‑teacher license:
-    - USD $19.99
-    - GBP £17.99
-    - EUR €19.99
+  - Simple per‑teacher license (Tier 1 markets):
+    - USD $19.99 (United States)
+    - GBP £17.99 (United Kingdom)
+    - EUR €19.99 (Eurozone)
+    - AUD A$29.99 (Australia)
+    - NZD NZ$32.99 (New Zealand)
   - Future: volume discounts / site licenses once demand validated.
 
 - **AI Credit Packs**

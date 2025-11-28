@@ -21,22 +21,28 @@ interface SkillRadarProps {
   data?: SkillData[];
 }
 
-const MOCK_DATA: SkillData[] = [
-  { subject: 'Addition', score: 80, fullMark: 100 },
-  { subject: 'Subtraction', score: 65, fullMark: 100 },
-  { subject: 'Multiplication', score: 40, fullMark: 100 },
-  { subject: 'Division', score: 20, fullMark: 100 },
-  { subject: 'Speed', score: 90, fullMark: 100 },
-  { subject: 'Accuracy', score: 75, fullMark: 100 },
+const DEFAULT_DATA: SkillData[] = [
+  { subject: 'Addition', score: 0, fullMark: 100 },
+  { subject: 'Subtraction', score: 0, fullMark: 100 },
+  { subject: 'Multiplication', score: 0, fullMark: 100 },
+  { subject: 'Division', score: 0, fullMark: 100 },
+  { subject: 'Speed', score: 0, fullMark: 100 },
+  { subject: 'Accuracy', score: 0, fullMark: 100 },
 ];
 
-export function SkillRadar({ data = MOCK_DATA }: SkillRadarProps) {
+export function SkillRadar({ data }: SkillRadarProps) {
+  const chartData = data && data.length > 0 ? data : DEFAULT_DATA;
+  const hasRealData = data && data.some(d => d.score > 0);
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Skill Breakdown</h3>
+      {!hasRealData && (
+        <p className={styles.emptyHint}>Play some games to see your skill breakdown!</p>
+      )}
       <div className={styles.chartWrapper}>
-        <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
+        <ResponsiveContainer width="100%" height={300}>
+          <RadarChart cx="50%" cy="50%" outerRadius="70%" data={chartData}>
             <PolarGrid stroke="#e5e7eb" />
             <PolarAngleAxis 
               dataKey="subject" 
@@ -46,9 +52,9 @@ export function SkillRadar({ data = MOCK_DATA }: SkillRadarProps) {
             <Radar
               name="Skills"
               dataKey="score"
-              stroke="#4f46e5"
-              fill="#4f46e5"
-              fillOpacity={0.5}
+              stroke={hasRealData ? "#4f46e5" : "#d1d5db"}
+              fill={hasRealData ? "#4f46e5" : "#e5e7eb"}
+              fillOpacity={hasRealData ? 0.5 : 0.3}
             />
             <Tooltip 
               contentStyle={{ 
@@ -57,6 +63,7 @@ export function SkillRadar({ data = MOCK_DATA }: SkillRadarProps) {
                 borderRadius: '8px',
                 color: '#111827'
               }}
+              formatter={(value: number) => [`${value}%`, 'Score']}
             />
           </RadarChart>
         </ResponsiveContainer>

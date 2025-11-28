@@ -401,7 +401,7 @@ export default function ParentsLandingPage() {
             Give Your Child the Gift of Math Confidence
           </h2>
           <p className={styles.finalCtaText}>
-            Join thousands of families who&apos;ve discovered a better way to practice math. 
+            Discover a better way to practice math—no nagging, no frustration. 
             No risk, no credit card required—just sign up and start playing.
           </p>
           

@@ -1,8 +1,8 @@
 # Math Dash - Implementation Gap Analysis
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Created:** November 2025  
-**Last Updated:** November 28, 2025  
+**Last Updated:** November 29, 2025  
 **Purpose:** Identify gaps between PRD/User Flows and current implementation to guide development priorities
 
 ---
@@ -17,9 +17,17 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
 - ✅ **Progress tracking** foundation exists (Dexie DB, mastery tracking)
 - ✅ **Number Range Selection** for Add/Sub implemented (Nov 2025)
 - ✅ **Streak Display** on dashboard implemented (Nov 2025)
-- ⚠️ **Parent/Grown-Up features** are partially implemented
-- ❌ **Monetization** needs completion (pricing discrepancy, Coach subscription)
+- ✅ **Phase 1: Polish MVP Core** completed (Nov 29, 2025)
+  - Parent email capture in checkout ✅
+  - Content/topic locking for free tier ✅
+  - Settings page with sound/haptics/theme ✅
+  - Adult verification before purchase ✅
+  - Email service (Resend) configured ✅
+  - Regional pricing (USD, GBP, EUR, AUD, NZD) ✅
+  - Profile deletion confirmation flow ✅
+  - Marketing statistics accuracy verified ✅
 - ⚠️ **Engagement layer** partially implemented (Streaks done, Goals not started)
+- ❌ **Math Dash Coach subscription** not started
 - ❌ **Teacher features** not started
 
 ---
@@ -36,10 +44,10 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
 | Enter Code Flow | ✅ Complete | Local device lookup working |
 | Guest Play | ✅ Complete | Temporary profile created |
 | Profile Switching | ✅ Complete | Profile selector with multiple profiles |
-| Profile Deletion | ⚠️ Partial | UI exists in Grown-Ups but confirmation flow needs polish |
+| Profile Deletion | ✅ Complete | Multi-step confirmation with adult gate (Nov 2025) |
 
 **Remaining Tasks:**
-- [ ] Add more robust profile deletion confirmation with adult gate
+- [x] ~~Add more robust profile deletion confirmation with adult gate~~ ✅ **Implemented Nov 2025**
 - [ ] Cloud-based code lookup (Future - requires account system)
 - [ ] Guest-to-full-profile conversion flow
 
@@ -162,7 +170,7 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
 | Profile Avatar/Name | ✅ Complete | Display in list |
 | Add New Profile | ⚠️ Partial | Button exists but flow unclear |
 | Edit Profile | ⚠️ Partial | Basic editing, needs polish |
-| Delete Profile | ⚠️ Partial | Works but confirmation needs improvement |
+| Delete Profile | ✅ Complete | Multi-step confirmation with adult gate (Nov 2025) |
 | Play Code Display | ⚠️ Partial | Not prominently shown per profile |
 
 **Remaining Tasks:**
@@ -196,10 +204,10 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
 | Premium Flag | ✅ Complete | isPremium in globalSettings |
 
 **Remaining Tasks:**
-- [ ] **Price Correction**: Shows $7.99, PRD says $6.99
-- [ ] **Locked Content UI**: Show lock icons on premium topics in game setup
-- [ ] **Adult Gate on Purchase**: Verify adult before payment flow
-- [ ] **Regional Pricing**: Support GBP, EUR tiers
+- [x] ~~**Price Correction**: Shows $7.99, PRD says $6.99~~ ✅ **Fixed Nov 2025**
+- [x] ~~**Locked Content UI**: Show lock icons on premium topics in game setup~~ ✅ **Implemented Nov 2025**
+- [x] ~~**Adult Gate on Purchase**: Verify adult before payment flow~~ ✅ **Implemented Nov 2025**
+- [x] ~~**Regional Pricing**: Support GBP, EUR tiers~~ ✅ **Implemented Nov 2025** (USD, GBP, EUR, AUD, NZD)
 
 ### 2.5 Math Dash Coach (Subscription) ❌ NOT STARTED
 
@@ -234,14 +242,13 @@ This is a **major missing feature** from PRD v2.0:
 | Export Data Button | ⚠️ Partial | UI exists, functionality unclear |
 | Reset App Button | ⚠️ Partial | UI exists, needs confirmation |
 | Notification Preferences | ❌ Not Built | PRD requires parent-controlled reminders |
-| Theme Selection | ❌ Not Built | Placeholder in schema |
-| Sound/Haptics Defaults | ❌ Not Built | Per-profile preferences exist but no UI |
+| Theme Selection | ✅ Complete | Light/Dark/Auto with ThemeProvider (Nov 2025) |
+| Sound/Haptics Defaults | ✅ Complete | Toggle switches in Settings page (Nov 2025) |
 
 **Remaining Tasks:**
 - [ ] **Working Export**: JSON export of all profile data
 - [ ] **Safe Reset**: Multi-step confirmation before data wipe
 - [ ] **Notification Settings**: Push reminder configuration (opt-in)
-- [ ] **Theme/Sound Settings**: Functional preferences UI
 
 ---
 
@@ -596,14 +603,14 @@ interface SkillTrend {
 
 **Issues to Fix:**
 - [x] **Price Discrepancy**: ~~Shows $7.99, PRD says $6.99~~ ✅ Fixed to $6.99
-- [ ] **Locked Content**: No actual content locking implemented
-- [ ] **Adult Gate**: No verification before purchase
+- [x] **Locked Content**: ~~No actual content locking implemented~~ ✅ Implemented Nov 2025
+- [x] **Adult Gate**: ~~No verification before purchase~~ ✅ Implemented Nov 2025
 
 **Remaining Tasks:**
 - [x] Fix pricing to $6.99 ✅
-- [ ] Implement topic locking for free tier
-- [ ] Add adult verification before payment
-- [ ] Support regional pricing (GBP £5.99, EUR €6.99)
+- [x] Implement topic locking for free tier ✅ **Implemented Nov 2025**
+- [x] Add adult verification before payment ✅ **Implemented Nov 2025**
+- [x] Support regional pricing (GBP £5.99, EUR €6.99) ✅ **Implemented Nov 2025** (+ AUD A$10.99, NZD NZ$11.99)
 - [ ] Teacher unlock tier ($19.99) - separate SKU
 
 ### 6.2 Coach Subscription ❌ NOT STARTED
@@ -875,21 +882,21 @@ The entire teacher flow is not implemented:
 
 ---
 
-## 12. Parent Email & Communication ❌ CRITICAL GAP
+## 12. Parent Email & Communication ✅ FOUNDATION COMPLETE
 
 ### 12.1 Current State
 
-**We currently do NOT capture parent email addresses.** This creates significant limitations:
+**Parent email capture is now implemented (Nov 2025).** Email captured during checkout flow.
 
 | Capability | Status | Impact |
 |------------|--------|--------|
-| Parent email capture | ❌ Not Built | No way to contact parents |
-| Email verification | ❌ Not Built | Can't verify parent identity |
-| Marketing emails | ❌ Blocked | Can't inform about new features |
-| Coach report delivery | ❌ Blocked | Can't send monthly/termly reports |
-| Password reset | ❌ Blocked | No account recovery mechanism |
-| Purchase receipts | ⚠️ Stripe Only | Only through Stripe, not our system |
-| Notification preferences | ❌ Not Built | Can't configure email preferences |
+| Parent email capture | ✅ Complete | Captured during Stripe checkout (Nov 2025) |
+| Email verification | ⚠️ Partial | Captured but not verified |
+| Marketing emails | ✅ Opt-in | marketingOptIn flag captured |
+| Coach report delivery | ⚠️ Ready | Email service configured, Coach not built |
+| Password reset | ❌ Blocked | No account system yet |
+| Purchase receipts | ✅ Complete | Resend transactional email on purchase (Nov 2025) |
+| Notification preferences | ⚠️ Partial | Marketing opt-in captured, no preference center |
 
 ### 12.2 Why This Matters
 
@@ -1008,15 +1015,15 @@ interface Profile {
 
 ### 12.7 Remaining Tasks - Email & Communication
 
-**P0 - Critical Foundation:**
-- [ ] Add email capture to Stripe checkout flow
-- [ ] Store parent email in database (link to Stripe customer)
-- [ ] Basic email preference capture (marketing opt-in checkbox)
-- [ ] Implement unsubscribe mechanism
+**P0 - Critical Foundation:** ✅ **COMPLETE (Nov 2025)**
+- [x] Add email capture to Stripe checkout flow ✅
+- [x] Store parent email in database (link to Stripe customer) ✅
+- [x] Basic email preference capture (marketing opt-in checkbox) ✅
+- [x] Implement unsubscribe mechanism ✅ (link in email footer)
 
-**P1 - Transactional Emails:**
-- [ ] Set up email service (SendGrid/Postmark)
-- [ ] Purchase confirmation email
+**P1 - Transactional Emails:** ✅ **COMPLETE (Nov 2025)**
+- [x] Set up email service (Resend) ✅
+- [x] Purchase confirmation email ✅
 - [ ] Email verification flow
 - [ ] Password reset (when accounts added)
 
@@ -1036,33 +1043,29 @@ interface Profile {
 
 ## 13. Settings & Preferences
 
-### 13.1 User Settings Page (/settings)
+### 13.1 User Settings Page (/settings) ✅ COMPLETE (Nov 2025)
 
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Settings Route | ✅ Complete | /settings page exists |
-| Settings UI | ❌ Placeholder | Just shows "Settings" heading |
-
-**Remaining Tasks:**
-- [ ] **Sound Toggle**: Enable/disable game sounds
-- [ ] **Haptics Toggle**: Enable/disable vibration feedback
-- [ ] **Theme Selection**: Light/dark/auto
-- [ ] **About/Version**: App info display
-- [ ] **Help/Support**: Links to documentation
+| Settings UI | ✅ Complete | Full settings page with sections (Nov 2025) |
+| Sound Toggle | ✅ Complete | Enable/disable game sounds |
+| Haptics Toggle | ✅ Complete | Enable/disable vibration feedback |
+| Theme Selection | ✅ Complete | Light/Dark/Auto with system detection |
+| About/Version | ✅ Complete | App info display |
+| Help/Support | ✅ Complete | Links to documentation |
 
 ### 13.2 Profile Preferences
 
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Per-Profile Preferences | ⚠️ Schema Only | preferences object in Profile |
-| Sound Preference | ❌ Not Used | Schema exists, not in UI |
-| Haptics Preference | ❌ Not Used | Schema exists, not in UI |
-| Theme Preference | ❌ Not Used | Schema exists, not in UI |
+| Per-Profile Preferences | ✅ Complete | Stored in Zustand with persistence |
+| Sound Preference | ✅ Complete | Applied during gameplay |
+| Haptics Preference | ✅ Complete | Applied during gameplay |
+| Theme Preference | ✅ Complete | ThemeProvider applies theme globally |
 
 **Remaining Tasks:**
-- [ ] Build preferences UI per profile
-- [ ] Apply preferences during gameplay
-- [ ] Sync preferences with profile
+- [ ] Sync preferences to Dexie profile record (currently localStorage only)
 
 ---
 
@@ -1080,7 +1083,7 @@ interface Profile {
 
 **Issues:**
 - [x] ~~**Price Discrepancy**: Shows $4.99, PRD says $6.99~~ ✅ Fixed to $6.99
-- [ ] **Student Count**: Shows "10,000+ Students" - verify this is accurate
+- [x] ~~**Student Count**: Shows "10,000+ Students" - verify this is accurate~~ ✅ Replaced with "Free Forever" (Nov 2025)
 
 ### 10.2 Audience Pages
 
@@ -1137,7 +1140,7 @@ interface Profile {
 
 ## Priority Recommendations
 
-### P0 - Critical for MVP Completion
+### P0 - Critical for MVP Completion ✅ **PHASE 1 COMPLETE (Nov 29, 2025)**
 1. ~~**Fix pricing discrepancies** across all surfaces ($6.99 not $7.99 or $4.99)~~ ✅ **DONE**
 2. ~~**Addition/Subtraction setup flow** - current number grid only works for multiplication/division~~ ✅ **DONE** - Number Range Selection implemented with 4 preset zones + custom range panel
 3. ~~**Fix data capture gaps**~~ ✅ **DONE**:
@@ -1145,10 +1148,15 @@ interface Profile {
    - ~~Capture session config (operations, numbers, difficulty, input method)~~ ✅
    - ~~Track given answers (not just right/wrong)~~ ✅
 4. ~~**Add streak display** on dashboard~~ ✅ **DONE** - StreakDisplay component with milestones, animations, encouraging messaging
-5. **Parent email capture** - add to checkout flow, critical for Coach and marketing
-6. **Implement content locking** for free tier limitations
+5. ~~**Parent email capture** - add to checkout flow, critical for Coach and marketing~~ ✅ **DONE** - EmailCaptureForm with marketing opt-in
+6. ~~**Implement content locking** for free tier limitations~~ ✅ **DONE** - Lock icons on premium topics, LockedContentModal
 7. ~~**Enforce adult gate** before Grown-Ups area~~ ✅ **DONE** (already implemented)
-8. **Complete Settings page** with sound/haptics toggles
+8. ~~**Complete Settings page** with sound/haptics toggles~~ ✅ **DONE** - Full settings with Sound/Haptics/Theme
+9. ~~**Set up transactional email service**~~ ✅ **DONE** - Resend integration with purchase confirmation
+10. ~~**Regional pricing support**~~ ✅ **DONE** - USD, GBP, EUR, AUD, NZD with currency selector
+11. ~~**Adult verification before purchase**~~ ✅ **DONE** - AdultGateModal before checkout
+12. ~~**Profile deletion confirmation flow**~~ ✅ **DONE** - Multi-step with name confirmation
+13. ~~**Marketing statistics accuracy**~~ ✅ **DONE** - Removed unverifiable claims
 
 ### P1 - Important for Core Experience
 1. **Weekly goals system** - key engagement feature (Healthy Habit Loop)
@@ -1184,16 +1192,20 @@ interface Profile {
 
 ## Implementation Order Suggestion
 
-**Phase 1: Polish MVP Core (1-2 weeks)**
+**Phase 1: Polish MVP Core (1-2 weeks)** ✅ **COMPLETE (Nov 29, 2025)**
 - ~~Fix pricing~~ ✅ Done
 - ~~Design & implement addition/subtraction setup flow (distinct from times tables grid)~~ ✅ Done - Number Range Selection
 - ~~Fix data capture: save actual topic, config snapshot, given answers~~ ✅ Done
-- Add parent email capture to checkout flow
-- Set up basic email service (transactional)
-- Add content locking
+- ~~Add parent email capture to checkout flow~~ ✅ Done - EmailCaptureForm with Stripe integration
+- ~~Set up basic email service (transactional)~~ ✅ Done - Resend with purchase confirmation template
+- ~~Add content locking~~ ✅ Done - Free tier limited to 2×, 3×, 4× and Starter range
 - ~~Enforce adult gate~~ ✅ Already implemented
-- Complete settings
+- ~~Complete settings~~ ✅ Done - Sound/Haptics/Theme toggles
 - ~~Add streak/goal UI shells~~ ✅ Streak UI complete
+- ~~Regional pricing~~ ✅ Done - USD, GBP, EUR, AUD, NZD
+- ~~Adult gate before purchase~~ ✅ Done - AdultGateModal
+- ~~Profile deletion flow~~ ✅ Done - Multi-step confirmation
+- ~~Marketing claims~~ ✅ Done - Removed unverifiable statistics
 
 **Phase 2: Engagement Layer (1-2 weeks)**
 - Weekly goals system (visual orbs for days practiced)

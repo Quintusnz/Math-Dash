@@ -1,8 +1,20 @@
 .container {
-  padding: var(--space-lg);
-  max-width: 72rem;
+  padding: var(--space-xl) var(--space-lg);
+  max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: var(--space-2xl) var(--space-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: var(--space-2xl) var(--space-3xl);
+  }
 }
 
 .backButton {
@@ -23,6 +35,13 @@
   flex-direction: column;
   gap: var(--space-lg);
   margin-bottom: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .header {
+    gap: var(--space-xl);
+    margin-bottom: var(--space-3xl);
+  }
 }
 
 .headerTop {
@@ -155,12 +174,19 @@
 .mainGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-xl);
+  gap: var(--space-2xl);
 }
 
 @media (min-width: 768px) {
   .mainGrid {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    gap: var(--space-3xl);
   }
 }
 
@@ -171,14 +197,46 @@
   color: var(--color-neutral-900);
 }
 
+@media (min-width: 768px) {
+  .sectionTitle {
+    font-size: var(--text-h2);
+    margin-bottom: var(--space-xl);
+  }
+}
+
 .engagementSection {
-  /* Streak section spans full width on larger screens */
+  /* Engagement section spans full width */
+}
+
+.engagementCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
 }
 
 @media (min-width: 768px) {
   .engagementSection {
     grid-column: 1 / -1;
-    max-width: 400px;
+  }
+
+  .engagementCards {
+    flex-direction: row;
+    gap: var(--space-xl);
+  }
+
+  .engagementCards > * {
+    flex: 1;
+    max-width: 480px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .engagementCards {
+    gap: var(--space-2xl);
+  }
+
+  .engagementCards > * {
+    max-width: 520px;
   }
 }
 
@@ -216,5 +274,63 @@
   .buttonSecondary {
     width: 100%;
     text-align: center;
+  }
+}
+
+/* Goal Celebration Toast */
+.celebrationToast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-gold, #f59e0b));
+  color: white;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+  z-index: 1000;
+  animation: slideUp 0.4s ease-out, fadeOut 0.3s ease-in 2.7s forwards;
+}
+
+.celebrationEmoji {
+  font-size: 1.5rem;
+  animation: bounce 0.6s ease-out infinite;
+}
+
+.celebrationText {
+  white-space: nowrap;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
   }
 }

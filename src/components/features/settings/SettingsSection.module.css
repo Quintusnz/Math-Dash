@@ -1,0 +1,26 @@
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: var(--text-body-sm);
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.content {
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: var(--space-sm) var(--space-lg);
+}
+
+/* Dividers between items */
+.content > *:not(:last-child) {
+  border-bottom: 1px solid var(--border-subtle);
+}

@@ -9,6 +9,7 @@ import {
   NUMBER_RANGE_PRESETS,
 } from "@/lib/stores/useGameStore";
 import { usePremiumAccess } from "@/lib/hooks/usePremiumAccess";
+import { useCurrency } from "@/lib/hooks/useCurrency";
 import { isRangePresetLocked, getPremiumDescription } from "@/lib/constants/content-access";
 import { LockedContentModal } from "@/components/ui/LockedContentModal";
 import { Star, Check, Settings2, X, Minus, Plus, Lock } from "lucide-react";
@@ -569,6 +570,7 @@ export function NumberRangeSelector({
   const [showCustomPanel, setShowCustomPanel] = useState(false);
   const [showLockedModal, setShowLockedModal] = useState(false);
   const { isPremium } = usePremiumAccess();
+  const { corePricing } = useCurrency();
 
   const presets: Exclude<RangePreset, "custom">[] = [
     "starter",
@@ -657,7 +659,7 @@ export function NumberRangeSelector({
         >
           <Lock size={16} />
           <span>Unlock All Zones</span>
-          <span className={styles.unlockPrice}>$6.99</span>
+          <span className={styles.unlockPrice}>{corePricing.displayPrice}</span>
         </button>
       )}
 

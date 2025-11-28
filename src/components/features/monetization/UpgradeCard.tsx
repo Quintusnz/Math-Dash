@@ -3,12 +3,15 @@
 import { useState } from 'react';
 import { EmailCaptureForm, EmailCaptureData } from './EmailCaptureForm';
 import { AdultGateModal } from '@/components/features/auth';
+import { useCurrency } from '@/lib/hooks/useCurrency';
+import { CurrencySelector } from './CurrencySelector';
 import styles from './UpgradeCard.module.css';
 
 export function UpgradeCard() {
   const [loading, setLoading] = useState(false);
   const [emailData, setEmailData] = useState<EmailCaptureData | null>(null);
   const [showAdultGate, setShowAdultGate] = useState(false);
+  const { currency, corePricing, setCurrency, isReady } = useCurrency();
 
   const handleEmailCapture = (data: EmailCaptureData) => {
     setEmailData(data);
@@ -49,6 +52,7 @@ export function UpgradeCard() {
         body: JSON.stringify({
           email: emailData.email,
           marketingOptIn: emailData.marketingOptIn,
+          currency,
         }),
       });
 
@@ -105,14 +109,20 @@ export function UpgradeCard() {
 
       <div className={styles.divider} />
 
+      <CurrencySelector 
+        value={currency} 
+        onChange={setCurrency} 
+        disabled={loading || !isReady} 
+      />
+
       <EmailCaptureForm onSubmit={handleEmailCapture} isLoading={loading} />
 
       <button 
         onClick={handleUpgradeClick} 
-        disabled={loading || !emailData}
+        disabled={loading || !emailData || !isReady}
         className={styles.button}
       >
-        {loading ? 'Processing...' : 'Upgrade for $6.99'}
+        {loading ? 'Processing...' : `Upgrade for ${corePricing.displayPrice}`}
       </button>
       
       <p className={styles.disclaimer}>

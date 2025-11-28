@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/lib/stripe';
+import { sendPurchaseConfirmationEmail } from '@/lib/email';
 import Stripe from 'stripe';
 
 // This webhook handles Stripe events server-side
@@ -45,30 +46,39 @@ export async function POST(req: Request) {
       const parentEmail = session.metadata?.parentEmail;
       const marketingOptIn = session.metadata?.marketingOptIn === 'true';
       const customerId = session.customer as string;
+      const currency = session.metadata?.currency || session.currency || 'usd';
+      const amountCents = session.metadata?.amountCents 
+        ? parseInt(session.metadata.amountCents, 10) 
+        : session.amount_total || 699;
 
       console.log('Purchase completed:', {
         email: parentEmail,
         marketingOptIn,
         customerId,
         amount: session.amount_total,
+        currency,
       });
 
-      // In a server-side database scenario, you would:
-      // 1. Store the parentEmail, marketingOptIn, and customerId
-      // 2. Send a welcome/receipt email
-      // 3. Update user's premium status in a server database
-      
-      // For the local-first architecture, the client handles this via
-      // sessionStorage and the success redirect. This webhook is for
-      // server-side tracking and future email integrations.
+      // Send purchase confirmation email
+      if (parentEmail) {
+        const emailResult = await sendPurchaseConfirmationEmail({
+          to: parentEmail,
+          customerName: undefined, // Could extract from Stripe customer if needed
+          amountCents,
+          currency: currency.toUpperCase(),
+        });
 
-      // TODO: Integrate with email service (SendGrid, Resend, etc.)
-      // if (parentEmail) {
-      //   await sendPurchaseConfirmationEmail(parentEmail);
-      //   if (marketingOptIn) {
-      //     await addToMarketingList(parentEmail);
-      //   }
-      // }
+        if (emailResult.success) {
+          console.log('Purchase confirmation email sent successfully');
+        } else {
+          console.error('Failed to send purchase confirmation email:', emailResult.error);
+        }
+
+        // TODO: If marketingOptIn, add to marketing audience in Resend
+        // if (marketingOptIn) {
+        //   await addToMarketingAudience(parentEmail);
+        // }
+      }
 
       break;
     }

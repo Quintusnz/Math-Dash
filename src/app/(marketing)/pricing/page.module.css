@@ -89,6 +89,12 @@
   position: relative;
 }
 
+.currencySelector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+}
+
 .plansGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -102,12 +108,13 @@
   background: var(--surface-card);
   border-radius: var(--radius-2xl);
   padding: var(--space-xl);
+  padding-top: calc(var(--space-xl) + 8px); /* Extra padding for badge */
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
   transition: transform var(--motion-duration-short) var(--motion-ease-spring),
               box-shadow var(--motion-duration-short) var(--motion-ease-standard);
-  overflow: hidden;
+  /* Remove overflow:hidden to allow badge to show */
 }
 
 .planSecondary {

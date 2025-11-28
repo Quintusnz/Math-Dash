@@ -64,11 +64,20 @@
 
 .cta {
   margin-left: var(--space-md);
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
 }
 
 .navCta {
   min-height: 38px !important;
   padding: var(--space-xs) var(--space-lg) !important;
+  font-size: var(--text-body) !important;
+}
+
+.navCtaSecondary {
+  min-height: 38px !important;
+  padding: var(--space-xs) var(--space-md) !important;
   font-size: var(--text-body) !important;
 }
 

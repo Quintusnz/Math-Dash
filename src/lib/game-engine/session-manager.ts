@@ -1,6 +1,7 @@
 import { db, GameSession, Achievement } from "@/lib/db";
 import { SyncManager } from "@/lib/sync/sync-manager";
 import { EngagementManager } from "./engagement-manager";
+import { WeeklyGoalTracker } from "./weekly-goal-tracker";
 
 export interface SessionConfig {
   operations: string[];
@@ -9,6 +10,12 @@ export interface SessionConfig {
   inputMethod: string;
   targetDuration?: number;
   targetQuestions?: number;
+}
+
+export interface SessionResult {
+  session: GameSession;
+  newAchievements: Achievement[];
+  weeklyGoalJustCompleted: boolean;
 }
 
 export async function saveGameSession(stats: {
@@ -23,7 +30,7 @@ export async function saveGameSession(stats: {
   topicId?: string;
   config?: SessionConfig;
   totalResponseTimeMs?: number;
-}): Promise<{ session: GameSession, newAchievements: Achievement[] }> {
+}): Promise<SessionResult> {
   
   const duration = stats.durationSeconds || 60;
   
@@ -70,6 +77,7 @@ export async function saveGameSession(stats: {
   await SyncManager.addToQueue('SESSION_UPLOAD', session);
 
   let newAchievements: Achievement[] = [];
+  let weeklyGoalJustCompleted = false;
 
   if (stats.profileId && stats.profileId !== 'guest') {
     // 1. Update Stats
@@ -81,7 +89,15 @@ export async function saveGameSession(stats: {
     // 2. Update Streak
     await EngagementManager.updateStreak(stats.profileId);
 
-    // 3. Check Achievements
+    // 3. Record weekly goal practice day
+    try {
+      const goalResult = await WeeklyGoalTracker.recordPracticeDay(stats.profileId);
+      weeklyGoalJustCompleted = goalResult.goalJustCompleted;
+    } catch (e) {
+      console.error('Failed to record weekly goal practice day:', e);
+    }
+
+    // 4. Check Achievements
     newAchievements = await EngagementManager.checkAchievements(stats.profileId, {
       correct: stats.questionsCorrect,
       total: stats.questionsAnswered,
@@ -89,5 +105,5 @@ export async function saveGameSession(stats: {
     });
   }
   
-  return { session, newAchievements };
+  return { session, newAchievements, weeklyGoalJustCompleted };
 }

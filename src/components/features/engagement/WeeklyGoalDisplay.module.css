@@ -1,0 +1,278 @@
+/* WeeklyGoalDisplay.module.css */
+/* Weekly goal visualization with orbs for tracking days practiced */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5, 20px) var(--space-6, 24px);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Goal complete celebration state */
+.container.complete {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-50, #ecfdf5) 0%,
+    var(--color-accent-gold-50, #fffbeb) 100%
+  );
+  border-color: var(--color-primary-500, #10b981);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-500, #10b981);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.iconWrapper.iconComplete {
+  background: var(--color-accent-gold, #f59e0b);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.message {
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-neutral-900);
+  line-height: 1.3;
+}
+
+/* Orbs container */
+.orbsContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--space-4, 16px);
+  padding: var(--space-3) 0;
+}
+
+.orbWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+.orb {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.orbFilled {
+  background: var(--color-primary-500, #10b981);
+  color: white;
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.orbFilled.orbLatest {
+  background: var(--color-accent-gold, #f59e0b);
+  box-shadow: 
+    0 2px 12px rgba(245, 158, 11, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.orbEmpty {
+  background: var(--color-neutral-200);
+  border: 2px dashed var(--color-neutral-300);
+}
+
+.orbLabel {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+/* Celebration sparkles */
+.sparkles {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sparkle1 {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  color: var(--color-accent-gold, #f59e0b);
+  animation: float 3s ease-in-out infinite;
+}
+
+.sparkle2 {
+  position: absolute;
+  top: 30%;
+  right: 20%;
+  color: var(--color-primary-400, #34d399);
+  animation: float 2.5s ease-in-out infinite 0.5s;
+}
+
+.sparkle3 {
+  position: absolute;
+  bottom: 20%;
+  right: 15%;
+  color: var(--color-accent-gold, #f59e0b);
+  animation: float 2s ease-in-out infinite 1s;
+}
+
+/* Compact variant */
+.compactContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-primary-500, #10b981);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-semibold, 600);
+  transition: all 0.2s ease;
+}
+
+.compactContainer.compactComplete {
+  background: var(--color-accent-gold, #f59e0b);
+}
+
+.compactIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.compactCount {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 2px 12px rgba(245, 158, 11, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 4px 16px rgba(245, 158, 11, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-5px) rotate(10deg);
+    opacity: 1;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: var(--color-neutral-800, #27272a);
+    border-color: var(--color-neutral-700, #3f3f46);
+  }
+
+  .container.complete {
+    background: linear-gradient(
+      135deg,
+      rgba(16, 185, 129, 0.15) 0%,
+      rgba(245, 158, 11, 0.1) 100%
+    );
+  }
+
+  .title {
+    color: var(--color-neutral-400);
+  }
+
+  .message {
+    color: var(--color-neutral-100);
+  }
+
+  .orbEmpty {
+    background: var(--color-neutral-700);
+    border-color: var(--color-neutral-600);
+  }
+
+  .orbLabel {
+    color: var(--color-neutral-400);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .iconWrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  .message {
+    font-size: var(--font-size-sm, 0.875rem);
+  }
+
+  .orb {
+    width: 36px;
+    height: 36px;
+  }
+
+  .orbLabel {
+    display: none;
+  }
+}

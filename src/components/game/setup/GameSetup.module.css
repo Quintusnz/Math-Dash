@@ -520,8 +520,8 @@
   position: absolute;
   top: -10px;
   right: -10px;
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-warning-500) 0%, var(--color-warning-600) 100%);
+  color: var(--color-white);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -532,8 +532,8 @@
     0 2px 8px rgba(245, 158, 11, 0.5),
     0 4px 12px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border: 3px solid white;
-  outline: 2px solid #D97706;
+  border: 3px solid var(--color-white);
+  outline: 2px solid var(--color-warning-600);
   animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 10;
 }

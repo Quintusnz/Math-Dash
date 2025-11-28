@@ -5,9 +5,11 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { ProfileManager } from './ProfileManager';
 import { SkillRadar } from '@/components/features/analytics/SkillRadar';
 import { UpgradeCard } from '@/components/features/monetization/UpgradeCard';
+import { WeeklyGoalDisplay } from '@/components/features/engagement';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '@/lib/db';
 import { MasteryTracker } from '@/lib/game-engine/mastery-tracker';
+import { WeeklyGoalTracker } from '@/lib/game-engine/weekly-goal-tracker';
 import styles from './GrownUpsDashboard.module.css';
 
 export default function GrownUpsDashboard() {
@@ -343,6 +345,61 @@ export default function GrownUpsDashboard() {
         {activeTab === 'settings' && (
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>App Settings</h2>
+            
+            {/* Weekly Goal Settings */}
+            <div className={styles.card}>
+              <h3>Weekly Practice Goals</h3>
+              <p>Set how many days per week each player should practice. Goals reset every Monday.</p>
+              
+              <div className={styles.goalSettingsGrid}>
+                {profiles?.map(profile => {
+                  const goal = profile.weeklyGoal;
+                  const targetDays = goal?.targetDays ?? 3;
+                  
+                  return (
+                    <div key={profile.id} className={styles.goalSetting}>
+                      <div className={styles.goalProfileInfo}>
+                        <span className={styles.goalAvatar}>{profile.avatarId}</span>
+                        <span className={styles.goalName}>{profile.displayName}</span>
+                      </div>
+                      
+                      <div className={styles.goalControls}>
+                        <label className={styles.goalLabel}>Days per week:</label>
+                        <div className={styles.goalSelector}>
+                          {[1, 2, 3, 4, 5, 6, 7].map(days => (
+                            <button
+                              key={days}
+                              className={`${styles.goalButton} ${targetDays === days ? styles.goalButtonActive : ''}`}
+                              onClick={async () => {
+                                await WeeklyGoalTracker.updateGoalTarget(profile.id, days);
+                              }}
+                            >
+                              {days}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {goal && (
+                        <div className={styles.goalProgress}>
+                          <WeeklyGoalDisplay weeklyGoal={goal} compact />
+                          <span className={styles.goalStatus}>
+                            {goal.currentDays >= goal.targetDays 
+                              ? '✓ Goal achieved this week!' 
+                              : `${goal.currentDays}/${goal.targetDays} days this week`}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+                
+                {(!profiles || profiles.length === 0) && (
+                  <div className={styles.muted}>No profiles found. Create one in the Profiles tab.</div>
+                )}
+              </div>
+            </div>
+            
             <div className={styles.card}>
               <h3>Data Management</h3>
               <p>Export or delete all data from this device.</p>

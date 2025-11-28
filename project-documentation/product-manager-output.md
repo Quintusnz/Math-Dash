@@ -262,12 +262,22 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
   - Optional **AI add-on subscription** for advanced insights and personalised support, priced to cover ongoing AI and hosting costs.
 
 - **Home (Family) License – Core App**:
-  - Target Tier 1 markets (US/UK/EU-high-income) reference price: **USD $7.99 / GBP £6.99 / EUR €7.99** as a one-time purchase.
+  - Target Tier 1 markets (US/UK/EU/AU/NZ) reference prices as a one-time purchase:
+    - **USD $6.99** (United States)
+    - **GBP £5.99** (United Kingdom)
+    - **EUR €6.99** (Eurozone)
+    - **AUD A$10.99** (Australia)
+    - **NZD NZ$11.99** (New Zealand)
   - License covers all child profiles in a household across devices tied to the same store account/email.
   - Lower-income regions can later be supported with regional prices at roughly 50–70% of Tier 1 levels.
 
 - **Teacher / Small-School License – Core App**:
-  - Simple per-teacher license to start, e.g., **USD $19.99 / GBP £17.99 / EUR €19.99** as a one-time purchase.
+  - Simple per-teacher license (Tier 1 markets) as a one-time purchase:
+    - **USD $19.99** (United States)
+    - **GBP £17.99** (United Kingdom)
+    - **EUR €19.99** (Eurozone)
+    - **AUD A$29.99** (Australia)
+    - **NZD NZ$32.99** (New Zealand)
   - Unlocks teacher features (class codes, class dashboards) for a limited number of classes (e.g., 2–3 classes, ~60–90 pupils).
   - Future: add volume discounts or site licenses once demand from larger schools is validated.
 

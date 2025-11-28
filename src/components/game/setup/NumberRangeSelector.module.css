@@ -518,25 +518,25 @@
 .applyButton {
   flex: 1;
   padding: var(--space-sm) var(--space-md);
-  background-color: #3056D3;
-  color: #ffffff;
+  background-color: var(--color-primary-500);
+  color: var(--color-white);
   border: none;
   border-radius: var(--radius-full);
   font-size: var(--text-body-sm);
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background-color var(--motion-duration-short), transform var(--motion-duration-short), box-shadow var(--motion-duration-short);
 }
 
 .applyButton:hover {
-  background-color: #2338A0;
-  color: #ffffff;
+  background-color: var(--color-primary-600);
+  color: var(--color-white);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(48, 86, 211, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .applyButton:active {
-  background-color: #1E3A8A;
+  background-color: var(--color-primary-700);
   transform: translateY(0);
 }
 
@@ -578,19 +578,19 @@
   right: -12px;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  background: linear-gradient(135deg, var(--color-warning-500) 0%, var(--color-warning-600) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-white);
   box-shadow: 
     0 2px 8px rgba(245, 158, 11, 0.5),
     0 4px 12px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border: 3px solid white;
+  border: 3px solid var(--color-white);
   z-index: 10;
-  outline: 2px solid #D97706;
+  outline: 2px solid var(--color-warning-600);
 }
 
 .lockedText {

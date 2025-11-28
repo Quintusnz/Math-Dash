@@ -1,8 +1,10 @@
 'use client';
 
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '@/lib/db';
+import { db, Profile } from '@/lib/db';
 import { useState } from 'react';
+import { AdultGateModal } from '@/components/features/auth/AdultGateModal';
+import { DeleteConfirmationModal } from './DeleteConfirmationModal';
 import styles from './ProfileManager.module.css';
 
 const AVATARS = [
@@ -21,6 +23,11 @@ export function ProfileManager() {
     ageBand: AGE_BANDS[0],
     avatarId: AVATARS[0]
   });
+  
+  // Deletion flow state
+  const [showAdultGate, setShowAdultGate] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [profileToDelete, setProfileToDelete] = useState<Profile | null>(null);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,10 +73,25 @@ export function ProfileManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure? This will delete all progress for this profile.')) return;
-    
+  // Step 1: User clicks delete - show adult gate first
+  const handleDeleteClick = (profile: Profile) => {
+    setProfileToDelete(profile);
+    setShowAdultGate(true);
+  };
+
+  // Step 2: Adult gate verified - show deletion confirmation
+  const handleAdultVerified = () => {
+    setShowAdultGate(false);
+    setShowDeleteModal(true);
+  };
+
+  // Step 3: User confirms deletion - perform actual delete
+  const handleConfirmDelete = async () => {
+    if (!profileToDelete) return;
+
+    const id = profileToDelete.id;
     setDeletingId(id);
+
     try {
       // Cascade delete: sessions and attempts
       const sessions = await db.sessions.where('profileId').equals(id).toArray();
@@ -78,22 +100,26 @@ export function ProfileManager() {
       await db.transaction('rw', db.profiles, db.sessions, db.attempts, async () => {
         await db.profiles.delete(id);
         await db.sessions.where('profileId').equals(id).delete();
-        // Note: Dexie doesn't support 'in' clause for delete easily without iterating, 
-        // but for now we'll just delete sessions. 
-        // Ideally we'd delete attempts too: await db.attempts.where('sessionId').anyOf(sessionIds).delete();
-        // Since attempts are tied to sessions, we can clean them up.
         
         // Bulk delete attempts for these sessions
         for (const sessionId of sessionIds) {
-            await db.attempts.where('sessionId').equals(sessionId).delete();
+          await db.attempts.where('sessionId').equals(sessionId).delete();
         }
       });
-    } catch (error) {
-      console.error('Failed to delete profile:', error);
-      alert('Failed to delete profile');
     } finally {
       setDeletingId(null);
     }
+  };
+
+  // Cancel/close handlers
+  const handleCancelAdultGate = () => {
+    setShowAdultGate(false);
+    setProfileToDelete(null);
+  };
+
+  const handleCancelDeleteModal = () => {
+    setShowDeleteModal(false);
+    setProfileToDelete(null);
   };
 
   if (!profiles) return <div>Loading profiles...</div>;
@@ -175,7 +201,7 @@ export function ProfileManager() {
           <div className={styles.empty}>No profiles found.</div>
         )}
         
-        {profiles.map((profile: any) => (
+        {profiles.map((profile: Profile) => (
           <div key={profile.id} className={styles.item}>
             <div className={styles.info}>
               <div className={styles.avatar}>{profile.avatarId}</div>
@@ -185,7 +211,7 @@ export function ProfileManager() {
               </div>
             </div>
             <button 
-              onClick={() => handleDelete(profile.id)}
+              onClick={() => handleDeleteClick(profile)}
               disabled={deletingId === profile.id}
               className={styles.deleteButton}
             >
@@ -194,6 +220,23 @@ export function ProfileManager() {
           </div>
         ))}
       </div>
+
+      {/* Adult Gate Modal - shown before deletion */}
+      <AdultGateModal
+        isOpen={showAdultGate}
+        onVerified={handleAdultVerified}
+        onCancel={handleCancelAdultGate}
+        title="Verify Adult"
+        description="Deleting a profile requires adult verification. Please solve this math problem to continue."
+      />
+
+      {/* Delete Confirmation Modal - multi-step confirmation */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        profile={profileToDelete}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDeleteModal}
+      />
     </div>
   );
 }

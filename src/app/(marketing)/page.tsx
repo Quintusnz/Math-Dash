@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { LinkButton } from "@/components/ui/Button";
-import { ShieldCheck, Lock, Plus, Minus, X, Divide, Gamepad2, Heart, GraduationCap, Rocket, Star, CheckCircle2, Users, Sparkles } from "lucide-react";
+import { LocalizedPrice } from "@/components/ui/LocalizedPrice";
+import { ShieldCheck, Lock, Plus, Minus, X, Divide, Gamepad2, Heart, GraduationCap, Rocket, Star, CheckCircle2, Sparkles } from "lucide-react";
 
 const OPERATIONS = [
   { icon: Plus, label: "Addition", color: "var(--color-primary-600)" },
@@ -63,8 +64,8 @@ export default function LandingPage() {
               <span>Parent Approved</span>
             </div>
             <div className={styles.trustBadge}>
-              <Users size={18} className={styles.trustIconUsers} />
-              <span>10,000+ Students</span>
+              <Heart size={18} className={styles.trustIconHeart} />
+              <span>Free Forever</span>
             </div>
           </div>
         </div>
@@ -104,7 +105,7 @@ export default function LandingPage() {
           <div className={styles.pricingPremium}>
             <div className={styles.pricingIcon}>💎</div>
             <div className={styles.pricingText}>
-              <h3>Unlock Everything — Just $6.99</h3>
+              <h3>Unlock Everything — Just <LocalizedPrice /></h3>
               <p>One-time payment • All topics • Family profiles • No subscriptions!</p>
             </div>
           </div>

@@ -25,10 +25,12 @@ This supports a **low-price / high-volume** strategy for the core business while
 
 ### 3.1 Home (Family) License
 
-- **Reference Price – Tier 1 Markets** (US/UK/EU-high-income):
-  - **USD $7.99**
-  - **GBP £6.99**
-  - **EUR €7.99**
+- **Reference Price – Tier 1 Markets** (US/UK/EU/AU/NZ):
+  - **USD $6.99** (United States)
+  - **GBP £5.99** (United Kingdom)
+  - **EUR €6.99** (Eurozone)
+  - **AUD A$10.99** (Australia)
+  - **NZD NZ$11.99** (New Zealand)
 - **Scope**:
   - One-time payment.
   - Unlocks all standard non-AI features: all tables (2×–12×) and their division counterparts, Make 10/20/100 number-bond style modes and missing-number facts, extended doubles/halves, adaptive mode, Dash Duel, and basic progress dashboards.
@@ -48,10 +50,12 @@ This supports a **low-price / high-volume** strategy for the core business while
 
 ### 3.2 Teacher / Small-School License
 
-- **Reference Price – Tier 1 Markets**:
-  - **USD $19.99**
-  - **GBP £17.99**
-  - **EUR €19.99**
+- **Reference Price – Tier 1 Markets** (US/UK/EU/AU/NZ):
+  - **USD $19.99** (United States)
+  - **GBP £17.99** (United Kingdom)
+  - **EUR €19.99** (Eurozone)
+  - **AUD A$29.99** (Australia)
+  - **NZD NZ$32.99** (New Zealand)
 - **Scope**:
   - One-time payment per teacher.
   - Unlocks teacher-specific features:
