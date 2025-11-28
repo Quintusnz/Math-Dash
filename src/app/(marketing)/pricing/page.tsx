@@ -59,7 +59,7 @@ const plans = [
       { text: "Priority support", included: true },
       { text: "All future updates included", included: true },
     ],
-    cta: { label: "Unlock Premium", href: "/grown-ups" },
+    cta: { label: "Unlock Premium", href: "/grown-ups?tab=premium" },
     primary: true,
   },
 ];
@@ -162,7 +162,7 @@ export default function PricingPage() {
                 {plan.features.map((feature, i) => (
                   <li 
                     key={i} 
-                    className={`${styles.featureItem} ${feature.highlight ? styles.featureHighlight : ''} ${!feature.included ? styles.featureDisabled : ''}`}
+                    className={`${styles.featureItem} ${'highlight' in feature && feature.highlight ? styles.featureHighlight : ''} ${!feature.included ? styles.featureDisabled : ''}`}
                   >
                     {feature.included ? (
                       <Check size={16} className={styles.featureCheck} />
@@ -177,7 +177,7 @@ export default function PricingPage() {
               <LinkButton 
                 href={plan.cta.href} 
                 size="lg" 
-                variant={plan.primary ? "default" : "secondary"}
+                variant={plan.primary ? "primary" : "secondary"}
                 className={plan.primary ? styles.primaryCta : styles.secondaryCta}
               >
                 {plan.primary && <Rocket size={18} />}

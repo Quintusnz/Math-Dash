@@ -5,9 +5,12 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { useGameStore, Operation, GameMode, NumberRange, NUMBER_RANGE_PRESETS } from "@/lib/stores/useGameStore";
 import { useVoskModel } from "@/lib/hooks/useVoskModel";
+import { usePremiumAccess } from "@/lib/hooks/usePremiumAccess";
+import { isNumberLocked, FREE_NUMBERS, PREMIUM_NUMBERS, getPremiumDescription } from "@/lib/constants/content-access";
 import { ProfileChip } from "@/components/features/profiles/ProfileChip";
 import { NumberRangeSelector } from "./NumberRangeSelector";
-import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap, Calculator, List, Mic, Check, Download, Loader2 } from "lucide-react";
+import { LockedContentModal } from "@/components/ui/LockedContentModal";
+import { Plus, Minus, X, Divide, Timer, Infinity as InfinityIcon, ChevronRight, ChevronLeft, Play, Zap, Calculator, List, Mic, Check, Download, Loader2, Lock } from "lucide-react";
 import styles from "./GameSetup.module.css";
 
 interface GameSetupProps {
@@ -16,8 +19,12 @@ interface GameSetupProps {
 
 export function GameSetup({ onStart }: GameSetupProps) {
   const [step, setStep] = useState(0);
+  const [showLockedModal, setShowLockedModal] = useState(false);
+  const [lockedModalDescription, setLockedModalDescription] = useState('');
+  
   const { config, setConfig, startGame } = useGameStore();
   const { status: voskStatus, progress: voskProgress, startLoading: startVoskLoading } = useVoskModel();
+  const { isPremium, isDevOverride } = usePremiumAccess();
 
   // Start loading Vosk when voice is selected
   useEffect(() => {
@@ -39,6 +46,13 @@ export function GameSetup({ onStart }: GameSetupProps) {
   };
 
   const handleNumberToggle = (num: number) => {
+    // Check if this number is locked for free users
+    if (isNumberLocked(num, isPremium)) {
+      setLockedModalDescription(getPremiumDescription(config.operations[0]));
+      setShowLockedModal(true);
+      return;
+    }
+    
     const current = config.selectedNumbers || [];
     const updated = current.includes(num)
       ? current.filter(n => n !== num)
@@ -93,7 +107,11 @@ export function GameSetup({ onStart }: GameSetupProps) {
   };
 
   const handleSelectAll = () => {
-    setConfig({ selectedNumbers: Array.from({ length: 12 }, (_, i) => i + 1) });
+    // Only select free numbers if user isn't premium
+    const numbersToSelect = isPremium 
+      ? Array.from({ length: 12 }, (_, i) => i + 1)
+      : FREE_NUMBERS;
+    setConfig({ selectedNumbers: numbersToSelect });
   };
 
   const handleClearSelection = () => {
@@ -130,24 +148,51 @@ export function GameSetup({ onStart }: GameSetupProps) {
           <button onClick={handleClearSelection} className={styles.textButton}>Clear</button>
         </div>
         <div className={styles.numberGrid}>
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => (
-            <button
-              key={num}
-              className={`${styles.numberCard} ${config.selectedNumbers?.includes(num) ? styles.selected : ''}`}
-              onClick={() => handleNumberToggle(num)}
-            >
-              {config.selectedNumbers?.includes(num) && (
-                <div className={styles.checkBadge}>
-                  <Check size={14} strokeWidth={4} />
-                </div>
-              )}
-              {formatNumber(num)}
-            </button>
-          ))}
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((num) => {
+            const isLocked = isNumberLocked(num, isPremium);
+            const isSelected = config.selectedNumbers?.includes(num);
+            
+            return (
+              <button
+                key={num}
+                className={`${styles.numberCard} ${isSelected ? styles.selected : ''} ${isLocked ? styles.locked : ''}`}
+                onClick={() => handleNumberToggle(num)}
+                aria-label={isLocked ? `${formatNumber(num)} - Premium content, tap to unlock` : formatNumber(num)}
+              >
+                {isSelected && !isLocked && (
+                  <div className={styles.checkBadge}>
+                    <Check size={14} strokeWidth={4} />
+                  </div>
+                )}
+                {isLocked && (
+                  <div className={styles.lockBadge}>
+                    <Lock size={14} strokeWidth={3} />
+                  </div>
+                )}
+                <span className={isLocked ? styles.lockedText : undefined}>
+                  {formatNumber(num)}
+                </span>
+              </button>
+            );
+          })}
         </div>
         <div className={styles.selectionSummary}>
           {getSummaryText()}
         </div>
+        {/* Show unlock button for free users */}
+        {!isPremium && (
+          <button
+            className={styles.unlockButton}
+            onClick={() => {
+              setLockedModalDescription(getPremiumDescription(config.operations[0]));
+              setShowLockedModal(true);
+            }}
+          >
+            <Lock size={16} />
+            <span>Unlock All Tables</span>
+            <span className={styles.unlockPrice}>$6.99</span>
+          </button>
+        )}
       </div>
     );
   };
@@ -514,6 +559,15 @@ export function GameSetup({ onStart }: GameSetupProps) {
           </div>
         </motion.div>
       </AnimatePresence>
+      
+      {/* Locked content upgrade modal */}
+      <LockedContentModal
+        isOpen={showLockedModal}
+        onClose={() => setShowLockedModal(false)}
+        title="Premium Content"
+        description={lockedModalDescription}
+        operation={config.operations[0]}
+      />
     </div>
   );
 }

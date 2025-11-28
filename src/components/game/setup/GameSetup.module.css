@@ -500,3 +500,76 @@
 .slider:focus::-webkit-slider-thumb {
   box-shadow: 0 0 0 4px var(--color-primary-100);
 }
+
+/* Locked content styles */
+.numberCard.locked {
+  background: linear-gradient(135deg, var(--color-neutral-100) 0%, var(--color-neutral-200) 100%);
+  border-color: var(--color-warning-300);
+  border-style: dashed;
+  cursor: pointer;
+}
+
+.numberCard.locked:hover {
+  transform: scale(1.02);
+  border-color: var(--color-warning-400);
+  box-shadow: 0 0 0 3px var(--color-warning-100);
+  background: linear-gradient(135deg, var(--color-warning-50) 0%, var(--color-neutral-100) 100%);
+}
+
+.lockBadge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 2px 8px rgba(245, 158, 11, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 3px solid white;
+  outline: 2px solid #D97706;
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+}
+
+.lockedText {
+  opacity: 0.5;
+  color: var(--color-neutral-500);
+}
+
+/* Unlock all button for free users */
+.unlockButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: linear-gradient(135deg, var(--color-warning-500), var(--color-warning-600));
+  border: none;
+  color: white;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  transition: all var(--motion-duration-short);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
+  margin-top: var(--space-md);
+}
+
+.unlockButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+  background: linear-gradient(135deg, var(--color-warning-400), var(--color-warning-500));
+}
+
+.unlockPrice {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+}

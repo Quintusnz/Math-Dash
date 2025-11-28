@@ -45,10 +45,20 @@ export function generateQuestion(options: QuestionGeneratorOptions = {}): Questi
       
       // For add/sub with number range, check if weak fact fits the range
       const isAddSub = type === 'addition' || type === 'subtraction';
-      const matchesRange = !numberRange || !isAddSub || 
-        (numberRange.rangeType === 'operand' 
-          ? (num1 >= numberRange.min && num1 <= numberRange.max && num2 >= numberRange.min && num2 <= numberRange.max)
-          : (answer >= numberRange.min && answer <= numberRange.max));
+      let matchesRange = true;
+      if (numberRange && isAddSub) {
+        if (numberRange.rangeType === 'operand') {
+          // Check first operand against min/max and second against min2/max2
+          const firstMin = numberRange.min;
+          const firstMax = numberRange.max;
+          const secondMin = numberRange.min2 ?? numberRange.min;
+          const secondMax = numberRange.max2 ?? numberRange.max;
+          matchesRange = (num1 >= firstMin && num1 <= firstMax && num2 >= secondMin && num2 <= secondMax);
+        } else {
+          // Answer range mode
+          matchesRange = (answer >= numberRange.min && answer <= numberRange.max);
+        }
+      }
       
       // Only use weak fact if it matches allowed operations AND selected numbers/range
       const matchesNumbers = selectedNumbers.length === 0 || 
@@ -169,7 +179,7 @@ export function generateQuestion(options: QuestionGeneratorOptions = {}): Questi
  * Generate addition question based on number range
  */
 function generateAdditionWithRange(range: NumberRange): { num1: number; num2: number; answer: number } {
-  const { min, max, rangeType } = range;
+  const { min, max, min2, max2, rangeType } = range;
   
   if (rangeType === 'answer') {
     // Answer must be within range - work backwards
@@ -179,9 +189,15 @@ function generateAdditionWithRange(range: NumberRange): { num1: number; num2: nu
     const num2 = answer - num1;
     return { num1, num2, answer };
   } else {
-    // Operand range - each number within range
-    const num1 = Math.floor(Math.random() * (max - min + 1)) + min;
-    const num2 = Math.floor(Math.random() * (max - min + 1)) + min;
+    // Operand range - each number within its own range
+    // First operand uses min/max, second operand uses min2/max2 (or falls back to min/max)
+    const firstMin = min;
+    const firstMax = max;
+    const secondMin = min2 ?? min;
+    const secondMax = max2 ?? max;
+    
+    const num1 = Math.floor(Math.random() * (firstMax - firstMin + 1)) + firstMin;
+    const num2 = Math.floor(Math.random() * (secondMax - secondMin + 1)) + secondMin;
     return { num1, num2, answer: num1 + num2 };
   }
 }
@@ -190,7 +206,7 @@ function generateAdditionWithRange(range: NumberRange): { num1: number; num2: nu
  * Generate subtraction question based on number range
  */
 function generateSubtractionWithRange(range: NumberRange): { num1: number; num2: number; answer: number } {
-  const { min, max, rangeType, allowNegatives } = range;
+  const { min, max, min2, max2, rangeType, allowNegatives } = range;
   
   if (rangeType === 'answer') {
     // Answer must be within range
@@ -206,9 +222,15 @@ function generateSubtractionWithRange(range: NumberRange): { num1: number; num2:
     
     return { num1, num2, answer };
   } else {
-    // Operand range - each operand within range
-    let num1 = Math.floor(Math.random() * (max - min + 1)) + min;
-    let num2 = Math.floor(Math.random() * (max - min + 1)) + min;
+    // Operand range - each operand within its own range
+    // First operand uses min/max, second operand uses min2/max2 (or falls back to min/max)
+    const firstMin = min;
+    const firstMax = max;
+    const secondMin = min2 ?? min;
+    const secondMax = max2 ?? max;
+    
+    let num1 = Math.floor(Math.random() * (firstMax - firstMin + 1)) + firstMin;
+    let num2 = Math.floor(Math.random() * (secondMax - secondMin + 1)) + secondMin;
     
     // Ensure positive result unless negatives allowed
     if (!allowNegatives && num1 < num2) {

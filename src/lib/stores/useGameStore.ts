@@ -13,9 +13,11 @@ export type RangeType = 'operand' | 'answer';
 
 export interface NumberRange {
   preset: RangePreset;
-  min: number;
-  max: number;
-  rangeType: RangeType; // 'operand' = each number 0-X, 'answer' = results 0-X
+  min: number;  // For answer mode: answer min. For operand mode: first operand min
+  max: number;  // For answer mode: answer max. For operand mode: first operand max
+  min2?: number; // For operand mode: second operand min (defaults to min if not set)
+  max2?: number; // For operand mode: second operand max (defaults to max if not set)
+  rangeType: RangeType; // 'operand' = each number in range, 'answer' = results in range
   allowNegatives: boolean; // For subtraction - default false
 }
 

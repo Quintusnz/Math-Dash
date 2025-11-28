@@ -81,6 +81,7 @@ describe('Accessibility Audit', () => {
           achievements={achievements}
           onPlayAgain={() => {}}
           onHome={() => {}}
+          onNewGame={() => {}}
         />
       )
       

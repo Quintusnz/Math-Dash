@@ -3,6 +3,7 @@ import { Nunito, Inter } from 'next/font/google';
 import './globals.css';
 import styles from './layout.module.css';
 import { Providers } from './providers';
+import { DevModeToggle } from '@/components/ui/DevModeToggle';
 
 const nunito = Nunito({ 
   subsets: ['latin'],
@@ -48,6 +49,7 @@ export default function RootLayout({
           </main>
           <div id="modal-root" />
           <div id="toast-root" />
+          <DevModeToggle />
         </Providers>
       </body>
     </html>

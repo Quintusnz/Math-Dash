@@ -136,6 +136,8 @@ export interface GlobalSettings {
   id: string; // 'default'
   isPremium: boolean;
   parentEmail?: string;
+  marketingOptIn?: boolean;
+  stripeCustomerId?: string;
   updatedAt: string;
 }
 

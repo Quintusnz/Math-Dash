@@ -7,6 +7,7 @@
   gap: var(--space-lg);
   width: 100%;
   max-width: 700px;
+  overflow: visible;
 }
 
 /* Preset Grid - 2x2 on mobile, 4x1 on larger */
@@ -15,6 +16,9 @@
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-md);
   width: 100%;
+  overflow: visible;
+  padding: var(--space-sm); /* Add padding to give room for badges */
+  margin: calc(-1 * var(--space-sm)); /* Offset the padding */
 }
 
 @media (min-width: 768px) {
@@ -39,6 +43,7 @@
   position: relative;
   min-height: 160px;
   text-align: center;
+  overflow: visible;
 }
 
 .presetTile:hover {
@@ -163,19 +168,21 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  background: transparent;
-  border: none;
-  color: var(--color-neutral-500);
+  background: var(--color-primary-50);
+  border: 2px solid var(--color-primary-200);
+  color: var(--color-primary-700);
   font-size: var(--text-body-sm);
+  font-weight: 600;
   cursor: pointer;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
   transition: all var(--motion-duration-short);
 }
 
 .moreOptionsButton:hover {
-  color: var(--color-primary-600);
-  background: var(--color-primary-50);
+  color: var(--color-primary-800);
+  background: var(--color-primary-100);
+  border-color: var(--color-primary-300);
 }
 
 /* Custom Range Panel (Bottom Sheet) */
@@ -183,32 +190,39 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 1000;
+}
+
+.panelWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .panelWrapper {
+    padding: 2rem;
+  }
 }
 
 .panel {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
   background: var(--surface-card);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  box-shadow: var(--shadow-lg);
-  z-index: 101;
-  max-height: 85vh;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: calc(100% - 2rem);
+  max-width: 480px;
+  max-height: 90vh;
   overflow-y: auto;
 }
 
 @media (min-width: 768px) {
   .panel {
-    left: 50%;
-    right: auto;
-    bottom: 50%;
-    transform: translate(-50%, 50%);
-    border-radius: var(--radius-xl);
-    max-width: 480px;
-    width: 90%;
-    max-height: 80vh;
+    max-height: none;
+    overflow-y: visible;
   }
 }
 
@@ -216,7 +230,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
@@ -251,10 +265,10 @@
 }
 
 .panelContent {
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .section {
@@ -333,6 +347,23 @@
   font-size: var(--text-body-sm);
   color: var(--color-neutral-700);
   line-height: 1.4;
+}
+
+.radioContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.radioTitle {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
+
+.radioDescription {
+  font-size: var(--text-caption);
+  color: var(--color-neutral-500);
 }
 
 /* Range Inputs */
@@ -478,40 +509,45 @@
 
 /* Panel Actions */
 .panelActions {
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
   border-top: 1px solid var(--border-subtle);
   display: flex;
-  flex-direction: column;
   gap: var(--space-sm);
 }
 
 .applyButton {
-  width: 100%;
-  padding: var(--space-md);
-  background: var(--color-primary-600);
-  color: white;
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  background-color: #3056D3;
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-full);
-  font-size: var(--text-body);
+  font-size: var(--text-body-sm);
   font-weight: 700;
   cursor: pointer;
-  transition: all var(--motion-duration-short);
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .applyButton:hover {
-  background: var(--color-primary-700);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background-color: #2338A0;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(48, 86, 211, 0.3);
+}
+
+.applyButton:active {
+  background-color: #1E3A8A;
+  transform: translateY(0);
 }
 
 .resetButton {
-  width: 100%;
-  padding: var(--space-md);
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
   background: transparent;
   color: var(--color-neutral-600);
   border: 2px solid var(--border-subtle);
   border-radius: var(--radius-full);
-  font-size: var(--text-body);
+  font-size: var(--text-body-sm);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--motion-duration-short);
@@ -520,4 +556,108 @@
 .resetButton:hover {
   background: var(--color-neutral-50);
   border-color: var(--color-neutral-300);
+}
+
+/* Locked preset styles */
+.presetTile.locked {
+  background: linear-gradient(135deg, var(--color-neutral-100) 0%, var(--color-neutral-200) 100%);
+  border-color: var(--color-warning-300);
+  border-style: dashed;
+}
+
+.presetTile.locked:hover {
+  border-color: var(--color-warning-400);
+  border-style: dashed;
+  box-shadow: 0 0 0 3px var(--color-warning-100);
+  background: linear-gradient(135deg, var(--color-warning-50) 0%, var(--color-neutral-100) 100%);
+}
+
+.lockBadge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 
+    0 2px 8px rgba(245, 158, 11, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 3px solid white;
+  z-index: 10;
+  outline: 2px solid #D97706;
+}
+
+.lockedText {
+  opacity: 0.5;
+}
+
+.presetTile.locked .star {
+  color: var(--color-neutral-300);
+}
+
+.presetTile.locked .rangeLabel {
+  color: var(--color-neutral-400);
+}
+
+/* Locked overlay text */
+.presetTile.locked::after {
+  content: 'Premium';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-warning-700);
+  background: var(--color-warning-200);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Unlock all button for free users */
+.unlockButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: linear-gradient(135deg, var(--color-warning-500), var(--color-warning-600));
+  border: none;
+  color: white;
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-full);
+  transition: all var(--motion-duration-short);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
+}
+
+.unlockButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+  background: linear-gradient(135deg, var(--color-warning-400), var(--color-warning-500));
+}
+
+.unlockPrice {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+}
+
+/* More options button locked state */
+.moreOptionsButton.lockedButton {
+  color: var(--color-warning-600);
+}
+
+.moreOptionsButton.lockedButton:hover {
+  background: var(--color-warning-50);
+  color: var(--color-warning-700);
 }

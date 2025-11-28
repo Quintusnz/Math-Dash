@@ -1,0 +1,171 @@
+.container {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.fab {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-neutral-800, #1f2937);
+  color: var(--color-neutral-300, #d1d5db);
+  border: 2px solid var(--color-neutral-700, #374151);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fab:hover {
+  background: var(--color-neutral-700, #374151);
+  transform: scale(1.05);
+}
+
+.fabOverride {
+  background: var(--color-warning-600, #d97706);
+  border-color: var(--color-warning-500, #f59e0b);
+  color: white;
+}
+
+.fabOverride:hover {
+  background: var(--color-warning-500, #f59e0b);
+}
+
+.fabBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 12px;
+  background: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.panel {
+  background: var(--color-neutral-900, #111827);
+  border: 1px solid var(--color-neutral-700, #374151);
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 220px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-neutral-700, #374151);
+}
+
+.closeBtn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--color-neutral-400, #9ca3af);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background: var(--color-neutral-800, #1f2937);
+  color: white;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: var(--color-neutral-800, #1f2937);
+  border-radius: 6px;
+}
+
+.statusLabel {
+  color: var(--color-neutral-400, #9ca3af);
+}
+
+.premium {
+  color: var(--color-warning-400, #fbbf24);
+  font-weight: 600;
+}
+
+.free {
+  color: var(--color-neutral-300, #d1d5db);
+  font-weight: 600;
+}
+
+.overrideBadge {
+  margin-left: auto;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-warning-600, #d97706);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: var(--color-neutral-800, #1f2937);
+  border: 1px solid var(--color-neutral-700, #374151);
+  border-radius: 8px;
+  color: var(--color-neutral-300, #d1d5db);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.option:hover {
+  background: var(--color-neutral-700, #374151);
+  border-color: var(--color-neutral-600, #4b5563);
+}
+
+.option.active {
+  background: var(--color-primary-600, #4f46e5);
+  border-color: var(--color-primary-500, #6366f1);
+  color: white;
+}
+
+.dbValue {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--color-neutral-500, #6b7280);
+}
+
+.option.active .dbValue {
+  color: var(--color-primary-200, #c7d2fe);
+}

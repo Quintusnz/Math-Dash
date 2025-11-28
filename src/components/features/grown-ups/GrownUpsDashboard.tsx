@@ -11,10 +11,17 @@ import { MasteryTracker } from '@/lib/game-engine/mastery-tracker';
 import styles from './GrownUpsDashboard.module.css';
 
 export default function GrownUpsDashboard() {
-  const [activeTab, setActiveTab] = useState<'profiles' | 'progress' | 'settings' | 'premium'>('profiles');
-  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
+  
+  // Get initial tab from URL param, default to 'profiles'
+  const tabParam = searchParams.get('tab');
+  const initialTab = (tabParam === 'premium' || tabParam === 'progress' || tabParam === 'settings') 
+    ? tabParam 
+    : 'profiles';
+  
+  const [activeTab, setActiveTab] = useState<'profiles' | 'progress' | 'settings' | 'premium'>(initialTab);
+  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
 
   const profiles = useLiveQuery(() => db.profiles.toArray());
   const settings = useLiveQuery(() => db.globalSettings.get('default'));
@@ -56,9 +63,36 @@ export default function GrownUpsDashboard() {
   
   useEffect(() => {
     if (searchParams.get('success') === 'true') {
-      // In a real app, verify with backend. For local-first, we trust the redirect for now
-      // or verify a token. Here we'll just enable premium.
-      db.globalSettings.put({ id: 'default', isPremium: true, updatedAt: new Date().toISOString() });
+      // Retrieve email data from sessionStorage (stored before redirect)
+      const pendingEmailData = sessionStorage.getItem('pendingPurchaseEmail');
+      let parentEmail: string | undefined;
+      let marketingOptIn: boolean | undefined;
+      let stripeCustomerId: string | undefined;
+
+      if (pendingEmailData) {
+        try {
+          const parsed = JSON.parse(pendingEmailData);
+          parentEmail = parsed.email;
+          marketingOptIn = parsed.marketingOptIn;
+        } catch (e) {
+          console.error('Failed to parse pending email data:', e);
+        }
+        sessionStorage.removeItem('pendingPurchaseEmail');
+      }
+
+      // Get customerId from URL if available
+      stripeCustomerId = searchParams.get('customerId') || undefined;
+
+      // Store all data in globalSettings
+      db.globalSettings.put({ 
+        id: 'default', 
+        isPremium: true, 
+        parentEmail,
+        marketingOptIn,
+        stripeCustomerId,
+        updatedAt: new Date().toISOString() 
+      });
+
       alert('Thank you for upgrading! Premium features are now unlocked.');
       router.replace('/grown-ups'); // Clear params
     }

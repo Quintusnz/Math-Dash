@@ -18,9 +18,12 @@
   padding: var(--space-xl);
   border-radius: var(--radius-xl);
   width: min(480px, 100%);
+  max-width: calc(100% - var(--space-lg));
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-subtle);
   text-align: center;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .title {
@@ -48,6 +51,7 @@
 }
 
 .inputGroup {
+  margin-top: var(--space-md);
   margin-bottom: var(--space-lg);
 }
 
