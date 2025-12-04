@@ -1,0 +1,308 @@
+.container {
+  width: 100%;
+}
+
+.loading {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-body);
+}
+
+/* Summary Section */
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, #FFD700 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.summaryIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.summaryText {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryCount {
+  font-family: var(--font-heading);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+}
+
+.summaryLabel {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-700);
+  font-weight: 500;
+}
+
+/* Category Tabs */
+.tabs {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+.tab:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+}
+
+.tab:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.tabActive {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.tabActive:hover {
+  background: var(--color-primary-600);
+  border-color: var(--color-primary-600);
+}
+
+.tabLabel {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.tabCount {
+  font-size: var(--text-caption);
+  opacity: 0.8;
+}
+
+.tabActive .tabCount {
+  opacity: 1;
+}
+
+/* Achievement Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Achievement Card */
+.card {
+  position: relative;
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.cardUnlocked {
+  background: var(--surface-card);
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 0 0 1px var(--color-accent-gold), var(--shadow-sm);
+}
+
+.cardUnlocked:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px var(--color-accent-gold), var(--shadow-md);
+}
+
+.cardLocked {
+  background: var(--surface-muted);
+  opacity: 0.85;
+}
+
+.cardLocked:hover {
+  opacity: 1;
+}
+
+/* Card Icon */
+.cardIcon {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-50);
+}
+
+.cardUnlocked .cardIcon {
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, #FFD700 100%);
+}
+
+.cardLocked .cardIcon {
+  background: var(--color-neutral-200);
+}
+
+.icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.iconLocked {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-neutral-400);
+}
+
+/* Card Content */
+.cardContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-xs) 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  line-height: 1.3;
+}
+
+.cardLocked .cardTitle {
+  color: var(--color-neutral-700);
+}
+
+.cardDescription {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.cardDate {
+  font-size: var(--text-caption);
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+/* Progress Bar */
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.progressBar {
+  flex: 1;
+  height: 6px;
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-400), var(--color-primary-500));
+  border-radius: var(--radius-full);
+  transition: width var(--motion-duration-medium) var(--motion-ease-decelerate);
+}
+
+.progressText {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Unlocked Badge */
+.unlockedBadge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-success);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Empty State */
+.empty {
+  padding: var(--space-2xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-body);
+}
+
+/* Dark Mode Adjustments */
+:root.theme-dark .summary {
+  background: linear-gradient(135deg, #B8860B 0%, #DAA520 100%);
+}
+
+:root.theme-dark .summaryCount,
+:root.theme-dark .summaryLabel {
+  color: var(--color-white);
+}
+
+:root.theme-dark .cardIcon {
+  background: var(--color-primary-100);
+}
+
+:root.theme-dark .cardUnlocked .cardIcon {
+  background: linear-gradient(135deg, #B8860B 0%, #DAA520 100%);
+}
+
+:root.theme-dark .cardLocked .cardIcon {
+  background: var(--color-neutral-700);
+}
+
+:root.theme-dark .iconLocked {
+  color: var(--color-neutral-500);
+}
+
+:root.theme-dark .progressBar {
+  background: var(--color-neutral-700);
+}

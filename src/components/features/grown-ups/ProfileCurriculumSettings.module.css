@@ -1,0 +1,225 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 1rem);
+}
+
+.description {
+  font-size: var(--text-body-sm, 0.875rem);
+  color: var(--text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.emptyState {
+  padding: var(--space-lg, 1.5rem);
+  text-align: center;
+  color: var(--text-muted, #6b7280);
+  font-size: var(--text-body-sm, 0.875rem);
+}
+
+.profileList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 0.5rem);
+}
+
+.profileCard {
+  background: var(--surface-card, white);
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  border-radius: var(--radius-lg, 0.75rem);
+  overflow: hidden;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-md, 1rem);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.profileHeader:hover {
+  background: var(--color-neutral-50, #f9fafb);
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 1rem);
+}
+
+.avatar {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs, 0.25rem);
+}
+
+.profileName {
+  font-size: var(--text-body, 1rem);
+  font-weight: 600;
+  color: var(--color-neutral-900, #111827);
+}
+
+.profileSummary {
+  font-size: var(--text-body-sm, 0.875rem);
+  color: var(--text-muted, #6b7280);
+}
+
+.expandedContent {
+  border-top: 1px solid var(--border-subtle, #e5e7eb);
+  overflow: hidden;
+}
+
+.settingsGrid {
+  padding: var(--space-md, 1rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 1rem);
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm, 0.5rem);
+}
+
+.settingHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.5rem);
+}
+
+.settingIcon {
+  color: var(--color-primary-500, #6366f1);
+}
+
+.settingLabel {
+  font-size: var(--text-body-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--color-neutral-700, #374151);
+}
+
+.settingValue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+  background: var(--color-neutral-50, #f9fafb);
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: var(--text-body, 1rem);
+  color: var(--color-neutral-800, #1f2937);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.settingValue:hover {
+  background: var(--color-neutral-100, #f3f4f6);
+  border-color: var(--color-primary-300, #a5b4fc);
+}
+
+.editHint {
+  font-size: var(--text-body-sm, 0.875rem);
+  color: var(--color-primary-500, #6366f1);
+  font-weight: 500;
+}
+
+.editPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 1rem);
+  padding: var(--space-md, 1rem);
+  background: var(--color-neutral-50, #f9fafb);
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  border-radius: var(--radius-md, 0.5rem);
+}
+
+.selector {
+  /* Override selector component styles if needed */
+}
+
+.editActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm, 0.5rem);
+}
+
+.cancelBtn {
+  padding: var(--space-xs, 0.25rem) var(--space-md, 1rem);
+  background: transparent;
+  border: 1px solid var(--border-subtle, #e5e7eb);
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: var(--text-body-sm, 0.875rem);
+  font-weight: 500;
+  color: var(--color-neutral-600, #4b5563);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cancelBtn:hover {
+  background: var(--color-neutral-100, #f3f4f6);
+}
+
+.saveBtn {
+  padding: var(--space-xs, 0.25rem) var(--space-md, 1rem);
+  background: var(--color-primary-500, #6366f1);
+  border: none;
+  border-radius: var(--radius-md, 0.5rem);
+  font-size: var(--text-body-sm, 0.875rem);
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--color-primary-600, #4f46e5);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dark mode */
+[data-theme="dark"] .profileHeader:hover {
+  background: var(--color-neutral-800, #1f2937);
+}
+
+[data-theme="dark"] .profileName {
+  color: var(--color-neutral-100, #f3f4f6);
+}
+
+[data-theme="dark"] .settingValue {
+  background: var(--color-neutral-800, #1f2937);
+  color: var(--color-neutral-200, #e5e7eb);
+}
+
+[data-theme="dark"] .settingValue:hover {
+  background: var(--color-neutral-700, #374151);
+}
+
+[data-theme="dark"] .editPanel {
+  background: var(--color-neutral-800, #1f2937);
+}
+
+[data-theme="dark"] .cancelBtn {
+  color: var(--color-neutral-300, #d1d5db);
+}
+
+[data-theme="dark"] .cancelBtn:hover {
+  background: var(--color-neutral-700, #374151);
+}

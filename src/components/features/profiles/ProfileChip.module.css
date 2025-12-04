@@ -177,3 +177,24 @@
   background: var(--color-primary-50);
   color: var(--color-primary-600);
 }
+
+.dashboardButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  width: 100%;
+  background: var(--surface-card);
+  border: none;
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--color-secondary-600);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dashboardButton:hover {
+  background: var(--color-secondary-50);
+  color: var(--color-secondary-700);
+}

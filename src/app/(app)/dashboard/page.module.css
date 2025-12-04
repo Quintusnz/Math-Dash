@@ -92,11 +92,145 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--space-lg);
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
   background: var(--surface-card);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-subtle);
+}
+
+.profileLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.avatarLarge {
+  font-size: 3rem;
+  line-height: 1;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-50);
+  border-radius: var(--radius-xl);
+  flex-shrink: 0;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.playCodeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.playCodeLabel {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+  font-weight: 500;
+}
+
+.profileMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.profileRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+
+/* Free Play Card */
+.freePlayCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-secondary-50));
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-primary-200);
+}
+
+.freePlayHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.freePlayIcon {
+  color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+
+.freePlayTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+}
+
+.freePlaySubtitle {
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+  margin-left: var(--space-sm);
+  padding-left: var(--space-sm);
+  border-left: 1px solid var(--color-neutral-300);
+}
+
+.quickPlayCard {
+  background: var(--surface-card);
+  border: 1px solid var(--color-primary-200);
+}
+
+.quickPlayCard:hover {
+  border-color: var(--color-primary-400);
+}
+
+.freePlayButtons {
+  display: flex;
+  gap: var(--space-md);
+}
+
+@media (max-width: 640px) {
+  .freePlayCard {
+    padding: var(--space-lg);
+  }
+
+  .freePlayHeader {
+    justify-content: center;
+  }
+
+  .freePlayButtons {
+    flex-direction: column;
+  }
+}
+
+.switcherWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--primary-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.switcherLabel {
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .profileInfo {
@@ -117,9 +251,10 @@
 }
 
 .greeting {
-  font-size: var(--text-h4);
+  font-size: var(--text-h3);
   font-weight: 700;
   color: var(--color-neutral-900);
+  line-height: 1.2;
 }
 
 .userControls {
@@ -134,6 +269,9 @@
 }
 
 .buttonPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   padding: var(--space-sm) var(--space-lg);
   background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
   color: var(--color-white);
@@ -153,6 +291,9 @@
 }
 
 .buttonSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   padding: var(--space-sm) var(--space-lg);
   background: linear-gradient(135deg, var(--color-secondary-500), #059669);
   color: var(--color-white);
@@ -208,6 +349,11 @@
   /* Engagement section spans full width */
 }
 
+/* Daily Dash section - featured prominently */
+.dailyDashSection {
+  grid-column: 1 / -1;
+}
+
 .engagementCards {
   display: flex;
   flex-direction: column;
@@ -221,22 +367,29 @@
 
   .engagementCards {
     flex-direction: row;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
   }
 
   .engagementCards > * {
     flex: 1;
-    max-width: 480px;
+    min-width: 0;
   }
 }
 
 @media (min-width: 1024px) {
   .engagementCards {
-    gap: var(--space-2xl);
+    gap: var(--space-xl);
   }
+}
 
-  .engagementCards > * {
-    max-width: 520px;
+/* Suggested Practice section */
+.suggestionsSection {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 768px) {
+  .suggestionsSection {
+    grid-column: 1 / -1;
   }
 }
 
@@ -259,6 +412,30 @@
   .profileBanner {
     flex-direction: column;
     text-align: center;
+    padding: var(--space-lg);
+  }
+
+  .profileLeft {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .profileDetails {
+    align-items: center;
+  }
+
+  .playCodeRow {
+    justify-content: center;
+  }
+
+  .profileRight {
+    align-items: center;
+    width: 100%;
+  }
+
+  .profileMeta {
+    flex-direction: column;
+    gap: var(--space-sm);
   }
 
   .profileInfo {
@@ -334,3 +511,74 @@
     transform: translateY(-4px);
   }
 }
+
+/* Achievements Card - within engagement section */
+.achievementsCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--surface-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.achievementsCard:hover {
+  border-color: var(--color-accent-gold);
+  box-shadow: 0 0 0 1px var(--color-accent-gold), var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.achievementsCard:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.achievementsCardIcon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-accent-gold), #FFD700);
+  border-radius: var(--radius-lg);
+  color: var(--color-neutral-900);
+  flex-shrink: 0;
+}
+
+.achievementsCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.achievementsCardTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-h4);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+}
+
+.achievementsCardSubtitle {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.achievementsCardArrow {
+  font-size: var(--text-h3);
+  color: var(--color-neutral-400);
+  transition: transform var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.achievementsCard:hover .achievementsCardArrow {
+  transform: translateX(4px);
+  color: var(--color-accent-gold);
+}
+

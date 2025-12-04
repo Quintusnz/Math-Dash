@@ -1,4 +1,5 @@
 import Dexie, { Table } from 'dexie';
+import type { CountryCode } from '../constants/curriculum-data';
 
 export interface WeeklyGoal {
   targetDays: number;        // Default: 3 (configurable by parent)
@@ -22,6 +23,10 @@ export interface Profile {
     soundEnabled: boolean;
     hapticsEnabled: boolean;
   };
+  // Curriculum alignment fields
+  country?: CountryCode;
+  yearGrade?: string; // e.g., 'Y3', 'G2', 'K' (country-specific format)
+  curriculumLastUpdated?: string; // ISO date for cache invalidation
   // Engagement stats
   streak?: {
     current: number;
@@ -59,12 +64,14 @@ export interface Achievement {
   id: string;
   title: string;
   description: string;
-  category: 'streak' | 'volume' | 'accuracy' | 'speed';
+  category: 'streak' | 'volume' | 'accuracy' | 'speed' | 'mastery' | 'milestone';
   icon: string;
   condition: {
-    type: string; // e.g. 'TOTAL_QUESTIONS'
+    type: string; // e.g. 'TOTAL_QUESTIONS', 'PERFECT_SESSION', 'MASTERY_COUNT'
     value: number;
   };
+  // Optional: For progress-based achievements
+  progressTrackable?: boolean; // If true, show progress bar in gallery
 }
 
 export interface PlayerAchievement {
@@ -142,6 +149,20 @@ export interface SyncQueueItem {
   retryCount: number;
 }
 
+export interface DailyDash {
+  id?: number;
+  profileId: string;
+  date: string; // YYYY-MM-DD format
+  operations: Array<'addition' | 'subtraction' | 'multiplication' | 'division'>;
+  selectedNumbers: number[]; // For mult/div
+  numberRangePreset: string; // For add/sub (e.g., 'starter', 'builder')
+  focusFacts: string[]; // Weak facts targeted today
+  completed: boolean;
+  completedAt?: string; // ISO timestamp when completed
+  sessionId?: string; // Link to the game session
+  score?: number; // Final score achieved
+}
+
 export interface GlobalSettings {
   id: string; // 'default'
   isPremium: boolean;
@@ -162,6 +183,7 @@ export class MathDashDB extends Dexie {
   playerAchievements!: Table<PlayerAchievement>;
   syncQueue!: Table<SyncQueueItem>;
   globalSettings!: Table<GlobalSettings>;
+  dailyDash!: Table<DailyDash>;
 
   constructor() {
     super('mathdash_v1');
@@ -199,6 +221,18 @@ export class MathDashDB extends Dexie {
       profiles: 'id, playCode, accountId, classroomId',
       deviceProfiles: '++id, playCode',
       deviceSettings: 'id'
+    });
+
+    // Add Daily Dash table for guided daily practice
+    this.version(8).stores({
+      dailyDash: '++id, [profileId+date], completed'
+    });
+
+    // Add curriculum alignment fields to profiles (country, yearGrade)
+    // No new indexes needed - fields are optional and used for filtering
+    this.version(9).stores({
+      // Re-declare profiles to ensure schema is recognized
+      profiles: 'id, playCode, accountId, classroomId'
     });
   }
 }

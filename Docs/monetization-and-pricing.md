@@ -14,9 +14,9 @@
 - **Core Upgrade (One‑Time Purchase)**
   - Unlocks:
     - All remaining standard multiplication tables (5×–12×) and their division topics.
-    - Extended bonds and more advanced doubles/halves.
+    - Extended number bonds (Make 20, Make 50, Make 100) and more advanced doubles/halves.
     - Adaptive practice mode.
-    - Local multiplayer “Dash Duel”.
+    - Local multiplayer "Dash Duel".
     - Teacher tools for a limited number of classes.
   - Positioned as low‑cost, high‑value, one‑time purchase.
 

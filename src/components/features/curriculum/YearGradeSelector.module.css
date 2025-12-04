@@ -1,0 +1,181 @@
+/* YearGradeSelector - Vertical list with radio-button style selection */
+
+.container {
+  width: 100%;
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.optionButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition: 
+    border-color var(--motion-duration-short) var(--motion-ease-standard),
+    background-color var(--motion-duration-short) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.optionButton:hover:not(.disabled) {
+  border-color: var(--color-primary-300);
+  background: var(--color-primary-50);
+}
+
+.optionButton:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Selected state */
+.optionButton.selected {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-50);
+}
+
+.optionButton.selected:hover:not(.disabled) {
+  background: var(--color-primary-100);
+}
+
+/* Recommended state (not selected) */
+.optionButton.recommended {
+  border-color: var(--color-secondary-500);
+  background: var(--color-secondary-50);
+}
+
+.optionButton.recommended:hover:not(.disabled) {
+  background: var(--color-secondary-100);
+}
+
+/* Disabled state */
+.optionButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--surface-muted);
+}
+
+/* Radio indicator (circle) */
+.radioIndicator {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  transition: 
+    border-color var(--motion-duration-short) var(--motion-ease-standard),
+    background-color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.optionButton:hover:not(.disabled) .radioIndicator {
+  border-color: var(--color-primary-400);
+}
+
+.optionButton.selected .radioIndicator {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-500);
+}
+
+.optionButton.recommended:not(.selected) .radioIndicator {
+  border-color: var(--color-secondary-500);
+}
+
+/* Radio inner dot */
+.radioInner {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  transition: 
+    transform var(--motion-duration-short) var(--motion-ease-spring),
+    background-color var(--motion-duration-short) var(--motion-ease-standard);
+  transform: scale(0);
+}
+
+.optionButton.selected .radioInner {
+  background: var(--color-white);
+  transform: scale(1);
+}
+
+/* Option content */
+.optionContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+
+.optionLabel {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.optionButton.selected .optionLabel {
+  color: var(--color-primary-700);
+}
+
+.ageHint {
+  font-family: var(--font-body);
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+/* Recommended badge */
+.recommendedBadge {
+  flex-shrink: 0;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-secondary-500);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.optionButton.selected .recommendedBadge {
+  background: var(--color-primary-500);
+}
+
+/* No options fallback */
+.noOptions {
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Touch-friendly targets on mobile */
+@media (pointer: coarse) {
+  .optionButton {
+    padding: var(--space-lg) var(--space-xl);
+    min-height: 64px;
+  }
+
+  .radioIndicator {
+    width: 26px;
+    height: 26px;
+  }
+
+  .radioInner {
+    width: 12px;
+    height: 12px;
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useDuelStore } from "@/lib/stores/useDuelStore";
-import { generateQuestion, Difficulty } from "@/lib/game-engine/question-generator";
+import { generateQuestion, Difficulty, clearQuestionHistory, clearMultiplierTracking } from "@/lib/game-engine/question-generator";
 import { DuelLayout } from "@/components/game/duel/DuelLayout";
 import { PlayerLane } from "@/components/game/duel/PlayerLane";
 import { TimerBar } from "@/components/game/TimerBar";
@@ -85,6 +85,10 @@ export default function DuelPage() {
   };
 
   const handleStart = () => {
+    // Clear question history and multiplier tracking for fresh session
+    clearQuestionHistory();
+    clearMultiplierTracking();
+    
     startGame();
     setQuestion('p1', generateQuestion({ difficulty: player1.difficulty }));
     setQuestion('p2', generateQuestion({ difficulty: player2.difficulty }));

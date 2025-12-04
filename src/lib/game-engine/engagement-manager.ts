@@ -1,21 +1,52 @@
 import { db, Profile, Achievement } from '../db';
 
 export const DEFAULT_ACHIEVEMENTS: Achievement[] = [
+  // ==================== MILESTONE ACHIEVEMENTS ====================
   {
     id: 'first_steps',
     title: 'First Steps',
     description: 'Complete your first session',
-    category: 'volume',
+    category: 'milestone',
     icon: '🏁',
     condition: { type: 'TOTAL_SESSIONS', value: 1 }
   },
+  {
+    id: 'getting_started',
+    title: 'Getting Started',
+    description: 'Complete 10 sessions',
+    category: 'milestone',
+    icon: '🌱',
+    condition: { type: 'TOTAL_SESSIONS', value: 10 },
+    progressTrackable: true
+  },
+  {
+    id: 'dedicated_learner',
+    title: 'Dedicated Learner',
+    description: 'Complete 50 sessions',
+    category: 'milestone',
+    icon: '📚',
+    condition: { type: 'TOTAL_SESSIONS', value: 50 },
+    progressTrackable: true
+  },
+  {
+    id: 'math_explorer',
+    title: 'Math Explorer',
+    description: 'Complete 100 sessions',
+    category: 'milestone',
+    icon: '🧭',
+    condition: { type: 'TOTAL_SESSIONS', value: 100 },
+    progressTrackable: true
+  },
+
+  // ==================== VOLUME ACHIEVEMENTS ====================
   {
     id: 'high_five',
     title: 'High Five',
     description: 'Answer 50 questions correctly',
     category: 'volume',
     icon: '🖐️',
-    condition: { type: 'TOTAL_CORRECT', value: 50 }
+    condition: { type: 'TOTAL_CORRECT', value: 50 },
+    progressTrackable: true
   },
   {
     id: 'century_club',
@@ -23,15 +54,37 @@ export const DEFAULT_ACHIEVEMENTS: Achievement[] = [
     description: 'Answer 100 questions correctly',
     category: 'volume',
     icon: '💯',
-    condition: { type: 'TOTAL_CORRECT', value: 100 }
+    condition: { type: 'TOTAL_CORRECT', value: 100 },
+    progressTrackable: true
   },
+  {
+    id: 'five_hundred',
+    title: 'High Fiver',
+    description: 'Answer 500 questions correctly',
+    category: 'volume',
+    icon: '🎯',
+    condition: { type: 'TOTAL_CORRECT', value: 500 },
+    progressTrackable: true
+  },
+  {
+    id: 'thousand_club',
+    title: 'Thousand Club',
+    description: 'Answer 1,000 questions correctly',
+    category: 'volume',
+    icon: '🏆',
+    condition: { type: 'TOTAL_CORRECT', value: 1000 },
+    progressTrackable: true
+  },
+
+  // ==================== STREAK ACHIEVEMENTS ====================
   {
     id: 'streak_3',
     title: 'Hat Trick',
     description: 'Play for 3 days in a row',
     category: 'streak',
     icon: '🔥',
-    condition: { type: 'STREAK', value: 3 }
+    condition: { type: 'STREAK', value: 3 },
+    progressTrackable: true
   },
   {
     id: 'streak_7',
@@ -39,15 +92,117 @@ export const DEFAULT_ACHIEVEMENTS: Achievement[] = [
     description: 'Play for 7 days in a row',
     category: 'streak',
     icon: '📅',
-    condition: { type: 'STREAK', value: 7 }
+    condition: { type: 'STREAK', value: 7 },
+    progressTrackable: true
   },
+  {
+    id: 'streak_14',
+    title: 'Fortnight Fighter',
+    description: 'Play for 14 days in a row',
+    category: 'streak',
+    icon: '⚔️',
+    condition: { type: 'STREAK', value: 14 },
+    progressTrackable: true
+  },
+  {
+    id: 'streak_30',
+    title: 'Monthly Master',
+    description: 'Play for 30 days in a row',
+    category: 'streak',
+    icon: '🌟',
+    condition: { type: 'STREAK', value: 30 },
+    progressTrackable: true
+  },
+
+  // ==================== SPEED ACHIEVEMENTS ====================
   {
     id: 'speed_demon',
     title: 'Speed Demon',
-    description: 'Answer 20 questions in 60 seconds',
+    description: 'Answer 20 questions per minute',
     category: 'speed',
     icon: '⚡',
-    condition: { type: 'SPEED_RPM', value: 20 } // RPM = Rounds Per Minute (Questions per minute)
+    condition: { type: 'SPEED_RPM', value: 20 }
+  },
+  {
+    id: 'lightning_fast',
+    title: 'Lightning Fast',
+    description: 'Answer 30 questions per minute',
+    category: 'speed',
+    icon: '🌩️',
+    condition: { type: 'SPEED_RPM', value: 30 }
+  },
+  {
+    id: 'supersonic',
+    title: 'Supersonic',
+    description: 'Answer 40 questions per minute',
+    category: 'speed',
+    icon: '🚀',
+    condition: { type: 'SPEED_RPM', value: 40 }
+  },
+
+  // ==================== ACCURACY ACHIEVEMENTS ====================
+  {
+    id: 'sharp_shooter',
+    title: 'Sharp Shooter',
+    description: 'Complete a session with 100% accuracy',
+    category: 'accuracy',
+    icon: '🎯',
+    condition: { type: 'PERFECT_SESSION', value: 1 }
+  },
+  {
+    id: 'precision_player',
+    title: 'Precision Player',
+    description: 'Complete 5 sessions with 100% accuracy',
+    category: 'accuracy',
+    icon: '💎',
+    condition: { type: 'PERFECT_SESSION', value: 5 },
+    progressTrackable: true
+  },
+  {
+    id: 'flawless',
+    title: 'Flawless',
+    description: 'Complete 10 sessions with 100% accuracy',
+    category: 'accuracy',
+    icon: '✨',
+    condition: { type: 'PERFECT_SESSION', value: 10 },
+    progressTrackable: true
+  },
+
+  // ==================== MASTERY ACHIEVEMENTS ====================
+  {
+    id: 'fact_finder',
+    title: 'Fact Finder',
+    description: 'Master your first math fact',
+    category: 'mastery',
+    icon: '🔍',
+    condition: { type: 'MASTERY_COUNT', value: 1 }
+  },
+  {
+    id: 'fact_collector',
+    title: 'Fact Collector',
+    description: 'Master 10 math facts',
+    category: 'mastery',
+    icon: '📦',
+    condition: { type: 'MASTERY_COUNT', value: 10 },
+    progressTrackable: true
+  },
+  {
+    id: 'fact_master',
+    title: 'Fact Master',
+    description: 'Master 50 math facts',
+    category: 'mastery',
+    icon: '🧠',
+    condition: { type: 'MASTERY_COUNT', value: 50 },
+    progressTrackable: true
+  },
+  {
+    id: 'math_wizard',
+    title: 'Math Wizard',
+    description: 'Master 100 math facts',
+    category: 'mastery',
+    icon: '🧙',
+    condition: { type: 'MASTERY_COUNT', value: 100 },
+    progressTrackable: true
   }
 ];
 
@@ -132,6 +287,21 @@ export class EngagementManager {
     
     const unlockedIds = new Set(existingUnlocks.map(u => u.achievementId));
 
+    // Get mastery count for mastery achievements
+    const masteredFacts = await db.mastery
+      .where('profileId').equals(profileId)
+      .filter(m => m.status === 'mastered')
+      .count();
+
+    // Get perfect sessions count for accuracy achievements
+    const perfectSessions = await db.sessions
+      .where('profileId').equals(profileId)
+      .filter(s => s.isCompleted && s.questionsCorrect === s.questionsAnswered && s.questionsAnswered > 0)
+      .count();
+
+    // Check if this session was perfect
+    const isCurrentSessionPerfect = sessionStats.correct === sessionStats.total && sessionStats.total > 0;
+
     for (const achievement of allAchievements) {
       if (unlockedIds.has(achievement.id)) continue;
 
@@ -153,6 +323,14 @@ export class EngagementManager {
           const rpm = (sessionStats.correct / sessionStats.durationSeconds) * 60;
           isMet = rpm >= value && sessionStats.durationSeconds >= 30; // Min 30s session
           break;
+        case 'PERFECT_SESSION':
+          // Count includes current session if perfect
+          const totalPerfect = perfectSessions + (isCurrentSessionPerfect ? 1 : 0);
+          isMet = totalPerfect >= value;
+          break;
+        case 'MASTERY_COUNT':
+          isMet = masteredFacts >= value;
+          break;
       }
 
       if (isMet) {
@@ -167,5 +345,65 @@ export class EngagementManager {
     }
 
     return unlocked;
+  }
+
+  /**
+   * Get progress data for all achievements for a given profile.
+   * Returns current progress toward each achievement's condition.
+   */
+  static async getAchievementProgress(profileId: string): Promise<Map<string, number>> {
+    const profile = await db.profiles.get(profileId);
+    const progressMap = new Map<string, number>();
+
+    if (!profile) return progressMap;
+
+    const stats = profile.stats || { totalQuestions: 0, totalCorrect: 0, totalSessions: 0 };
+    const streak = profile.streak || { current: 0, best: 0, lastActiveDate: '' };
+
+    // Get mastery count
+    const masteredFacts = await db.mastery
+      .where('profileId').equals(profileId)
+      .filter(m => m.status === 'mastered')
+      .count();
+
+    // Get perfect sessions count
+    const perfectSessions = await db.sessions
+      .where('profileId').equals(profileId)
+      .filter(s => s.isCompleted && s.questionsCorrect === s.questionsAnswered && s.questionsAnswered > 0)
+      .count();
+
+    // Map progress for each condition type
+    const allAchievements = await db.achievements.toArray();
+    
+    for (const achievement of allAchievements) {
+      const { type } = achievement.condition;
+      let progress = 0;
+
+      switch (type) {
+        case 'TOTAL_SESSIONS':
+          progress = stats.totalSessions;
+          break;
+        case 'TOTAL_CORRECT':
+          progress = stats.totalCorrect;
+          break;
+        case 'STREAK':
+          progress = Math.max(streak.current, streak.best);
+          break;
+        case 'PERFECT_SESSION':
+          progress = perfectSessions;
+          break;
+        case 'MASTERY_COUNT':
+          progress = masteredFacts;
+          break;
+        // Speed achievements don't have trackable progress
+        case 'SPEED_RPM':
+          progress = 0;
+          break;
+      }
+
+      progressMap.set(achievement.id, progress);
+    }
+
+    return progressMap;
   }
 }

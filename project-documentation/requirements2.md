@@ -198,7 +198,7 @@ This file focuses on implementation-ready functional and non-functional requirem
 - `FR-2.2` For MVP, the minimum topics SHALL include:
   - Multiplication facts: `2x` through `12x` as separate topics and a mixed 1-12x mode.
   - Division facts: inverse of the above multiplication tables.
-  - Addition & Subtraction facts: Make 10/20 (Number Bonds), Make 100, and missing-number facts to at least 20 (stretch to 100).
+  - Addition & Subtraction facts: Make 10/20/50 (Number Bonds), Make 100, and missing-number facts to at least 20 (stretch to 100).
   - Doubles and halves: doubles/halves to 20 (stretch to 100).
   - Square numbers: squares up to at least `10x10` (stretch to `12x12`).
 - `FR-2.2a` The free tier SHALL include at least the following starter topics:
@@ -207,7 +207,7 @@ This file focuses on implementation-ready functional and non-functional requirem
   - Doubles/halves: simple doubles and halves up to at least 10.
 - `FR-2.2b` The paid one-time upgrade SHALL unlock:
   - All remaining standard multiplication tables (5x–12x) and their division counterparts.
-  - Extended number-bond style modes (e.g., Make 20/100) and extended doubles/halves ranges (to 100).
+  - Extended number-bond style modes (e.g., Make 20/50/100) and extended doubles/halves ranges (to 100).
   - Square numbers to 10x10 or 12x12.
   - Any additional standard topics added post-MVP, unless explicitly designated as free.
 - `FR-2.3` Each topic entry SHALL define generation rules, including:

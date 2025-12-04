@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ProfileManager } from './ProfileManager';
+import { ProfileCurriculumSettings } from './ProfileCurriculumSettings';
 import { SkillRadar } from '@/components/features/analytics/SkillRadar';
 import { UpgradeCard } from '@/components/features/monetization/UpgradeCard';
 import { WeeklyGoalDisplay } from '@/components/features/engagement';
@@ -345,6 +346,12 @@ export default function GrownUpsDashboard() {
         {activeTab === 'settings' && (
           <div className={styles.section}>
             <h2 className={styles.sectionTitle}>App Settings</h2>
+            
+            {/* Curriculum Settings */}
+            <div className={styles.card}>
+              <h3>Curriculum Alignment</h3>
+              <ProfileCurriculumSettings profiles={profiles ?? []} />
+            </div>
             
             {/* Weekly Goal Settings */}
             <div className={styles.card}>

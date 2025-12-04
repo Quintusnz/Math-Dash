@@ -42,7 +42,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${nunito.variable} ${inter.variable}`}>
-      <body>
+      <body suppressHydrationWarning>
         <Providers>
           <main className={styles.main}>
             {children}

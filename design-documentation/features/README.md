@@ -1,8 +1,8 @@
 ---
 title: Feature Documentation Index
 description: Index of all feature-level design documentation for Math Dash.
-last-updated: 2025-11-19
-version: 1.0.0
+last-updated: 2025-12-04
+version: 1.1.0
 ---
 
 # Feature Documentation Index
@@ -28,6 +28,9 @@ This directory contains detailed design specifications for each major feature of
 - **[Progress Dashboard & Skill Radar](./progress-dashboard-skill-radar/README.md)**  
   Visualizations of progress: simple celebrations for children, detailed skill radars for adults.
 
+- **[Curriculum Alignment & Progress Tracking](./curriculum-alignment/README.md)** *(New)*  
+  Compare child's progress to local curriculum expectations by country and year/grade. Shows "On Track", "Ahead", or "Needs Focus" status.
+
 - **[Engagement Layer](./engagement-layer/README.md)**  
   Gamification elements including streaks, badges, and celebratory moments to drive retention.
 
@@ -46,3 +49,4 @@ This directory contains detailed design specifications for each major feature of
 
 - **[Accounts & Cloud Sync](./accounts-and-cloud-sync/README.md)**  
   Systems for data persistence, cross-device synchronization, and account management.
+

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useGameStore } from "@/lib/stores/useGameStore";
 import { useProfileStore } from "@/lib/stores/useProfileStore";
-import { generateQuestion } from "@/lib/game-engine/question-generator";
+import { generateQuestion, clearQuestionHistory, clearMultiplierTracking } from "@/lib/game-engine/question-generator";
 import { saveGameSession } from "@/lib/game-engine/session-manager";
 import { MasteryTracker } from "@/lib/game-engine/mastery-tracker";
 import { EngagementManager } from "@/lib/game-engine/engagement-manager";
+import { getStoppingCueData, StoppingCue } from "@/lib/game-engine/stopping-cues";
 import { db, MasteryRecord, Achievement, WeeklyGoal } from "@/lib/db";
 import { GameCanvas } from "@/components/game/GameCanvas";
 import { TimerBar } from "@/components/game/TimerBar";
@@ -16,17 +17,33 @@ import { MultipleChoiceInput } from "@/components/game/MultipleChoiceInput";
 import { VoskSpeechInput } from "@/components/game/VoskSpeechInput";
 import { ResultScreen } from "@/components/game/ResultScreen";
 import { GameSetup } from "@/components/game/setup/GameSetup";
+import { PauseModal } from "@/components/game/PauseModal";
 import { AuthGuard } from "@/components/features/auth";
 import { ProfileChip } from "@/components/features/profiles/ProfileChip";
 import { AnimatePresence } from "motion/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useGameSound } from "@/lib/hooks/useGameSound";
+import { useBackgroundTheme } from "@/lib/hooks/useBackgroundTheme";
+import { useFocusLoss } from "@/lib/hooks/useFocusLoss";
 import styles from './page.module.css';
+
+// Background themes for visual variety
+const BACKGROUND_THEMES = [
+  styles.themeBluePlus,
+  styles.themeCoralMinus,
+  styles.themeGoldMultiply,
+  styles.themeTealDivide,
+] as const;
 
 function PlayContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Select a background theme that's different from the last 3 visits
+  const backgroundTheme = useBackgroundTheme(BACKGROUND_THEMES);
 
   const hasSavedRef = useRef(false);
+  const quickPlayTriggeredRef = useRef(false);
   const { activeProfile } = useProfileStore();
   const activeProfileId = activeProfile?.id || null;
   const sessionIdRef = useRef<string>(crypto.randomUUID());
@@ -34,6 +51,7 @@ function PlayContent() {
   const questionStartTimeRef = useRef<number>(Date.now());
   const [unlockedAchievements, setUnlockedAchievements] = useState<Achievement[]>([]);
   const [weeklyGoalData, setWeeklyGoalData] = useState<{ goal: WeeklyGoal; justCompleted: boolean } | null>(null);
+  const [stoppingCueData, setStoppingCueData] = useState<{ cue: StoppingCue; sessionsToday: number } | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isHighScore, setIsHighScore] = useState(false);
@@ -48,6 +66,8 @@ function PlayContent() {
     input,
     questionsAnswered,
     questionsCorrect,
+    pauseCount,
+    pauseStartedAt,
     startGame, 
     tick, 
     setQuestion, 
@@ -55,8 +75,63 @@ function PlayContent() {
     appendInput, 
     clearInput, 
     submitAnswer,
-    endGame
+    endGame,
+    pauseGame,
+    resumeGame,
   } = useGameStore();
+
+  // Pause state for modal visibility (separate from game paused state)
+  const [showPauseModal, setShowPauseModal] = useState(false);
+
+  // Handle focus loss - pause the game when tab/window loses focus
+  const handleFocusLost = useCallback(() => {
+    if (status === 'playing') {
+      pauseGame();
+    }
+  }, [status, pauseGame]);
+
+  const handleFocusRegained = useCallback(() => {
+    // Show the pause modal when focus is regained (user is back)
+    // Only show if game was paused (not if it ended or is idle)
+    if (status === 'paused') {
+      setShowPauseModal(true);
+    }
+  }, [status]);
+
+  // Use focus loss detection
+  useFocusLoss({
+    onFocusLost: handleFocusLost,
+    onFocusRegained: handleFocusRegained,
+    enabled: status === 'playing' || status === 'paused',
+  });
+
+  // Handle resume from pause modal
+  const handleResume = useCallback(() => {
+    setShowPauseModal(false);
+    resumeGame();
+  }, [resumeGame]);
+
+  // Handle end session from pause modal
+  const handleEndFromPause = useCallback(() => {
+    setShowPauseModal(false);
+    resumeGame(); // Resume first to calculate pause duration
+    endGame();
+  }, [resumeGame, endGame]);
+
+  // Quick Play: Auto-start game when ?quick=true is in URL
+  useEffect(() => {
+    const isQuickPlay = searchParams.get('quick') === 'true';
+    
+    if (isQuickPlay && status === 'idle' && !quickPlayTriggeredRef.current) {
+      // Mark as triggered to prevent re-triggering
+      quickPlayTriggeredRef.current = true;
+      
+      // Config should already be set by QuickPlay component
+      // Clear the URL param and start the game
+      window.history.replaceState({}, '', '/play');
+      startGame();
+    }
+  }, [searchParams, status, startGame]);
 
   // Game Loop & Timer
   useEffect(() => {
@@ -93,12 +168,17 @@ function PlayContent() {
       // Initialize Engagement Manager (seed achievements)
       EngagementManager.initialize();
       
+      // Clear question history and multiplier tracking for fresh session
+      clearQuestionHistory();
+      clearMultiplierTracking();
+      
       hasSavedRef.current = false;
       sessionIdRef.current = crypto.randomUUID();
       setUnlockedAchievements([]);
       
-      // Determine if we're using number range (for add/sub) or selected numbers (mult/div)
-      const usesNumberRange = config.operations[0] === 'addition' || config.operations[0] === 'subtraction';
+      // Determine if we're using special topics, number range (for add/sub), or selected numbers (mult/div)
+      const usesSpecialTopics = config.selectedTopics && config.selectedTopics.length > 0;
+      const usesNumberRange = !usesSpecialTopics && (config.operations[0] === 'addition' || config.operations[0] === 'subtraction');
       
       // Load weak facts if we have a profile
       if (activeProfileId) {
@@ -108,18 +188,20 @@ function PlayContent() {
           setQuestion(generateQuestion({
             difficulty: config.difficulty,
             weakFacts: facts,
-            allowedOperations: config.operations,
-            selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
-            numberRange: usesNumberRange ? config.numberRange : undefined
+            allowedOperations: usesSpecialTopics ? [] : config.operations,
+            selectedNumbers: usesNumberRange || usesSpecialTopics ? [] : config.selectedNumbers,
+            numberRange: usesNumberRange ? config.numberRange : undefined,
+            selectedTopics: usesSpecialTopics ? config.selectedTopics : undefined
           }));
         });
       } else {
         setQuestion(generateQuestion({
           difficulty: config.difficulty,
           weakFacts: [],
-          allowedOperations: config.operations,
-          selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
-          numberRange: usesNumberRange ? config.numberRange : undefined
+          allowedOperations: usesSpecialTopics ? [] : config.operations,
+          selectedNumbers: usesNumberRange || usesSpecialTopics ? [] : config.selectedNumbers,
+          numberRange: usesNumberRange ? config.numberRange : undefined,
+          selectedTopics: usesSpecialTopics ? config.selectedTopics : undefined
         }));
       }
 
@@ -177,6 +259,11 @@ function PlayContent() {
               }
             }).catch(console.error);
           });
+          
+          // Fetch stopping cue data (not a Daily Dash session in regular play)
+          getStoppingCueData(activeProfileId, false).then(data => {
+            setStoppingCueData({ cue: data.cue, sessionsToday: data.sessionsToday });
+          }).catch(console.error);
         }
       }).catch(console.error);
     }
@@ -203,8 +290,9 @@ function PlayContent() {
     // Shorter feedback delay for voice mode (speed matters!)
     const feedbackDelay = config.inputMode === 'voice' ? 200 : 500;
     
-    // Determine if we're using number range (for add/sub) or selected numbers (mult/div)
-    const usesNumberRange = config.operations[0] === 'addition' || config.operations[0] === 'subtraction';
+    // Determine if we're using special topics, number range (for add/sub), or selected numbers (mult/div)
+    const usesSpecialTopics = config.selectedTopics && config.selectedTopics.length > 0;
+    const usesNumberRange = !usesSpecialTopics && (config.operations[0] === 'addition' || config.operations[0] === 'subtraction');
 
     if (isCorrect) {
       setFeedback('correct');
@@ -218,9 +306,10 @@ function PlayContent() {
         setQuestion(generateQuestion({
           difficulty: config.difficulty,
           weakFacts: weakFactsRef.current,
-          allowedOperations: config.operations,
-          selectedNumbers: usesNumberRange ? [] : config.selectedNumbers,
-          numberRange: usesNumberRange ? config.numberRange : undefined
+          allowedOperations: usesSpecialTopics ? [] : config.operations,
+          selectedNumbers: usesNumberRange || usesSpecialTopics ? [] : config.selectedNumbers,
+          numberRange: usesNumberRange ? config.numberRange : undefined,
+          selectedTopics: usesSpecialTopics ? config.selectedTopics : undefined
         }));
         questionStartTimeRef.current = Date.now();
       }, feedbackDelay);
@@ -289,10 +378,13 @@ function PlayContent() {
         isHighScore={isHighScore}
         weeklyGoal={weeklyGoalData?.goal}
         weeklyGoalJustCompleted={weeklyGoalData?.justCompleted}
+        stoppingCue={stoppingCueData?.cue}
+        sessionsToday={stoppingCueData?.sessionsToday}
         onPlayAgain={() => {
           hasSavedRef.current = false;
           setIsHighScore(false);
           setWeeklyGoalData(null);
+          setStoppingCueData(null);
           sessionIdRef.current = crypto.randomUUID();
           questionStartTimeRef.current = Date.now();
           setUnlockedAchievements([]);
@@ -310,10 +402,17 @@ function PlayContent() {
           setIsHighScore(false);
           setUnlockedAchievements([]);
           setWeeklyGoalData(null);
+          setStoppingCueData(null);
+          // Clear URL params when starting new game
+          window.history.replaceState({}, '', '/play');
           // Reset to idle status to show GameSetup
           useGameStore.setState({ status: 'idle' });
         }}
-        onHome={() => router.push('/dashboard')}
+        onHome={() => {
+          // Clear URL params when going home
+          window.history.replaceState({}, '', '/play');
+          router.push('/dashboard');
+        }}
       />
     );
   } else {
@@ -385,8 +484,15 @@ function PlayContent() {
   }
 
   return (
-    <div className={styles.pageWrapper}>
+    <div className={`${styles.pageWrapper} ${backgroundTheme}`}>
       {content}
+      <PauseModal
+        isOpen={showPauseModal}
+        onResume={handleResume}
+        onEndSession={handleEndFromPause}
+        pauseStartedAt={pauseStartedAt}
+        pauseCount={pauseCount}
+      />
     </div>
   );
 }

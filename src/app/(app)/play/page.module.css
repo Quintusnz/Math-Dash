@@ -1,15 +1,11 @@
 .pageWrapper {
   min-height: 100vh;
   width: 100%;
-  background-color: var(--color-primary-600);
-  background-image: 
-    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 15v4h-4v2h4v4h2v-4h4v-2h-4v-4z' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E"),
-    linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-500));
+  display: flex;
+  justify-content: center;
   background-size: 40px 40px, 100% 100%;
   background-position: center center, center center;
   background-repeat: repeat, no-repeat;
-  display: flex;
-  justify-content: center;
   
   /* Theme Overrides for Dark Background */
   --foreground: var(--color-white);
@@ -17,7 +13,42 @@
   --muted-foreground: rgba(255, 255, 255, 0.8);
   --card-foreground: var(--color-neutral-900); /* Keep cards dark text */
   --primary: var(--color-white);
+}
+
+/* Theme 1: Blue with Plus symbols (Addition) */
+.themeBluePlus {
+  background-color: var(--color-primary-600);
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 15v4h-4v2h4v4h2v-4h4v-2h-4v-4z' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, var(--color-primary-600), var(--color-primary-400));
   --primary-foreground: var(--color-primary-600);
+}
+
+/* Theme 2: Coral with Minus symbols (Subtraction) */
+.themeCoralMinus {
+  background-color: #E04A6A;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='14' y='19' width='12' height='2' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, #E04A6A, var(--color-accent-coral));
+  --primary-foreground: #E04A6A;
+}
+
+/* Theme 3: Gold with Multiplication symbols */
+.themeGoldMultiply {
+  background-color: var(--color-warning-600);
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.17 14.17l1.41-1.41L20 16.17l3.42-3.41 1.41 1.41L21.41 17.6l3.42 3.41-1.41 1.41L20 19.01l-3.42 3.41-1.41-1.41 3.41-3.41z' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, var(--color-warning-600), var(--color-accent-gold));
+  --primary-foreground: var(--color-warning-600);
+}
+
+/* Theme 4: Teal with Division symbols */
+.themeTealDivide {
+  background-color: #0D9488;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='14' r='2' fill='%23ffffff' fill-opacity='0.15'/%3E%3Crect x='14' y='19' width='12' height='2' fill='%23ffffff' fill-opacity='0.15'/%3E%3Ccircle cx='20' cy='26' r='2' fill='%23ffffff' fill-opacity='0.15'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, #0D9488, var(--color-secondary-500));
+  --primary-foreground: #0D9488;
 }
 
 .header {
@@ -63,4 +94,150 @@
   height: 3rem; /* 12 * 0.25rem = 3rem */
   margin-bottom: var(--space-8);
   color: var(--color-primary-500);
+}
+
+/* Daily Dash specific styles */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  min-height: 60vh;
+  color: white;
+  font-size: var(--text-lg);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dailyDashSetup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-xl);
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.backLink {
+  position: absolute;
+  top: var(--space-lg);
+  left: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.backLink:hover {
+  opacity: 1;
+}
+
+.dailyDashCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 100%;
+}
+
+.dailyDashIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+}
+
+.dailyDashTitle {
+  font-size: var(--text-h2);
+  font-weight: 800;
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.dailyDashTopic {
+  font-size: var(--text-h3);
+  font-weight: 700;
+  color: var(--color-primary-600);
+  margin: 0;
+}
+
+.dailyDashDetails {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.dailyDashDetail {
+  font-size: var(--text-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  border-radius: var(--radius-full);
+}
+
+.dailyDashDescription {
+  font-size: var(--text-body);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+.startDailyDashButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-lg) var(--space-2xl);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(48, 86, 211, 0.4);
+  transition: 
+    transform var(--motion-duration-short) var(--motion-ease-spring),
+    box-shadow var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.startDailyDashButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(48, 86, 211, 0.5);
+}
+
+.dailyDashBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }

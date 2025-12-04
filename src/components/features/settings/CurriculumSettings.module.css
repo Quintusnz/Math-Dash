@@ -1,0 +1,261 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Info Banner */
+.infoBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary-50);
+  border: 1px solid var(--color-primary-100);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  color: var(--color-primary-700);
+}
+
+.infoIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.infoText {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Setup Prompt (when no curriculum set) */
+.setupPrompt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--surface-card);
+  border: 2px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+  text-align: left;
+}
+
+.setupPrompt:hover {
+  border-color: var(--color-primary-300);
+  background: var(--color-primary-50);
+}
+
+.setupIcon {
+  color: var(--color-primary-500);
+}
+
+.setupContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.setupLabel {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
+
+.setupHint {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.setupArrow {
+  font-size: var(--text-body-lg);
+  color: var(--color-primary-500);
+}
+
+/* Settings List */
+.settingsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--surface-card);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.settingRow:hover {
+  background: var(--color-neutral-50);
+}
+
+.settingIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  flex-shrink: 0;
+}
+
+.settingContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.settingLabel {
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.settingValue {
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+
+.settingArrow {
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  color: var(--color-primary-500);
+}
+
+/* Editor Container */
+.editorContainer {
+  overflow: hidden;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+}
+
+.editorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.editorTitle {
+  font-size: var(--text-body-lg);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.cancelButton {
+  padding: var(--space-xs) var(--space-sm);
+  background: transparent;
+  border: none;
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.cancelButton:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+}
+
+.selector {
+  margin-bottom: var(--space-md);
+}
+
+.editorActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveButton {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-primary-500);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--color-primary-600);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dark mode */
+[data-theme="dark"] .infoBanner {
+  background: color-mix(in srgb, var(--color-primary-900) 30%, transparent);
+  border-color: var(--color-primary-800);
+  color: var(--color-primary-300);
+}
+
+[data-theme="dark"] .setupPrompt {
+  background: var(--surface-card);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .setupPrompt:hover {
+  border-color: var(--color-primary-500);
+  background: color-mix(in srgb, var(--color-primary-900) 20%, var(--surface-card));
+}
+
+[data-theme="dark"] .setupLabel {
+  color: var(--color-neutral-200);
+}
+
+[data-theme="dark"] .settingRow:hover {
+  background: var(--color-neutral-800);
+}
+
+[data-theme="dark"] .settingIcon {
+  background: color-mix(in srgb, var(--color-primary-900) 50%, transparent);
+  color: var(--color-primary-400);
+}
+
+[data-theme="dark"] .settingValue {
+  color: var(--color-neutral-100);
+}
+
+[data-theme="dark"] .editorContainer {
+  background: var(--surface-card);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .editorTitle {
+  color: var(--color-neutral-100);
+}
+
+[data-theme="dark"] .cancelButton {
+  color: var(--color-neutral-400);
+}
+
+[data-theme="dark"] .cancelButton:hover {
+  background: var(--color-neutral-700);
+  color: var(--color-neutral-200);
+}

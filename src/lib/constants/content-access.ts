@@ -8,15 +8,21 @@
  * - Division: ÷1, ÷2, ÷3, ÷4
  * - Addition: Starter zone only (0-10)
  * - Subtraction: Starter zone only (0-10)
+ * - Number Bonds: Make 10 only
+ * - Doubles: Basic doubles (up to 10)
  * 
  * PREMIUM (Core Unlock $6.99) includes:
  * - All times tables (5-12)
  * - All division (÷5 through ÷12)
  * - All addition zones (up to 100)
  * - All subtraction zones (up to 100)
+ * - All Number Bonds (Make 20, Make 50, Make 100)
+ * - All Doubles (up to 20)
+ * - Halves
+ * - Square Numbers
  */
 
-import type { RangePreset, Operation } from '@/lib/stores/useGameStore';
+import type { RangePreset, Operation, TopicType } from '@/lib/stores/useGameStore';
 
 // Which times tables / divisors are free (1-4 are foundational)
 export const FREE_NUMBERS: number[] = [1, 2, 3, 4];
@@ -36,6 +42,24 @@ export const ALL_RANGE_PRESETS: RangePreset[] = ['starter', 'builder', 'challeng
 // Premium range presets
 export const PREMIUM_RANGE_PRESETS: RangePreset[] = ['builder', 'challenge', 'pro', 'custom'];
 
+// ============================================
+// Special Topics Access Control
+// ============================================
+
+// Free special topics
+export const FREE_SPECIAL_TOPICS: TopicType[] = ['number-bonds-10', 'doubles'];
+
+// All special topics
+export const ALL_SPECIAL_TOPICS: TopicType[] = [
+  'number-bonds-10', 'number-bonds-20', 'number-bonds-50', 'number-bonds-100',
+  'doubles', 'halves', 'squares'
+];
+
+// Premium special topics (everything not in FREE_SPECIAL_TOPICS)
+export const PREMIUM_SPECIAL_TOPICS: TopicType[] = ALL_SPECIAL_TOPICS.filter(
+  t => !FREE_SPECIAL_TOPICS.includes(t)
+);
+
 /**
  * Check if a specific number (times table / divisor) is locked for free users
  */
@@ -53,6 +77,14 @@ export function isRangePresetLocked(preset: RangePreset, isPremium: boolean): bo
 }
 
 /**
+ * Check if a special topic is locked for free users
+ */
+export function isSpecialTopicLocked(topic: TopicType, isPremium: boolean): boolean {
+  if (isPremium) return false;
+  return PREMIUM_SPECIAL_TOPICS.includes(topic);
+}
+
+/**
  * Get all available numbers for an operation based on premium status
  */
 export function getAvailableNumbers(isPremium: boolean): number[] {
@@ -64,6 +96,13 @@ export function getAvailableNumbers(isPremium: boolean): number[] {
  */
 export function getAvailableRangePresets(isPremium: boolean): RangePreset[] {
   return isPremium ? ALL_RANGE_PRESETS : FREE_RANGE_PRESETS;
+}
+
+/**
+ * Get all available special topics based on premium status
+ */
+export function getAvailableSpecialTopics(isPremium: boolean): TopicType[] {
+  return isPremium ? ALL_SPECIAL_TOPICS : FREE_SPECIAL_TOPICS;
 }
 
 /**
@@ -90,6 +129,9 @@ export const PREMIUM_CONTENT_DESCRIPTIONS = {
   division: 'Unlock all division facts (÷1 through ÷12)', 
   addition: 'Unlock higher number zones (up to 100)',
   subtraction: 'Unlock higher number zones (up to 100)',
+  'number-bonds': 'Unlock Make 20, Make 50 and Make 100',
+  'doubles-halves': 'Unlock all doubles and halves practice',
+  'squares': 'Unlock square numbers 1-12',
   general: 'Get access to all math content with Premium'
 } as const;
 

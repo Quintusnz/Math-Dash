@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: var(--space-lg);
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   margin: 0 auto;
   padding: var(--space-xl);
   background: var(--card);
@@ -11,11 +11,53 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Step Indicator */
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: var(--space-md);
+}
+
+.stepDot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-200);
+  transition: background-color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.stepDot.active {
+  background: var(--color-primary-500);
+}
+
+.stepLine {
+  width: 60px;
+  height: 2px;
+  background: var(--color-neutral-200);
+}
+
+/* Step Content */
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
 .title {
   text-align: center;
   color: var(--primary);
   font-size: 1.5rem;
   font-weight: 700;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-sm);
 }
 
 .field {
@@ -35,8 +77,14 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  background: var(--background);
+  background: var(--surface-card);
   color: var(--foreground);
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
 .avatarGrid {
@@ -56,17 +104,52 @@
 }
 
 .avatarBtn:hover {
-  background: var(--accent);
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+}
+
+.avatarBtn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
 }
 
 .selected {
   border-color: var(--primary);
-  background: var(--primary-foreground);
+  background: var(--color-primary-50);
   transform: scale(1.1);
 }
 
-.submitBtn {
+/* Button Group */
+.buttonGroup {
+  display: flex;
+  gap: var(--space-md);
   margin-top: var(--space-md);
+}
+
+.backBtn {
+  flex: 0 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--surface-muted);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.backBtn:hover {
+  background: var(--color-neutral-200);
+}
+
+.backBtn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.submitBtn {
+  flex: 1;
   padding: var(--space-md);
   background: var(--primary);
   color: var(--primary-foreground);
@@ -75,4 +158,44 @@
   font-size: 1.125rem;
   font-weight: 700;
   cursor: pointer;
+  transition: 
+    background-color var(--motion-duration-short) var(--motion-ease-standard),
+    opacity var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--color-primary-600);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitBtn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Skip Button */
+.skipBtn {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--motion-duration-short) var(--motion-ease-standard);
+}
+
+.skipBtn:hover {
+  color: var(--color-neutral-700);
+}
+
+.skipBtn:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
 }

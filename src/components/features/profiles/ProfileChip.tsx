@@ -1,19 +1,23 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useProfileStore } from '@/lib/stores/useProfileStore';
 import { db, Profile } from '@/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, UserPlus, Check } from 'lucide-react';
+import { ChevronDown, UserPlus, Check, LayoutDashboard } from 'lucide-react';
 import styles from './ProfileChip.module.css';
 
 interface ProfileChipProps {
   size?: 'sm' | 'md';
   showSwitcher?: boolean;
+  showDashboardLink?: boolean;
 }
 
-export function ProfileChip({ size = 'md', showSwitcher = true }: ProfileChipProps) {
+export function ProfileChip({ size = 'md', showSwitcher = true, showDashboardLink = false }: ProfileChipProps) {
+  const router = useRouter();
   const { activeProfile, setActiveProfile, setAuthStep, resetPendingProfile } = useProfileStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,13 @@ export function ProfileChip({ size = 'md', showSwitcher = true }: ProfileChipPro
   }, [isOpen]);
 
   const handleProfileSelect = async (profile: Profile) => {
-    setActiveProfile(profile);
+    // Fetch fresh profile data from database to ensure streak/stats are current
+    const freshProfile = await db.profiles.get(profile.id);
+    if (freshProfile) {
+      setActiveProfile(freshProfile);
+    } else {
+      setActiveProfile(profile);
+    }
     
     // Update device settings with last active profile
     await db.deviceSettings.put({
@@ -122,6 +132,22 @@ export function ProfileChip({ size = 'md', showSwitcher = true }: ProfileChipPro
                 </button>
               ))}
             </div>
+
+            {showDashboardLink && (
+              <>
+                <div className={styles.dropdownDivider} />
+                <button
+                  className={styles.dashboardButton}
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push('/dashboard');
+                  }}
+                >
+                  <LayoutDashboard size={16} />
+                  <span>{activeProfile.displayName}&apos;s Dashboard</span>
+                </button>
+              </>
+            )}
 
             <div className={styles.dropdownDivider} />
             

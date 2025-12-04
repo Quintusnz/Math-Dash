@@ -1,0 +1,681 @@
+````markdown
+# Math Dash – Curriculum Alignment & Skill Framework (Global + Country-Specific)
+
+> **Purpose:**  
+> This document captures the full history of our thinking, research conclusions, and the final implementation model for aligning Math Dash with primary-school curricula across **New Zealand, Australia, UK, US, and Canada**.  
+> It is designed as a **drop-in spec** for an AI coder or engineering team.
+
+---
+
+## 0. Context & Goals
+
+Math Dash is a fast fluency game for ages **5–11** focused on:
+
+- Number bonds  
+- Addition and subtraction facts  
+- Multiplication & division tables  
+- Doubles & halves  
+- Square numbers  
+
+We want:
+
+1. A **global skill taxonomy** with stable `skill_id`s that we can use in:
+   - Question generators
+   - Progress dashboards
+   - Parent/teacher reports
+   - Adaptive difficulty
+
+2. A **cross-country alignment** so we can say, for each child:
+   - What skills are typically “on track” for their **age** and **country**.
+   - Whether they are **behind / on track / ahead** relative to local curriculum expectations.
+
+3. A **data asset (JSON)** that can be:
+   - Embedded in the app,
+   - Queried by country + year/grade,
+   - Used by recommendation logic and UI.
+
+We focused on these five systems:
+
+- New Zealand  
+- Australia  
+- United Kingdom (England National Curriculum)  
+- United States (Common Core–style expectations)  
+- Canada (Ontario-like progression as a representative reference)  
+
+---
+
+## 1. Summary of Research & Key Decisions
+
+### 1.1 High-level research steps
+
+1. We used curriculum-aligned resources (including IXL’s country-specific mappings and official curriculum docs) to understand:
+   - What **math facts** children are expected to know by **year/grade**.
+   - How **tables** (e.g. 2×, 3×, …, 12×) and **division facts** are phased in.
+   - When **number bonds**, **doubles/halves**, and **square numbers** appear.
+
+2. We compared expectations across:
+   - **NZ / AU / UK** (Year 1–6),
+   - **US** (Grades K–5),
+   - **CA** (Grades 1–5, Ontario style).
+
+3. We identified **converging content**:
+   - Number bonds to 10, 20, 100 are virtually universal.
+   - Addition/subtraction fluency to 20, 100, 1000 appears in similar ranges.
+   - Multiplication: every system wants full **1×–10×** or **1×–12×** at some point before age ~11.
+   - Doubles/halves start with small numbers, then 2-digit, then 3-digit and decimals.
+   - Square numbers (1²–12²) show up around ages 9–11 as extension/required content depending on country.
+
+4. We distilled this into:
+   - A **global skill framework** with stable IDs and metadata.
+   - **Country-by-year/grade benchmark mappings** (core vs extension).
+
+---
+
+### 1.2 Cross-country differences (short summary)
+
+- **Times tables**
+  - **UK**: most aggressive; **full 1–12×12 by end of Year 4** (~age 8–9).
+  - **US (Common Core)**: expects *all 1-digit×1-digit facts (0–10×10)* by end of Grade 3 (~age 8–9); 11×,12× not mandated but often taught.
+  - **AU / NZ**: expect strong recall of **1–10×** by ~Year 4; 11×,12× often added by Year 5/6.
+  - **CA (Ontario)**: staged:
+    - up to **7×7** by Grade 3,
+    - **9×9** by Grade 4,
+    - **12×12** by Grade 5.
+
+- **Number bonds / add-sub fluency**
+  - All systems converge on:
+    - Bonds to **10** by ~age 6,
+    - Bonds to **20** by ~age 7,
+    - Strong add/subtraction to **100** by ~age 7–8,
+    - To **1000** by ~age 8–9.
+
+- **Doubles & halves**
+  - All systems:
+    - Tiny doubles (≤10) at 5–6,
+    - Doubles/halves to 20 and simple 2-digit numbers at 6–8,
+    - 3-digit and decimal doubling/halving in the 9–11 range.
+
+- **Square numbers**
+  - Typically formalised around ages **9–10** in **UK/AU/US/CA**.
+  - NZ tends to treat them more as extension/Year 6 content.
+  - Common set: squares **1²–10²** or **1²–12²**.
+
+---
+
+## 2. Age / Year / Grade Mapping
+
+Approximate correspondence (used internally for reasoning):
+
+| Approx Age | NZ / AU / UK | US          | Canada (Ontario-like) |
+|-----------|--------------|-------------|------------------------|
+| 5–6       | Year 1       | Kindergarten| Grade 1                |
+| 6–7       | Year 2       | Grade 1     | Grade 2                |
+| 7–8       | Year 3       | Grade 2–3   | Grade 3                |
+| 8–9       | Year 4       | Grade 3–4   | Grade 4                |
+| 9–10      | Year 5       | Grade 4–5   | Grade 5                |
+| 10–11     | Year 6       | Grade 5     | Grade 6 (beyond our core band) |
+
+We are only modelling up to **NZ/AU/UK Year 6, US Grade 5, CA Grade 5** in this doc.
+
+---
+
+## 3. Global Skill Framework
+
+This is the **canonical set of skills** used by Math Dash for ages 5–11 in this domain.
+
+Each skill has:
+
+- `id` – stable identifier used in code & data.
+- `label` – UI-friendly name.
+- `domain` – broad math domain.
+- `subdomain` – more specific grouping.
+- `description` – what the child is expected to be able to do.
+- `numberRange` – approximate range.
+- `gameModes` – names of relevant game modes in the engine (conceptual; you can tweak).
+
+> The exact JSON version is in section **4.1**.  
+> Here is the conceptual list.
+
+### 3.1 Number bonds & add/sub fluency
+
+- **NB10** – Number bonds to 10
+- **NB20** – Number bonds to 20
+- **NB100** – Number bonds to 100 (two-digit complements)
+- **NB_DEC1** – Decimal bonds to 1 (0.x + ? = 1.0)
+- **ADD_SUB_20** – Addition/subtraction within 20
+- **ADD_SUB_100** – Addition/subtraction within 100
+- **ADD_SUB_1000** – Addition/subtraction within 1000
+
+### 3.2 Multiplication & division facts
+
+Multiplication:
+
+- **TT_2_5_10** – Times tables 2, 5, 10
+- **TT_CORE** – Core tables 2, 3, 4, 5, 8, 10
+- **TT_1_10_ALL** – All 1×1 to 10×10 facts
+- **TT_1_12_ALL** – All 1×1 to 12×12 facts
+
+Division (inverse facts):
+
+- **DIV_2_5_10** – Division facts from 2, 5, 10 tables
+- **DIV_CORE** – Division facts for 2, 3, 4, 5, 8, 10
+- **DIV_1_10_ALL** – All division facts consistent with 1–10×10
+- **DIV_1_12_ALL** – All division facts consistent with 1–12×12
+
+### 3.3 Doubles & halves
+
+- **DBL_10** – Doubles & halves within 10
+- **DBL_20** – Doubles & halves within 20
+- **DBL_100** – Doubles & halves of 2-digit numbers
+- **DBL_3DIG** – Doubles & halves of 3-digit numbers
+- **DBL_DEC** – Doubles & halves of decimal numbers
+
+### 3.4 Square numbers
+
+- **SQ_1_10** – Square numbers from 1² to 10²
+- **SQ_1_12** – Square numbers from 1² to 12²
+
+---
+
+## 4. JSON – Skill Definitions
+
+This section gives a **drop-in JSON structure** for skills. You can:
+- Put this in `mathdash_skills.json`, or
+- Store it in your DB and load at startup.
+
+```json
+{
+  "version": 1,
+  "skills": [
+    {
+      "id": "NB10",
+      "label": "Number bonds to 10",
+      "domain": "number_facts",
+      "subdomain": "number_bonds",
+      "description": "Fluent recall of all addition and subtraction pairs where the total is 10 or less (e.g. 7+3, 4+6, 10-7).",
+      "numberRange": "0-10",
+      "gameModes": ["bonds_to_10", "add_sub_facts_small"]
+    },
+    {
+      "id": "NB20",
+      "label": "Number bonds to 20",
+      "domain": "number_facts",
+      "subdomain": "number_bonds",
+      "description": "Fluent recall of all addition and subtraction pairs where the total is 20 or less (e.g. 13+7, 18-5).",
+      "numberRange": "0-20",
+      "gameModes": ["bonds_to_20", "add_sub_facts_20"]
+    },
+    {
+      "id": "NB100",
+      "label": "Number bonds to 100",
+      "domain": "number_facts",
+      "subdomain": "number_bonds",
+      "description": "Complements to 100 using two-digit numbers (e.g. 47+53, 82+18, 100-64).",
+      "numberRange": "0-100",
+      "gameModes": ["bonds_to_100"]
+    },
+    {
+      "id": "NB_DEC1",
+      "label": "Decimal number bonds to 1",
+      "domain": "number_facts",
+      "subdomain": "number_bonds",
+      "description": "Complements to 1.0 using decimals to 1 or 2 decimal places (e.g. 0.3+0.7, 0.45+0.55).",
+      "numberRange": "0.0-1.0",
+      "gameModes": ["bonds_to_1_decimal"]
+    },
+    {
+      "id": "ADD_SUB_20",
+      "label": "Addition and subtraction within 20",
+      "domain": "operations",
+      "subdomain": "add_sub",
+      "description": "Fluent single-step addition and subtraction where both numbers and results are 20 or less (e.g. 14-6, 7+8, 9+9).",
+      "numberRange": "0-20",
+      "gameModes": ["add_sub_facts_20"]
+    },
+    {
+      "id": "ADD_SUB_100",
+      "label": "Addition and subtraction within 100",
+      "domain": "operations",
+      "subdomain": "add_sub",
+      "description": "Mental and written addition and subtraction with two-digit numbers (e.g. 45+37, 82-19).",
+      "numberRange": "0-100",
+      "gameModes": ["add_sub_2digit"]
+    },
+    {
+      "id": "ADD_SUB_1000",
+      "label": "Addition and subtraction within 1000",
+      "domain": "operations",
+      "subdomain": "add_sub",
+      "description": "Addition and subtraction with three-digit numbers (e.g. 426+175, 900-357). Can be mental or written but evaluated as fact-level fluency.",
+      "numberRange": "0-1000",
+      "gameModes": ["add_sub_3digit"]
+    },
+    {
+      "id": "TT_2_5_10",
+      "label": "Times tables: 2, 5 and 10",
+      "domain": "operations",
+      "subdomain": "multiplication",
+      "description": "Recall of single-digit multiplication facts for the 2, 5 and 10 times tables (e.g. 7×2, 6×5, 9×10).",
+      "numberRange": "1-10",
+      "gameModes": ["tt_single_table", "tt_mixed_subset"]
+    },
+    {
+      "id": "TT_CORE",
+      "label": "Core times tables: 2, 3, 4, 5, 8 and 10",
+      "domain": "operations",
+      "subdomain": "multiplication",
+      "description": "Recall of multiplication facts for the 2, 3, 4, 5, 8 and 10 times tables. These are heavily emphasised across curricula around age 7–8.",
+      "numberRange": "1-10",
+      "gameModes": ["tt_single_table", "tt_mixed_subset"]
+    },
+    {
+      "id": "TT_1_10_ALL",
+      "label": "All times tables 1 to 10",
+      "domain": "operations",
+      "subdomain": "multiplication",
+      "description": "Recall of all 1×1 to 10×10 multiplication facts.",
+      "numberRange": "1-10",
+      "gameModes": ["tt_mixed_all_1_10", "tt_single_table"]
+    },
+    {
+      "id": "TT_1_12_ALL",
+      "label": "All times tables 1 to 12",
+      "domain": "operations",
+      "subdomain": "multiplication",
+      "description": "Recall of all 1×1 to 12×12 multiplication facts.",
+      "numberRange": "1-12",
+      "gameModes": ["tt_mixed_all_1_12", "tt_single_table"]
+    },
+    {
+      "id": "DIV_2_5_10",
+      "label": "Division facts: ÷2, ÷5 and ÷10",
+      "domain": "operations",
+      "subdomain": "division",
+      "description": "Division facts that are inverses of the 2, 5 and 10 times tables (e.g. 20÷5, 18÷2, 50÷10).",
+      "numberRange": "quotients up to 12",
+      "gameModes": ["div_single_table", "div_mixed_subset"]
+    },
+    {
+      "id": "DIV_CORE",
+      "label": "Core division facts: ÷2, ÷3, ÷4, ÷5, ÷8 and ÷10",
+      "domain": "operations",
+      "subdomain": "division",
+      "description": "Division facts that are inverses of the 2, 3, 4, 5, 8 and 10 times tables (e.g. 24÷3, 32÷4, 40÷8).",
+      "numberRange": "quotients up to 12",
+      "gameModes": ["div_mixed_subset"]
+    },
+    {
+      "id": "DIV_1_10_ALL",
+      "label": "All division facts (1–10 tables)",
+      "domain": "operations",
+      "subdomain": "division",
+      "description": "All division facts that correspond to 1×1 to 10×10 multiplication facts, with dividends up to 100.",
+      "numberRange": "dividends up to 100",
+      "gameModes": ["div_mixed_all_1_10"]
+    },
+    {
+      "id": "DIV_1_12_ALL",
+      "label": "All division facts (1–12 tables)",
+      "domain": "operations",
+      "subdomain": "division",
+      "description": "All division facts that correspond to 1×1 to 12×12 multiplication facts, with dividends up to 144.",
+      "numberRange": "dividends up to 144",
+      "gameModes": ["div_mixed_all_1_12"]
+    },
+    {
+      "id": "DBL_10",
+      "label": "Doubles and halves to 10",
+      "domain": "number_facts",
+      "subdomain": "doubles_halves",
+      "description": "Doubling and halving integers up to 10 (e.g. double 6, half of 8).",
+      "numberRange": "0-10",
+      "gameModes": ["doubles_10", "halves_10"]
+    },
+    {
+      "id": "DBL_20",
+      "label": "Doubles and halves to 20",
+      "domain": "number_facts",
+      "subdomain": "doubles_halves",
+      "description": "Doubling and halving integers up to 20 (e.g. double 15, half of 18).",
+      "numberRange": "0-20",
+      "gameModes": ["doubles_20", "halves_20"]
+    },
+    {
+      "id": "DBL_100",
+      "label": "Doubles and halves of 2-digit numbers",
+      "domain": "number_facts",
+      "subdomain": "doubles_halves",
+      "description": "Doubling and halving two-digit numbers, often multiples of 2, 5, or 10 (e.g. 24, 36, 45, 80).",
+      "numberRange": "10-99",
+      "gameModes": ["doubles_2digit", "halves_2digit"]
+    },
+    {
+      "id": "DBL_3DIG",
+      "label": "Doubles and halves of 3-digit numbers",
+      "domain": "number_facts",
+      "subdomain": "doubles_halves",
+      "description": "Doubling and halving three-digit numbers (e.g. 144, 250, 360).",
+      "numberRange": "100-999",
+      "gameModes": ["doubles_3digit", "halves_3digit"]
+    },
+    {
+      "id": "DBL_DEC",
+      "label": "Doubles and halves of decimal numbers",
+      "domain": "number_facts",
+      "subdomain": "doubles_halves",
+      "description": "Doubling and halving decimal numbers to one or two decimal places (e.g. 3.5, 0.75, 4.2).",
+      "numberRange": "0.0-100.0",
+      "gameModes": ["doubles_decimal", "halves_decimal"]
+    },
+    {
+      "id": "SQ_1_10",
+      "label": "Square numbers 1² to 10²",
+      "domain": "number_properties",
+      "subdomain": "square_numbers",
+      "description": "Recognising and recalling perfect squares from 1² up to 10² (1, 4, 9, ..., 100).",
+      "numberRange": "1-100",
+      "gameModes": ["squares_1_10"]
+    },
+    {
+      "id": "SQ_1_12",
+      "label": "Square numbers 1² to 12²",
+      "domain": "number_properties",
+      "subdomain": "square_numbers",
+      "description": "Recognising and recalling perfect squares from 1² up to 12² (1, 4, 9, ..., 144).",
+      "numberRange": "1-144",
+      "gameModes": ["squares_1_12"]
+    }
+  ]
+}
+````
+
+---
+
+## 5. JSON – Country & Year/Grade Benchmarks
+
+This structure defines, **per country and per year/grade**:
+
+* `coreSkills`: skills that are typically expected to be **mastered** by end of that year (according to local curricula / common practice).
+* `extensionSkills`: skills that are reasonable **stretch goals** at that stage.
+
+You can:
+
+* Use this for **default targets** for new players.
+* Drive **progress dashboards** (“On track for Year 4 in UK”).
+* Adjust **adaptive difficulty** and recommendations.
+
+> Note: Age ranges are approximate; they can be used for UI descriptions, but the primary key is **year/grade**.
+
+```json
+{
+  "version": 1,
+  "countries": {
+    "NZ": {
+      "label": "New Zealand",
+      "systemType": "year",
+      "years": {
+        "Y1": {
+          "label": "Year 1",
+          "ageRange": "5-6",
+          "coreSkills": ["NB10", "ADD_SUB_20", "DBL_10"],
+          "extensionSkills": ["NB20", "DBL_20"]
+        },
+        "Y2": {
+          "label": "Year 2",
+          "ageRange": "6-7",
+          "coreSkills": ["NB20", "ADD_SUB_100", "DBL_20", "TT_2_5_10", "DIV_2_5_10"],
+          "extensionSkills": ["NB100", "TT_CORE", "DBL_100"]
+        },
+        "Y3": {
+          "label": "Year 3",
+          "ageRange": "7-8",
+          "coreSkills": ["ADD_SUB_1000", "NB100", "DBL_100", "TT_2_5_10", "TT_CORE", "DIV_2_5_10", "DIV_CORE"],
+          "extensionSkills": ["TT_1_10_ALL", "DIV_1_10_ALL", "DBL_3DIG"]
+        },
+        "Y4": {
+          "label": "Year 4",
+          "ageRange": "8-9",
+          "coreSkills": ["TT_1_10_ALL", "DIV_1_10_ALL", "ADD_SUB_1000", "DBL_3DIG"],
+          "extensionSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "DBL_DEC"]
+        },
+        "Y5": {
+          "label": "Year 5",
+          "ageRange": "9-10",
+          "coreSkills": ["TT_1_10_ALL", "ADD_SUB_1000", "NB_DEC1", "DBL_DEC"],
+          "extensionSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "SQ_1_10"]
+        },
+        "Y6": {
+          "label": "Year 6",
+          "ageRange": "10-11",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "ADD_SUB_1000", "DBL_DEC", "SQ_1_10"],
+          "extensionSkills": ["SQ_1_12"]
+        }
+      }
+    },
+    "AU": {
+      "label": "Australia",
+      "systemType": "year",
+      "years": {
+        "Y1": {
+          "label": "Year 1",
+          "ageRange": "5-6",
+          "coreSkills": ["NB10", "ADD_SUB_20", "DBL_10"],
+          "extensionSkills": ["NB20"]
+        },
+        "Y2": {
+          "label": "Year 2",
+          "ageRange": "6-7",
+          "coreSkills": ["NB20", "ADD_SUB_100", "DBL_20", "TT_2_5_10", "DIV_2_5_10"],
+          "extensionSkills": ["NB100", "TT_CORE", "DBL_100"]
+        },
+        "Y3": {
+          "label": "Year 3",
+          "ageRange": "7-8",
+          "coreSkills": ["NB100", "ADD_SUB_1000", "DBL_100", "TT_CORE", "DIV_CORE"],
+          "extensionSkills": ["TT_1_10_ALL", "DIV_1_10_ALL", "DBL_3DIG"]
+        },
+        "Y4": {
+          "label": "Year 4",
+          "ageRange": "8-9",
+          "coreSkills": ["TT_1_10_ALL", "DIV_1_10_ALL", "ADD_SUB_1000", "DBL_3DIG"],
+          "extensionSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "DBL_DEC", "SQ_1_10"]
+        },
+        "Y5": {
+          "label": "Year 5",
+          "ageRange": "9-10",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "DBL_DEC", "SQ_1_10"],
+          "extensionSkills": ["SQ_1_12"]
+        },
+        "Y6": {
+          "label": "Year 6",
+          "ageRange": "10-11",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "ADD_SUB_1000", "DBL_DEC", "SQ_1_12"],
+          "extensionSkills": []
+        }
+      }
+    },
+    "UK": {
+      "label": "United Kingdom (England)",
+      "systemType": "year",
+      "years": {
+        "Y1": {
+          "label": "Year 1",
+          "ageRange": "5-6",
+          "coreSkills": ["NB10", "ADD_SUB_20", "DBL_10"],
+          "extensionSkills": ["NB20", "DBL_20"]
+        },
+        "Y2": {
+          "label": "Year 2",
+          "ageRange": "6-7",
+          "coreSkills": ["NB20", "ADD_SUB_100", "DBL_20", "TT_2_5_10", "DIV_2_5_10"],
+          "extensionSkills": ["NB100", "TT_CORE"]
+        },
+        "Y3": {
+          "label": "Year 3",
+          "ageRange": "7-8",
+          "coreSkills": ["ADD_SUB_1000", "NB100", "DBL_100", "TT_CORE", "DIV_CORE"],
+          "extensionSkills": ["TT_1_10_ALL", "DIV_1_10_ALL", "DBL_3DIG"]
+        },
+        "Y4": {
+          "label": "Year 4",
+          "ageRange": "8-9",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "ADD_SUB_1000", "DBL_3DIG"],
+          "extensionSkills": ["NB_DEC1", "DBL_DEC", "SQ_1_10"]
+        },
+        "Y5": {
+          "label": "Year 5",
+          "ageRange": "9-10",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "DBL_DEC", "SQ_1_10"],
+          "extensionSkills": ["SQ_1_12"]
+        },
+        "Y6": {
+          "label": "Year 6",
+          "ageRange": "10-11",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "ADD_SUB_1000", "DBL_DEC", "SQ_1_12"],
+          "extensionSkills": []
+        }
+      }
+    },
+    "US": {
+      "label": "United States",
+      "systemType": "grade",
+      "years": {
+        "K": {
+          "label": "Kindergarten",
+          "ageRange": "5-6",
+          "coreSkills": ["NB10", "ADD_SUB_20", "DBL_10"],
+          "extensionSkills": ["NB20"]
+        },
+        "G1": {
+          "label": "Grade 1",
+          "ageRange": "6-7",
+          "coreSkills": ["NB10", "NB20", "ADD_SUB_20", "DBL_10", "DBL_20"],
+          "extensionSkills": ["TT_2_5_10"]
+        },
+        "G2": {
+          "label": "Grade 2",
+          "ageRange": "7-8",
+          "coreSkills": ["NB20", "ADD_SUB_100", "DBL_20", "DBL_100"],
+          "extensionSkills": ["NB100", "TT_2_5_10", "TT_CORE"]
+        },
+        "G3": {
+          "label": "Grade 3",
+          "ageRange": "8-9",
+          "coreSkills": ["NB100", "ADD_SUB_1000", "DBL_100", "TT_1_10_ALL", "DIV_1_10_ALL"],
+          "extensionSkills": ["DBL_3DIG", "TT_1_12_ALL", "DIV_1_12_ALL"]
+        },
+        "G4": {
+          "label": "Grade 4",
+          "ageRange": "9-10",
+          "coreSkills": ["ADD_SUB_1000", "TT_1_10_ALL", "DIV_1_10_ALL", "DBL_3DIG", "NB_DEC1", "DBL_DEC"],
+          "extensionSkills": ["SQ_1_10", "TT_1_12_ALL", "DIV_1_12_ALL"]
+        },
+        "G5": {
+          "label": "Grade 5",
+          "ageRange": "10-11",
+          "coreSkills": ["ADD_SUB_1000", "TT_1_10_ALL", "DIV_1_10_ALL", "NB_DEC1", "DBL_DEC", "SQ_1_10"],
+          "extensionSkills": ["SQ_1_12", "TT_1_12_ALL", "DIV_1_12_ALL"]
+        }
+      }
+    },
+    "CA": {
+      "label": "Canada (Ontario-like)",
+      "systemType": "grade",
+      "years": {
+        "G1": {
+          "label": "Grade 1",
+          "ageRange": "6-7",
+          "coreSkills": ["NB10", "ADD_SUB_20", "DBL_10"],
+          "extensionSkills": ["NB20"]
+        },
+        "G2": {
+          "label": "Grade 2",
+          "ageRange": "7-8",
+          "coreSkills": ["NB20", "ADD_SUB_100", "DBL_20", "DBL_100"],
+          "extensionSkills": ["NB100", "TT_2_5_10"]
+        },
+        "G3": {
+          "label": "Grade 3",
+          "ageRange": "8-9",
+          "coreSkills": ["NB100", "ADD_SUB_1000", "DBL_100", "TT_2_5_10"],
+          "extensionSkills": ["TT_CORE", "TT_1_10_ALL", "DIV_2_5_10"]
+        },
+        "G4": {
+          "label": "Grade 4",
+          "ageRange": "9-10",
+          "coreSkills": ["ADD_SUB_1000", "TT_1_10_ALL", "DIV_1_10_ALL", "DBL_3DIG"],
+          "extensionSkills": ["NB_DEC1", "DBL_DEC", "SQ_1_10", "TT_1_12_ALL", "DIV_1_12_ALL"]
+        },
+        "G5": {
+          "label": "Grade 5",
+          "ageRange": "10-11",
+          "coreSkills": ["TT_1_12_ALL", "DIV_1_12_ALL", "NB_DEC1", "DBL_DEC", "SQ_1_10"],
+          "extensionSkills": ["SQ_1_12"]
+        }
+      }
+    }
+  }
+}
+```
+
+---
+
+## 6. How to Use This in the App (Implementation Notes)
+
+These are not code, but **design constraints** for the implementation.
+
+### 6.1 Linking skills to question generators
+
+Each game mode (e.g. `tt_mixed_all_1_10`) should:
+
+* Know which `skill_id`s it can serve.
+* Use the **country/year benchmark** to:
+
+  * Prefer `coreSkills` for that player’s default practice.
+  * Offer `extensionSkills` as “challenge” or “stretch” content.
+
+Example:
+
+* Player: `country = "UK"`, `year = "Y4"`.
+* From benchmarks:
+
+  * `coreSkills` include `TT_1_12_ALL`, `DIV_1_12_ALL`.
+* Engine can:
+
+  * Recommend “Times Table Challenge (1–12)” as the main mode.
+  * Treat older skills (e.g. NB20) as remediation content if their analytics show weaknesses.
+
+### 6.2 Progress dashboards & messaging
+
+For each player:
+
+1. Track per-skill metrics:
+
+   * attempts, correct rate, correct per minute, etc.
+2. Compare to **expected skill set** for their country/year:
+
+   * If a `coreSkill` is weak: flag as **“needs practice”**.
+   * If an `extensionSkill` is strong: flag as **“ahead of the pack”**.
+
+Parent/teacher copy can be generated like:
+
+* “In the UK, by the end of Year 3, children are usually working on 2, 3, 4, 5, 8 and 10 times tables. Your child is already strong in 2, 5 and 10, and is now practising 3 and 4.”
+
+You have everything needed here: skill labels, descriptions, and benchmark mappings.
+
+### 6.3 Evolving the framework
+
+If you later add:
+
+* More countries (e.g. Ireland, South Africa, India),
+* More domains (fractions, place value, etc.),
+
+You can:
+
+* Extend the `skills` list with new anchors (e.g. `FRAC_EASY`, `PLACEVALUE_4DIGIT`).
+* Add new entries in `countries.*.years.*.coreSkills`.
+
+The overall pattern stays the same.
+
+---
+

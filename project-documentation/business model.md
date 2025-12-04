@@ -33,7 +33,7 @@ This supports a **low-price / high-volume** strategy for the core business while
   - **NZD NZ$11.99** (New Zealand)
 - **Scope**:
   - One-time payment.
-  - Unlocks all standard non-AI features: all tables (2×–12×) and their division counterparts, Make 10/20/100 number-bond style modes and missing-number facts, extended doubles/halves, adaptive mode, Dash Duel, and basic progress dashboards.
+  - Unlocks all standard non-AI features: all tables (2×–12×) and their division counterparts, Make 10/20/50/100 number-bond style modes and missing-number facts, extended doubles/halves, adaptive mode, Dash Duel, and basic progress dashboards.
   - Covers all child profiles in a household on all devices associated with the same store account/email.
 - **Free Tier**:
   - Always-available free starter content:

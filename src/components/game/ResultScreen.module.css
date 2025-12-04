@@ -190,3 +190,46 @@
   100% { transform: scale(1); }
 }
 
+/* Break Earned Badge - Healthy Habit Loop */
+.breakBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #047857;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-body);
+  margin: 0 auto var(--space-lg);
+  border: 1px solid #10b981;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+/* Daily Dash Complete Badge */
+.dailyDashBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #92400e;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: var(--text-body);
+  margin: 0 auto var(--space-lg);
+  border: 1px solid #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+/* Footer Text - Stopping Cue */
+.footerText {
+  margin: var(--space-lg) 0 0;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-body);
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+}
+

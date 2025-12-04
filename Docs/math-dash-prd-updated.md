@@ -1,7 +1,7 @@
 # Math Dash - Product Requirements & Specification
 
-**Version:** 2.1  
-**Last Updated:** November 2025  
+**Version:** 2.2  
+**Last Updated:** December 2025  
 **Status:** Active
 
 ---
@@ -9,6 +9,33 @@
 ## Document Change Log
 
 This section summarises the major changes and additions made in this version of the PRD.
+
+### Changes & Additions (December 2025 - v2.2)
+
+1. **New Feature: Curriculum Alignment & Progress Tracking (Section 4, Feature 10)** – New feature
+   - Added comprehensive curriculum alignment feature specification
+   - Enables parents/teachers to see child's progress vs local curriculum expectations
+   - Supports 5 countries: New Zealand, Australia, UK, USA, Canada
+   - Profile includes optional country and year/grade selection
+   - Dashboard displays "On Track", "Ahead", or "Needs Focus" status
+   - Grown-Ups area shows detailed skill-by-skill curriculum progress
+   - Data-driven architecture allows easy addition of new countries
+
+2. **Math Dash Coach – Curriculum-Aligned Insights (Section 12.3.5)** – New subsection
+   - Coach now references curriculum benchmarks in insights and recommendations
+   - Country-specific messaging using local terminology
+   - Curriculum progress included in monthly Coach reports
+   - Celebrates skills ahead of expectations, gently highlights priority areas
+
+3. **Analytics – Curriculum-Specific Events (Section 13.3)** – New subsection
+   - Added curriculum-related analytics events
+   - CURRICULUM_COUNTRY_SET, CURRICULUM_PROGRESS_VIEWED, CURRICULUM_STATUS_CHANGED
+   - Track curriculum skill progression for validation
+
+4. **Supporting Documentation**
+   - Created `Docs/curriculum-alignment-implementation-plan.md` – Full technical implementation plan
+   - Created `Docs/curriculum-linear-issues.md` – Work breakdown for Linear
+   - Referenced `Docs/Cirriculum` – Curriculum research and skill framework
 
 ### Changes & Additions (November 2025 - v2.1)
 
@@ -203,12 +230,12 @@ As a child learner, I want to play short, timed math rounds (one question at a t
 ### Feature 2: Topic & Skill Library (P0)
 
 - Library organized by globally clear categories:
-  - Addition & Subtraction Facts (includes number-bond style modes like Make 10/20/100 and missing-number facts).
+  - Addition & Subtraction Facts (includes number-bond style modes like Make 10/20/50/100 and missing-number facts).
   - Multiplication Facts (Times Tables).
   - Division Facts.
   - Doubles & Halves (fast addition/subtraction/multiplication/division by 2).
   - Square Numbers (e.g., squares up to 10×10 or 12×12).
-- Sub-levels/modes examples: "Make 10 (Number Bonds)", "Make 20 (Number Bonds)", "Make 100", "1-12× mixed tables", "Doubles to 20", "Halves to 100", "Squares to 12×12".
+- Sub-levels/modes examples: "Make 10 (Number Bonds)", "Make 20 (Number Bonds)", "Make 50 (Number Bonds)", "Make 100", "1-12× mixed tables", "Doubles to 20", "Halves to 100", "Squares to 12×12".
 - Per-profile remembered recent topics.
 - Locked topics clearly indicated with upgrade prompt.
 
@@ -257,6 +284,53 @@ As a child learner, I want to play short, timed math rounds (one question at a t
 - Optional adult accounts for cross-device sync.
 - Teacher accounts with class codes.
 - Offline-first design with conflict-safe sync.
+
+### Feature 10: Curriculum Alignment & Progress Tracking (P1)
+
+**User Story:**
+As a parent or teacher, I want to see how my child's math fluency compares to typical expectations for their age and country, so I can understand if they are on track and where to focus practice.
+
+**Core Capabilities:**
+
+- **Country and Year/Grade Selection:**
+  - Profile includes optional country selection (NZ, AU, UK, US, CA – extensible).
+  - Year/grade is auto-derived from age band with manual override.
+  - Uses local terminology (Year 1-6 for NZ/AU/UK, Grades K-5 for US/CA).
+
+- **Curriculum Benchmark Comparison:**
+  - Each country/year combination defines expected "core skills" and "extension skills".
+  - Skills are mapped to game modes and mastery data.
+  - System calculates proficiency for each curriculum skill.
+
+- **Progress Status Display:**
+  - Dashboard shows compact status badge: "On Track", "Ahead", or "Needs Focus".
+  - Grown-Ups area shows detailed curriculum progress view.
+  - Per-skill breakdown with proficiency indicators (Not Started → Developing → Proficient → Mastered).
+
+- **Curriculum-Aligned Recommendations:**
+  - Practice suggestions prioritise curriculum-required skills.
+  - Coach AI references curriculum expectations in reports.
+  - Focus areas highlight specific skills needing attention.
+
+**Acceptance Criteria:**
+- Profile creation includes optional country/year selection step.
+- Dashboard displays curriculum status badge for profiles with country set.
+- Grown-Ups area shows detailed skill-by-skill curriculum progress.
+- System correctly calculates proficiency by aggregating mastery records to skill level.
+- Supports 5 countries initially (NZ, AU, UK, US, CA) with architecture for easy expansion.
+- Coach insights reference curriculum benchmarks for subscribed parents.
+
+**Dependencies:** Progress Dashboard, Mastery Tracker, Profile system, Coach AI (for enhanced insights).
+
+**Technical Notes:**
+- Curriculum data stored as JSON configuration (data-driven, not code-driven).
+- Adding new countries requires only data changes, no code changes.
+- Skill-to-game-mode mapping configuration links curriculum skills to actual game content.
+- Caching strategy for curriculum calculations to maintain performance.
+
+**Related Documentation:**
+- `Docs/Cirriculum` – Full curriculum research and skill framework.
+- `Docs/curriculum-alignment-implementation-plan.md` – Technical implementation plan.
 
 ---
 
@@ -638,7 +712,7 @@ Math Dash operates a **one-time paid core app** with an **optional low-cost AI s
 **What's included:**
 - Unlocks all standard topics:
   - All multiplication tables (5×–12×) and their division counterparts.
-  - Extended number bonds (Make 20, Make 100).
+  - Extended number bonds (Make 20, Make 50, Make 100).
   - Advanced doubles/halves.
   - Square numbers.
 - Adaptive Practice Mode.
@@ -830,6 +904,30 @@ Coach turns raw gameplay data into clear insights:
 - Focus on progress and actionable next steps.
 - Never discouraging or comparative to other children.
 
+#### 12.3.5 Curriculum-Aligned Insights
+
+**Per-child curriculum comparison:**
+- Compare proficiency to local curriculum expectations for their year/grade.
+- Identify skills where child is ahead or behind typical expectations.
+- Example: "In Year 4, children are expected to know all times tables to 12×12. Alex has mastered 10 of 12 tables and is on track."
+
+**Country-specific messaging:**
+- Recommendations use local terminology (Year 3 vs Grade 2).
+- Reference appropriate curriculum standards.
+- Example (UK): "By the end of Year 3, most children are fluent with the 2, 3, 4, 5, 8, and 10 times tables. Emma is strong in 2× and 5×, and is now working on 3× and 4×."
+- Example (US): "By the end of Grade 3, children typically know all single-digit multiplication facts. Jake has mastered facts for 2, 5, and 10, and is building fluency in 3 and 4."
+
+**Curriculum progress in Coach reports:**
+- Monthly reports include curriculum alignment summary.
+- Show movement towards year-end expectations.
+- Celebrate when skills are "ahead of typical expectations".
+- Gently highlight priority areas when "behind" without alarm.
+
+**Requirements:**
+- Curriculum insights require profile to have country/yearGrade set.
+- If not set, Coach prompts parent to add this information.
+- All curriculum messaging is encouraging and non-judgmental.
+
 ### 12.4 Non-Goals (V1)
 
 Math Dash Coach is **not** trying to be:
@@ -934,7 +1032,21 @@ Coach is a **lightweight analytic and guidance layer** on top of the existing fl
   - Identify trends over time (improving, stable, declining).
   - Compare to age-band expectations.
 
-### 13.3 AI Interaction Requirements
+### 13.3 Curriculum-Specific Events
+
+**Events for curriculum alignment feature:**
+- CURRICULUM_COUNTRY_SET: When user sets or changes country/yearGrade on profile.
+- CURRICULUM_PROGRESS_VIEWED: When user views the curriculum progress page in Grown-Ups area.
+- CURRICULUM_STATUS_CHANGED: When overall status changes (e.g., "needs-focus" → "on-track").
+- CURRICULUM_SKILL_MASTERED: When a curriculum skill reaches "mastered" proficiency.
+- CURRICULUM_PRACTICE_STARTED: When user starts practice from a curriculum skill recommendation.
+
+**Data for curriculum analytics:**
+- Track country distribution of users for prioritising curriculum updates.
+- Monitor skill progression rates by country/year to validate curriculum mappings.
+- Track which curriculum skills are most commonly "needs focus" to inform content recommendations.
+
+### 13.4 AI Interaction Requirements
 
 **Internal AI service specification:**
 

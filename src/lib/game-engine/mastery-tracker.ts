@@ -1,5 +1,31 @@
 import { db, MasteryRecord } from '../db';
-import { Question } from '../stores/useGameStore';
+import { Question, TopicType, Operation } from '../stores/useGameStore';
+
+/**
+ * Maps special topics to their underlying operation for database storage
+ * Special topics are stored as 'addition' since they're variations of addition/complement finding
+ */
+function getOperationForStorage(topicType: TopicType): Operation {
+  switch (topicType) {
+    case 'addition':
+    case 'subtraction':
+    case 'multiplication':
+    case 'division':
+      return topicType;
+    case 'number-bonds-10':
+    case 'number-bonds-20':
+    case 'number-bonds-50':
+    case 'number-bonds-100':
+    case 'doubles':
+      return 'addition';
+    case 'halves':
+      return 'division';
+    case 'squares':
+      return 'multiplication';
+    default:
+      return 'addition';
+  }
+}
 
 export class MasteryTracker {
   
@@ -11,12 +37,14 @@ export class MasteryTracker {
     timeMs: number,
     givenAnswer?: number
   ) {
+    const operation = getOperationForStorage(question.type);
+    
     // 1. Log the raw attempt with the actual answer given
     await db.attempts.add({
       sessionId,
       questionId: question.id,
       fact: question.fact,
-      operation: question.type,
+      operation,
       isCorrect,
       responseTimeMs: timeMs,
       timestamp: new Date().toISOString(),
@@ -66,7 +94,7 @@ export class MasteryTracker {
       await db.mastery.add({
         profileId,
         fact: question.fact,
-        operation: question.type,
+        operation,
         attempts: 1,
         correct: isCorrect ? 1 : 0,
         avgResponseTime: timeMs,

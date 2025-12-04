@@ -1,0 +1,135 @@
+/* CountrySelector - 2x3 grid layout for country selection */
+
+.container {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+/* Mobile: Full width single column */
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.countryButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  min-height: 100px;
+  background: var(--surface-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: 
+    transform var(--motion-duration-short) var(--motion-ease-standard),
+    border-color var(--motion-duration-short) var(--motion-ease-standard),
+    background-color var(--motion-duration-short) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-short) var(--motion-ease-standard);
+  position: relative;
+}
+
+.countryButton:hover:not(.disabled) {
+  border-color: var(--color-primary-300);
+  background: var(--color-primary-50);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.countryButton:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+.countryButton:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+/* Selected state */
+.countryButton.selected {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-50);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.countryButton.selected:hover:not(.disabled) {
+  background: var(--color-primary-100);
+}
+
+/* Skip option styling */
+.skipOption {
+  border-style: dashed;
+}
+
+.skipOption.selected {
+  border-color: var(--color-neutral-400);
+  background: var(--color-neutral-50);
+  box-shadow: 0 0 0 3px var(--color-neutral-100);
+}
+
+/* Disabled state */
+.countryButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--surface-muted);
+}
+
+/* Flag emoji */
+.flag {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+/* Country label */
+.label {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  text-align: center;
+}
+
+.selected .label {
+  color: var(--color-primary-700);
+}
+
+/* Checkmark indicator */
+.checkmark {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.skipOption .checkmark {
+  background: var(--color-neutral-400);
+}
+
+/* Touch-friendly targets */
+@media (pointer: coarse) {
+  .countryButton {
+    min-height: 110px;
+    padding: var(--space-xl) var(--space-lg);
+  }
+  
+  .flag {
+    font-size: 3rem;
+  }
+}
