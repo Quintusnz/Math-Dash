@@ -1,13 +1,13 @@
 ---
 title: Feature Documentation Index
-description: Index of all feature-level design documentation for Math Dash.
+description: Index of all feature-level design documentation for Ready Steady Math.
 last-updated: 2025-12-04
 version: 1.1.0
 ---
 
 # Feature Documentation Index
 
-This directory contains detailed design specifications for each major feature of Math Dash. Each feature folder includes user journeys, screen states, interaction details, accessibility guidelines, and implementation notes.
+This directory contains detailed design specifications for each major feature of Ready Steady Math. Each feature folder includes user journeys, screen states, interaction details, accessibility guidelines, and implementation notes.
 
 ## Core Experience
 

@@ -1,4 +1,6 @@
-# Math Dash – User Personas
+# Ready Steady Math – User Personas
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Child Learner – “Ava, Age 8”
 
@@ -13,14 +15,14 @@
 
 - **Frustrations**
   - Gets bored by slow or text‑heavy interfaces.
-  - Feels discouraged when she doesn’t understand scores or progress.
+  - Feels discouraged when she doesn't understand scores or progress.
   - Confused by cluttered layouts or too many options.
 
-- **Key Needs from Math Dash**
+- **Key Needs from Ready Steady Math**
   - Big, clear question and answers; quick rounds (30–120s).
   - Simple, positive feedback for right/wrong answers.
-  - Small, visible “wins” (streaks, badges, new high scores).
-  - Obvious topic choices (e.g., “2× table”, “Bonds to 10”).
+  - Small, visible "wins" (streaks, badges, new high scores).
+  - Obvious topic choices (e.g., "2× table", "Bonds to 10").
 
 ---
 
@@ -40,10 +42,10 @@
   - Over‑gamified apps that feel like pure entertainment.
   - Having to micro‑configure practice topics every time.
 
-- **Key Needs from Math Dash**
+- **Key Needs from Ready Steady Math**
   - Clear profile selection for each child.
-  - Simple “My Progress” view per child with a topic proficiency summary.
-  - Minimal but clear premium boundary: what’s free vs paid.
+  - Simple "My Progress" view per child with a topic proficiency summary.
+  - Minimal but clear premium boundary: what's free vs paid.
   - Safe, adult‑gated upgrade flow and no accidental child purchases.
 
 ---
@@ -62,9 +64,9 @@
 - **Frustrations**
   - Set‑up friction (logins, codes, forgotten passwords).
   - Overly complex reporting dashboards.
-  - Apps that are clearly “home‑only” and not classroom‑aware.
+  - Apps that are clearly "home‑only" and not classroom‑aware.
 
-- **Key Needs from Math Dash**
+- **Key Needs from Ready Steady Math**
   - Quickly create a class code (post‑MVP) and get pupils playing.
   - Class‑level summary with per‑pupil proficiency bands.
   - Offline‑tolerant play with sync when possible.

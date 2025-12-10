@@ -1,6 +1,6 @@
 ---
 title: Core Dash Round Gameplay – User Journey
-description: Detailed user journey for playing single-player math dash rounds from entry to completion.
+description: Detailed user journey for playing single-player math quick sprint rounds from entry to completion.
 feature: core-dash-round-gameplay
 last-updated: 2025-11-19
 version: 0.1.0

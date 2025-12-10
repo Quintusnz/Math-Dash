@@ -1,8 +1,10 @@
-# Math Dash – Product Management Output
+# Ready Steady Math – Product Management Output
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## Executive Summary
 
-- **Elevator Pitch**: Math Dash is a fast, fun browser game where kids race the clock answering math questions to master number facts a little more every day.
+- **Elevator Pitch**: Ready Steady Math is a fast, fun browser game where kids race the clock answering math questions to master number facts a little more every day.
 - **Problem Statement**: Children 6–11 need automatic recall of number facts (times tables, number bonds, etc.) to succeed in later math. Existing tools drill facts but often lack adaptivity, clear insight for adults, and modern engagement loops, leading to boredom and inconsistent practice. Teachers and parents need a simple, modern, kid-friendly tool that keeps practice going and makes strengths and weaknesses obvious at a glance.
 - **Target Audience**:
   - Kids 6–11 (primary school, years 1–6 / KS1–KS2) using tablets, Chromebooks, or shared family devices.
@@ -236,7 +238,7 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
 ## Critical Questions Checklist
 
 - [x] **Existing solutions were improving upon?**
-  - Hit the Button, TTRS, Mathletics, Sumdog, etc. Math Dash focuses on being lighter, more adaptive, and more transparent about progress.
+  - Hit the Button, TTRS, Mathletics, Sumdog, etc. Ready Steady Math focuses on being lighter, more adaptive, and more transparent about progress.
 - [x] **Minimum viable version?**
   - Core gameplay (single-player timed and practice modes), topic library (key tables, bonds, doubles/halves), basic profiles, simple progress dashboard, and a clear but minimal freemium boundary.
 - [x] **Potential risks or unintended consequences?**
@@ -297,4 +299,4 @@ Below: key features with user stories, acceptance criteria, priorities, dependen
 
 ---
 
-This document is intended as a product-facing companion to the implementation-ready requirements in `requirements2.md`. It can be used with designers and engineers to align on scope, priorities, and UX principles for Math Dash’s MVP and early iterations.
+This document is intended as a product-facing companion to the implementation-ready requirements in `requirements2.md`. It can be used with designers and engineers to align on scope, priorities, and UX principles for Ready Steady Math's MVP and early iterations.

@@ -1,4 +1,6 @@
-# Math Dash – Architecture Blueprint
+# Ready Steady Math – Architecture Blueprint
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## Executive Summary
 

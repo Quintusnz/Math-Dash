@@ -1,4 +1,6 @@
-# Math Dash - User Flows
+# Ready Steady Math - User Flows
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 **Version:** 2.1  
 **Last Updated:** November 2025  
@@ -41,7 +43,7 @@ This section summarises the major changes and additions made in this version of 
 4. **Parent/Grown-Ups Journey (Section 5)** - Updated
    - Clarified adult gate is planned but not yet enforced in current build
    - Updated proficiency terminology to match implementation (mastered/learning/new)
-   - Added Math Dash Coach subscription flow (new from PRD v2.0)
+   - Added Ready Steady Math Coach subscription flow (new from PRD v2.0)
 
 5. **Dash Duel Flow (Section 4)** - New
    - Added complete flow for two-player local multiplayer mode
@@ -49,7 +51,7 @@ This section summarises the major changes and additions made in this version of 
 
 6. **Pricing Updates (Section 5)** - Updated
    - Home/Family Core unlock: US$6.99 (one-time)
-   - Added Math Dash Coach subscription: US$2.99/month or US$23.99/year
+   - Added Ready Steady Math Coach subscription: US$2.99/month or US$23.99/year
 
 7. **Error & Edge Cases (Section 6)** - Updated
    - Clarified current implementation status for offline play
@@ -63,7 +65,7 @@ This section summarises the major changes and additions made in this version of 
 
 ## 1. First-Time Setup & Authentication
 
-This section covers the flows for new users arriving at Math Dash for the first time, as well as the Play Code authentication system that allows players to access their profiles across devices.
+This section covers the flows for new users arriving at Ready Steady Math for the first time, as well as the Play Code authentication system that allows players to access their profiles across devices.
 
 ### 1.1 Welcome Screen
 
@@ -203,7 +205,7 @@ This section covers the flow from Dashboard to starting a game session.
 After authentication, the player lands on their Dashboard:
 
 **Header**
-- App title: "Math Dash"
+- App title: "Ready Steady Math"
 - Settings icon (top right)
 - Logout/Switch player icon (top right)
 
@@ -600,7 +602,7 @@ This section covers the adult-facing features for parents and guardians.
 ### 5.2 Grown-Ups Dashboard Layout
 
 **Sidebar Navigation**
-- Logo: "Math Dash Admin"
+- Logo: "Ready Steady Math Admin"
 - Tabs:
   - Profiles
   - Progress
@@ -674,7 +676,7 @@ This section covers the adult-facing features for parents and guardians.
 - Thank you message
 - All features unlocked
 
-### 5.6 Math Dash Coach (Subscription Add-On)
+### 5.6 Ready Steady Math Coach (Subscription Add-On)
 
 *Note: This is a planned feature as specified in PRD v2.0.*
 
@@ -683,7 +685,7 @@ This section covers the adult-facing features for parents and guardians.
 *Entry Points:*
 - Banner in Progress tab after several sessions
 - Prompt in Grown-Ups area
-- Example: "We've spotted some useful patterns in [Child]'s results. Unlock Math Dash Coach to get a simple weekly plan."
+- Example: "We've spotted some useful patterns in [Child]'s results. Unlock Ready Steady Math Coach to get a simple weekly plan."
 
 **Coach Benefits Screen**
 - Skill snapshot per child
@@ -1061,5 +1063,5 @@ Dashboard --> Grown-Ups --> [Adult Gate - Planned]
 | Mastery | Per-fact tracking of accuracy and speed |
 | Weak Facts | Facts with low accuracy or slow response times |
 | Core Unlock | One-time purchase to unlock all game content |
-| Math Dash Coach | Subscription add-on for AI-powered parent guidance |
+| Ready Steady Math Coach | Subscription add-on for AI-powered parent guidance |
 | Adult Gate | Verification step to confirm adult access (e.g., math question) |

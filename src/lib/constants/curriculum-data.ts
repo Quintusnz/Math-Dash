@@ -321,6 +321,18 @@ export const COUNTRY_BENCHMARKS: Record<CountryCode, CountryConfig> = {
         coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'ADD_SUB_1000', 'DBL_DEC', 'SQ_1_10'],
         extensionSkills: ['SQ_1_12'],
       },
+      Y7: {
+        label: 'Year 7',
+        ageRange: '11-12',
+        coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'ADD_SUB_1000', 'DBL_DEC', 'SQ_1_10', 'SQ_1_12'],
+        extensionSkills: ['DBL_3DIG'],
+      },
+      Y8: {
+        label: 'Year 8',
+        ageRange: '12-13',
+        coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'ADD_SUB_1000', 'DBL_DEC', 'SQ_1_12'],
+        extensionSkills: [],
+      },
     },
   },
 
@@ -328,39 +340,45 @@ export const COUNTRY_BENCHMARKS: Record<CountryCode, CountryConfig> = {
     label: 'Australia',
     systemType: 'year',
     years: {
+      F: {
+        label: 'Foundation',
+        ageRange: '5-6',
+        coreSkills: ['NB10', 'ADD_SUB_20', 'DBL_10'],
+        extensionSkills: ['NB20'],
+      },
       Y1: {
         label: 'Year 1',
-        ageRange: '5-6',
+        ageRange: '6-7',
         coreSkills: ['NB10', 'ADD_SUB_20', 'DBL_10'],
         extensionSkills: ['NB20'],
       },
       Y2: {
         label: 'Year 2',
-        ageRange: '6-7',
+        ageRange: '7-8',
         coreSkills: ['NB20', 'ADD_SUB_100', 'DBL_20', 'TT_2_5_10', 'DIV_2_5_10'],
         extensionSkills: ['NB100', 'TT_CORE', 'DBL_100'],
       },
       Y3: {
         label: 'Year 3',
-        ageRange: '7-8',
+        ageRange: '8-9',
         coreSkills: ['NB100', 'ADD_SUB_1000', 'DBL_100', 'TT_CORE', 'DIV_CORE'],
         extensionSkills: ['TT_1_10_ALL', 'DIV_1_10_ALL', 'DBL_3DIG'],
       },
       Y4: {
         label: 'Year 4',
-        ageRange: '8-9',
+        ageRange: '9-10',
         coreSkills: ['TT_1_10_ALL', 'DIV_1_10_ALL', 'ADD_SUB_1000', 'DBL_3DIG'],
         extensionSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'DBL_DEC', 'SQ_1_10'],
       },
       Y5: {
         label: 'Year 5',
-        ageRange: '9-10',
+        ageRange: '10-11',
         coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'DBL_DEC', 'SQ_1_10'],
         extensionSkills: ['SQ_1_12'],
       },
       Y6: {
         label: 'Year 6',
-        ageRange: '10-11',
+        ageRange: '11-12',
         coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'ADD_SUB_1000', 'DBL_DEC', 'SQ_1_12'],
         extensionSkills: [],
       },
@@ -457,6 +475,12 @@ export const COUNTRY_BENCHMARKS: Record<CountryCode, CountryConfig> = {
     label: 'Canada (Ontario)',
     systemType: 'grade',
     years: {
+      K: {
+        label: 'Kindergarten',
+        ageRange: '5-6',
+        coreSkills: ['NB10', 'ADD_SUB_20', 'DBL_10'],
+        extensionSkills: ['NB20'],
+      },
       G1: {
         label: 'Grade 1',
         ageRange: '6-7',
@@ -484,8 +508,14 @@ export const COUNTRY_BENCHMARKS: Record<CountryCode, CountryConfig> = {
       G5: {
         label: 'Grade 5',
         ageRange: '10-11',
-        coreSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL', 'NB_DEC1', 'DBL_DEC', 'SQ_1_10'],
-        extensionSkills: ['SQ_1_12'],
+        coreSkills: ['TT_1_10_ALL', 'DIV_1_10_ALL', 'NB_DEC1', 'DBL_DEC', 'SQ_1_10'],
+        extensionSkills: ['SQ_1_12', 'TT_1_12_ALL', 'DIV_1_12_ALL'],
+      },
+      G6: {
+        label: 'Grade 6',
+        ageRange: '11-12',
+        coreSkills: ['TT_1_10_ALL', 'DIV_1_10_ALL', 'NB_DEC1', 'ADD_SUB_1000', 'DBL_DEC', 'SQ_1_12'],
+        extensionSkills: ['TT_1_12_ALL', 'DIV_1_12_ALL'],
       },
     },
   },

@@ -1,8 +1,10 @@
-# Math Dash – Product Overview
+# Ready Steady Math – Product Overview
 
-## 1. What Is Math Dash?
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
-Math Dash is a fast, fun, browser-based math fluency game for children aged 6–11. Players race the clock (or complete fixed sets of questions) to answer single-step number fact questions (times tables, number bonds, doubles/halves, etc.) with quick taps on large, kid‑friendly answer buttons.
+## 1. What Is Ready Steady Math?
+
+Ready Steady Math is a fast, fun, browser-based math fluency game for children aged 6–11. Players race the clock (or complete fixed sets of questions) to answer single-step number fact questions (times tables, number bonds, doubles/halves, etc.) with quick taps on large, kid‑friendly answer buttons.
 
 The experience is designed to be:
 
@@ -29,9 +31,9 @@ Children need automatic recall of number facts to succeed in later math. Existin
 - Drill facts but can feel repetitive or babyish.
 - Often lack adaptivity per child.
 - Hide or complicate progress insights for adults.
-- Don’t always respect classroom realities (shared devices, mixed ages, limited time).
+- Don't always respect classroom realities (shared devices, mixed ages, limited time).
 
-Math Dash aims to solve these by:
+Ready Steady Math aims to solve these by:
 
 - Providing short, high‑tempo rounds kids enjoy.
 - Automatically tuning difficulty (post‑MVP adaptive mode).

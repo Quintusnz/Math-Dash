@@ -4,14 +4,22 @@ import { Numpad } from '@/components/game/Numpad'
 import { TimerBar } from '@/components/game/TimerBar'
 import { ResultScreen } from '@/components/game/ResultScreen'
 
-// Mock motion to avoid animation issues in tests
+// Mock motion to avoid animation issues in tests and strip motion-only props
 vi.mock('motion/react', () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+    button: ({ children, whileTap, ...rest }: any) => <button {...rest}>{children}</button>,
     h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
+}))
+
+// Mock game sound to avoid AudioContext usage in tests
+vi.mock('@/lib/hooks/useGameSound', () => ({
+  useGameSound: () => ({
+    play: vi.fn(),
+    vibrate: vi.fn(),
+  }),
 }))
 
 describe('Accessibility Audit', () => {

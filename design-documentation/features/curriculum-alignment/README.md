@@ -20,7 +20,7 @@ status: planned
 
 ## Overview
 
-This feature enables Math Dash to show parents and teachers how a child's math fluency compares to typical curriculum expectations for their age, country, and year/grade level. It transforms raw mastery data into contextual insights that answer the question: "Is my child on track?"
+This feature enables Ready Steady Math to show parents and teachers how a child's math fluency compares to typical curriculum expectations for their age, country, and year/grade level. It transforms raw mastery data into contextual insights that answer the question: "Is my child on track?"
 
 ## Primary User Goals
 

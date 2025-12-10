@@ -1,4 +1,4 @@
-# Math Dash – Analytics Specification
+# Ready Steady Math – Analytics Specification
 
 ## 1. Principles
 

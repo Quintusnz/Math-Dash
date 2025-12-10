@@ -1,4 +1,4 @@
-﻿Here's a full color system for Math Dash that's playful for kids, modern for the product, and not a clone of Hit the Button / Twinkl.
+﻿Here's a full color system for Ready Steady Math that's playful for kids, modern for the product, and not a clone of Hit the Button / Twinkl.
 I'll give you:
 1. Concept & vibe
 2. Core palette (with hexes + usage)

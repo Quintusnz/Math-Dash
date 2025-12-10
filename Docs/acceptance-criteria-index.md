@@ -1,4 +1,4 @@
-# Math Dash – Acceptance Criteria Index
+# Ready Steady Math – Acceptance Criteria Index
 
 This file centralises the main acceptance criteria from the PRD and detailed requirements.
 

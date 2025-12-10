@@ -1,4 +1,6 @@
-# Math Dash – Accessibility Guidelines
+# Ready Steady Math – Accessibility Guidelines
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Standards
 

@@ -1,4 +1,6 @@
-# Math Dash – Color Tokens
+# Ready Steady Math – Color Tokens
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Primary
 

@@ -22,8 +22,8 @@ import {
 } from '../constants/curriculum-data';
 import {
   SKILL_GAME_MAP,
-  doesFactMatchSkill,
   getExpectedFactCount,
+  filterRecordsForSkill,
 } from '../constants/skill-game-mapping';
 import {
   deriveYearFromAge,
@@ -107,6 +107,13 @@ export interface RecommendedSkill {
   proficiency: ProficiencyLevel;
   /** Coverage percentage */
   coverage: number;
+  /** Accuracy percentage */
+  accuracy: number;
+  /** Actionable config to start practice */
+  action: {
+    topicType?: import('../stores/useGameStore').TopicType;
+    config: Partial<import('../stores/useGameStore').GameConfig>;
+  };
 }
 
 // ============================================================================
@@ -114,22 +121,15 @@ export interface RecommendedSkill {
 // ============================================================================
 
 const PROFICIENCY_THRESHOLDS = {
-  /** Minimum accuracy to be considered 'developing' */
-  DEVELOPING_ACCURACY: 50,
-  /** Minimum accuracy to be considered 'proficient' */
-  PROFICIENT_ACCURACY: 70,
-  /** Minimum accuracy to be considered 'mastered' */
+  /** Minimum coverage (percent) before we consider a skill started */
+  MIN_STARTED_COVERAGE: 30,
+  /** Developing thresholds */
+  DEVELOPING_ACCURACY: 70,
+  DEVELOPING_COVERAGE: 60,
+  /** Mastery thresholds */
   MASTERED_ACCURACY: 85,
-  /** Minimum coverage to be considered 'proficient' */
-  PROFICIENT_COVERAGE: 50,
-  /** Minimum coverage to be considered 'mastered' */
   MASTERED_COVERAGE: 80,
-  /** Maximum average response time (ms) for 'mastered' */
   MASTERED_MAX_RESPONSE_TIME: 3000,
-  /** Minimum attempts to be considered 'proficient' */
-  MIN_ATTEMPTS_PROFICIENT: 10,
-  /** Minimum attempts to be considered 'mastered' */
-  MIN_ATTEMPTS_MASTERED: 20,
 };
 
 // ============================================================================
@@ -159,10 +159,8 @@ export class CurriculumTracker {
       .equals(profileId)
       .toArray();
 
-    // Filter to facts that match this skill
-    const matchingRecords = masteryRecords.filter((record) =>
-      doesFactMatchSkill(record.fact, skillId)
-    );
+    // Filter to facts that match this skill (with precedence)
+    const matchingRecords = filterRecordsForSkill(masteryRecords, skillId);
 
     // Calculate aggregates
     const totalAttempts = matchingRecords.reduce((sum, r) => sum + r.attempts, 0);
@@ -238,11 +236,11 @@ export class CurriculumTracker {
     const profile = await db.profiles.get(profileId);
     
     const country = profile?.country;
-    const yearGrade = profile?.yearGrade ?? (
-      profile?.ageBand && country
-        ? deriveYearFromAge(country, profile.ageBand as AgeBand)
-        : undefined
-    );
+    // Prefer an explicitly stored year/grade; fall back to age-band-derived suggestion
+    const derivedYearGrade = profile?.ageBand && country
+      ? deriveYearFromAge(country, profile.ageBand as AgeBand)
+      : undefined;
+    const yearGrade = profile?.yearGrade ?? derivedYearGrade;
 
     // Calculate progress for all skills
     const allProgress: SkillProgress[] = await Promise.all(
@@ -277,9 +275,9 @@ export class CurriculumTracker {
 
     // Determine overall status
     const overallStatus = this.determineOverallStatus(
-      coreSkillCounts,
+      coreSkillCounts.mastered,
       effectiveCoreProgress.length,
-      effectiveExtensionProgress
+      extensionSkillCounts.mastered
     );
 
     return {
@@ -307,23 +305,50 @@ export class CurriculumTracker {
     const progress = await this.getCurriculumProgress(profileId);
     const recommendations: RecommendedSkill[] = [];
 
-    // Priority 1: Core skills that are 'developing' (in progress, need more work)
-    const developingCore = progress.coreSkillProgress
-      .filter((p) => p.proficiency === 'developing')
-      .sort((a, b) => a.coverage - b.coverage); // Lower coverage first
+    const buildAction = (skillId: SkillId): RecommendedSkill['action'] => {
+      const cfg = SKILL_GAME_MAP[skillId];
+      const defaultRange = {
+        preset: 'starter',
+        min: 0,
+        max: 20,
+        rangeType: 'answer' as const,
+        allowNegatives: false,
+      };
+      return {
+        topicType: cfg?.topics?.[0],
+        config: {
+          operations: cfg?.operations,
+          selectedNumbers: cfg?.selectedNumbers,
+          numberRange: cfg?.numberRange ?? defaultRange,
+          selectedTopics: cfg?.topics ?? [],
+        },
+      };
+    };
 
-    for (const skill of developingCore.slice(0, maxRecommendations)) {
+    const pushRec = (skill: SkillProgress, reason: RecommendedSkill['reason'], priority: number) => {
+      if (recommendations.find((r) => r.skillId === skill.skillId)) return;
       recommendations.push({
         skillId: skill.skillId,
         label: skill.label,
-        reason: 'in-progress',
-        priority: 1,
+        reason,
+        priority,
         proficiency: skill.proficiency,
         coverage: skill.coverage,
+        accuracy: skill.accuracy,
+        action: buildAction(skill.skillId),
       });
-    }
+    };
 
-    // Priority 2: Core skills that need practice (started but low accuracy)
+    // Priority 1: Core skills that are 'developing' (almost there) - sort by higher coverage but low accuracy
+    const developingCore = progress.coreSkillProgress
+      .filter((p) => p.proficiency === 'developing')
+      .sort((a, b) => b.coverage - a.coverage || a.accuracy - b.accuracy);
+
+    developingCore.slice(0, maxRecommendations).forEach((skill) =>
+      pushRec(skill, 'in-progress', 1)
+    );
+
+    // Priority 2: Started but below proficient accuracy (needs-practice)
     if (recommendations.length < maxRecommendations) {
       const needsPractice = progress.coreSkillProgress
         .filter(
@@ -334,58 +359,32 @@ export class CurriculumTracker {
         )
         .sort((a, b) => a.accuracy - b.accuracy);
 
-      for (const skill of needsPractice.slice(0, maxRecommendations - recommendations.length)) {
-        if (!recommendations.some((r) => r.skillId === skill.skillId)) {
-          recommendations.push({
-            skillId: skill.skillId,
-            label: skill.label,
-            reason: 'needs-practice',
-            priority: 2,
-            proficiency: skill.proficiency,
-            coverage: skill.coverage,
-          });
-        }
-      }
+      needsPractice.slice(0, maxRecommendations - recommendations.length).forEach((skill) =>
+        pushRec(skill, 'needs-practice', 2)
+      );
     }
 
-    // Priority 3: Next core skill to start
+    // Priority 3: Not-started core skills
     if (recommendations.length < maxRecommendations) {
-      const notStarted = progress.coreSkillProgress
-        .filter((p) => p.proficiency === 'not-started');
-
-      for (const skill of notStarted.slice(0, maxRecommendations - recommendations.length)) {
-        recommendations.push({
-          skillId: skill.skillId,
-          label: skill.label,
-          reason: 'next-skill',
-          priority: 3,
-          proficiency: skill.proficiency,
-          coverage: skill.coverage,
-        });
-      }
+      const notStarted = progress.coreSkillProgress.filter((p) => p.proficiency === 'not-started');
+      notStarted.slice(0, maxRecommendations - recommendations.length).forEach((skill) =>
+        pushRec(skill, 'next-skill', 3)
+      );
     }
 
-    // Priority 4: Review mastered skills (if nothing else)
+    // Priority 4: Review mastered (oldest practice first)
     if (recommendations.length < maxRecommendations) {
       const mastered = progress.coreSkillProgress
         .filter((p) => p.proficiency === 'mastered')
         .sort((a, b) => {
-          // Prefer skills that haven't been practiced recently
           const aTime = a.lastPracticedAt ? new Date(a.lastPracticedAt).getTime() : 0;
           const bTime = b.lastPracticedAt ? new Date(b.lastPracticedAt).getTime() : 0;
           return aTime - bTime;
         });
 
-      for (const skill of mastered.slice(0, maxRecommendations - recommendations.length)) {
-        recommendations.push({
-          skillId: skill.skillId,
-          label: skill.label,
-          reason: 'review',
-          priority: 4,
-          proficiency: skill.proficiency,
-          coverage: skill.coverage,
-        });
-      }
+      mastered.slice(0, maxRecommendations - recommendations.length).forEach((skill) =>
+        pushRec(skill, 'review', 4)
+      );
     }
 
     return recommendations.slice(0, maxRecommendations);
@@ -416,45 +415,29 @@ export class CurriculumTracker {
     masteredFactCount: number,
     expectedFactCount: number
   ): ProficiencyLevel {
-    // Not started if no attempts
-    if (totalAttempts === 0) {
+    // Not started if no attempts or coverage remains too low
+    if (totalAttempts === 0 || coverage < PROFICIENCY_THRESHOLDS.MIN_STARTED_COVERAGE) {
       return 'not-started';
     }
 
-    // Mastered requires high accuracy, coverage, speed, and sufficient attempts
-    const masteryRatio = expectedFactCount > 0
-      ? masteredFactCount / expectedFactCount
-      : 0;
-
+    // Developing if accuracy or coverage below thresholds
     if (
-      accuracy >= PROFICIENCY_THRESHOLDS.MASTERED_ACCURACY &&
-      coverage >= PROFICIENCY_THRESHOLDS.MASTERED_COVERAGE &&
-      avgResponseTime <= PROFICIENCY_THRESHOLDS.MASTERED_MAX_RESPONSE_TIME &&
-      totalAttempts >= PROFICIENCY_THRESHOLDS.MIN_ATTEMPTS_MASTERED &&
-      masteryRatio >= 0.7
-    ) {
-      return 'mastered';
-    }
-
-    // Proficient requires good accuracy and coverage
-    if (
-      accuracy >= PROFICIENCY_THRESHOLDS.PROFICIENT_ACCURACY &&
-      coverage >= PROFICIENCY_THRESHOLDS.PROFICIENT_COVERAGE &&
-      totalAttempts >= PROFICIENCY_THRESHOLDS.MIN_ATTEMPTS_PROFICIENT
-    ) {
-      return 'proficient';
-    }
-
-    // Developing if any attempts made
-    if (
-      accuracy >= PROFICIENCY_THRESHOLDS.DEVELOPING_ACCURACY ||
-      totalAttempts >= 3
+      accuracy < PROFICIENCY_THRESHOLDS.DEVELOPING_ACCURACY ||
+      coverage < PROFICIENCY_THRESHOLDS.DEVELOPING_COVERAGE
     ) {
       return 'developing';
     }
 
-    // Default to developing if some attempts
-    return 'developing';
+    // Mastered requires high accuracy, high coverage, and fast responses
+    if (
+      accuracy >= PROFICIENCY_THRESHOLDS.MASTERED_ACCURACY &&
+      coverage >= PROFICIENCY_THRESHOLDS.MASTERED_COVERAGE &&
+      avgResponseTime <= PROFICIENCY_THRESHOLDS.MASTERED_MAX_RESPONSE_TIME
+    ) {
+      return 'mastered';
+    }
+
+    return 'proficient';
   }
 
   private static countByProficiency(
@@ -494,31 +477,24 @@ export class CurriculumTracker {
   }
 
   private static determineOverallStatus(
-    counts: Record<ProficiencyLevel, number>,
-    totalSkills: number,
-    extensionProgress?: SkillProgress[]
+    coreMastered: number,
+    totalCoreSkills: number,
+    extensionMastered: number
   ): CurriculumStatus {
-    if (totalSkills === 0) return 'behind';
-
-    const behindCount = counts['not-started'] + counts.developing;
-    const proficientOrBetter = counts.proficient + counts.mastered;
-    
-    // Ahead: >80% of core skills are mastered AND extension skills started
-    if (counts.mastered >= totalSkills * 0.8) {
-      const extensionStarted = extensionProgress?.some(
-        (p) => p.proficiency !== 'not-started'
-      );
-      if (extensionStarted || !extensionProgress?.length) {
-        return 'ahead';
-      }
+    if (totalCoreSkills === 0) {
+      return 'behind';
     }
 
-    // On-track: >50% of core skills are proficient or mastered
-    if (proficientOrBetter > totalSkills * 0.5) {
-      return 'on-track';
+    const corePercent = totalCoreSkills > 0 ? coreMastered / totalCoreSkills : 0;
+
+    if (corePercent < 0.5) {
+      return 'behind';
     }
 
-    // Behind: >50% of core skills are not-started or developing (default)
-    return 'behind';
+    if (corePercent >= 0.8 && extensionMastered > 0) {
+      return 'ahead';
+    }
+
+    return 'on-track';
   }
 }

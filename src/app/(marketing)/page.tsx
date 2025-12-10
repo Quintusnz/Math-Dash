@@ -72,14 +72,16 @@ export default function LandingPage() {
         
         <div className={styles.heroVisual}>
           <div className={styles.heroGlow} />
-          <Image 
-            src="/logos/logo-3d.png" 
-            alt="Math Dash 3D logo" 
-            width={480} 
-            height={480} 
-            className={styles.heroLogo}
-            priority
-          />
+          <div className={styles.heroLogoFrame}>
+            <Image 
+              src="/logos/readysteadymathlogo-darkbackground.png" 
+              alt="Ready Steady Math logo (dark)" 
+              width={480} 
+              height={480} 
+              className={styles.heroLogo}
+              priority
+            />
+          </div>
           <Image
             src="/mascots/dashy-sprint.png"
             alt="Dashy the Squirrel ready to sprint"

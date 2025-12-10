@@ -154,6 +154,14 @@
   background: var(--color-primary-500);
 }
 
+/* Recommendation helper text */
+.recommendationHint {
+  margin-top: 0.75rem;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
 /* No options fallback */
 .noOptions {
   padding: var(--space-lg);

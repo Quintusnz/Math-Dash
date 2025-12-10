@@ -1,0 +1,86 @@
+.card {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  background: var(--surface-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  outline: none;
+}
+
+.card:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-primary-200);
+}
+
+.card:hover {
+  border-color: var(--color-primary-400);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.cardCore {
+  border-left: 3px solid var(--color-primary-500);
+}
+
+.cardExtension {
+  border-left: 3px solid var(--color-secondary-500);
+}
+
+.cardHighlight {
+  box-shadow: 0 0 0 2px var(--color-secondary-400);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  align-items: flex-start;
+}
+
+.skillLabel {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.badge {
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.6;
+  text-transform: capitalize;
+}
+
+.badgeNotStarted {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+}
+
+.badgeDeveloping {
+  background: var(--color-warning-100);
+  color: var(--color-warning-700);
+}
+
+.badgeProficient {
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+}
+
+.badgeMastered {
+  background: var(--color-secondary-100);
+  color: var(--color-secondary-700);
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+}

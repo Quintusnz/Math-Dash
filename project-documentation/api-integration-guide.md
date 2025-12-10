@@ -1,4 +1,6 @@
-# Math Dash – API Integration & Data Schema Guide
+# Ready Steady Math – API Integration & Data Schema Guide
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 This document defines the data contracts between the Frontend (Next.js Client) and the Backend (Next.js API / Supabase). We use **Zod** for runtime validation and TypeScript type inference.
 

@@ -1,4 +1,6 @@
-# Math Dash – Curriculum Alignment Feature: Analysis & Implementation Plan
+# Ready Steady Math – Curriculum Alignment Feature: Analysis & Implementation Plan
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 **Version:** 1.0  
 **Date:** December 2025  
@@ -9,7 +11,7 @@
 
 ## Executive Summary
 
-This document provides a comprehensive analysis and implementation plan for adding **curriculum-aligned progress tracking** to Math Dash. The feature will enable parents and teachers to see how a child's math fluency compares to local curriculum expectations for their age and country.
+This document provides a comprehensive analysis and implementation plan for adding **curriculum-aligned progress tracking** to Ready Steady Math. The feature will enable parents and teachers to see how a child's math fluency compares to local curriculum expectations for their age and country.
 
 ### Key Objectives
 
@@ -425,7 +427,7 @@ Add country/year selection to profile creation and settings.
 Create the curriculum progress view for parents/teachers.
 
 #### Epic 6: Coach AI Integration (Week 5-6)
-Enhance Math Dash Coach with curriculum-aligned insights.
+Enhance Ready Steady Math Coach with curriculum-aligned insights.
 
 #### Epic 7: Testing & Documentation (Ongoing)
 Comprehensive testing and documentation updates.
@@ -612,7 +614,7 @@ As a parent or teacher, I want to see how my child's math fluency compares to ty
 **Dependencies:** Progress Dashboard, Mastery Tracker, Profile system.
 ```
 
-### Section 12: Math Dash Coach
+### Section 12: Ready Steady Math Coach
 
 Add curriculum alignment to Coach capabilities:
 
@@ -790,7 +792,7 @@ The following issues should be created in Linear:
 
 ## Conclusion
 
-This curriculum alignment feature is a significant addition to Math Dash that will:
+This curriculum alignment feature is a significant addition to Ready Steady Math that will:
 
 1. **Differentiate** the product from competitors by providing meaningful, localized progress tracking
 2. **Empower parents** with clear understanding of where their child stands

@@ -1,6 +1,8 @@
-# Healthy Habit Loop – Implementation Prompt for Math Dash
+# Healthy Habit Loop – Implementation Prompt for Ready Steady Math
 
-You are an AI assistant helping us refine **Math Dash**, a browser-based math fluency game for children roughly **ages 6–11**.
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
+
+You are an AI assistant helping us refine **Ready Steady Math**, a browser-based math fluency game for children roughly **ages 6–11**.
 
 Your task is to:
 
@@ -14,7 +16,7 @@ Where this document uses “you”, it is instructing you, the AI assistant.
 
 ## 1. Context & Product Intent
 
-Math Dash is designed to:
+Ready Steady Math is designed to:
 
 - Help kids **build fast mental recall of number facts** (addition, subtraction, multiplication, division).
 - Do this via **short, focused, repeatable sessions** (about 5–10 minutes each).
@@ -104,7 +106,7 @@ When proposing changes, enforce these principles:
   - **Configured by parents/teachers** in a grown-ups area.
   - **Opt-in** by default (no automatic nagging).
 - Notification tone is:
-  - Gentle and neutral, e.g. “This might be a good moment for a 5-minute Math Dash.”
+  - Gentle and neutral, e.g. "This might be a good moment for a 5-minute Ready Steady Math session."
   - Never: “Your streak is in danger” or “Only 2 hours left”.
 
 ### 3.6 Copy & Tone
@@ -264,7 +266,7 @@ Requirements:
   - Schedule times and days.
   - Choose channel (e.g., email, OS notification if supported).
 - Example messaging:
-  - “This could be a good moment for a quick 5-minute Math Dash with [ChildName].”
+  - "This could be a good moment for a quick 5-minute Ready Steady Math session with [ChildName]."
 - You should:
   - Check our current reminder/notification implementation.
   - Remove or redesign any direct child-targeted, high-pressure notifications.
@@ -341,4 +343,4 @@ When you have reviewed the current application and flows, produce:
      - Notification behaviour.
      - Analytics events.
 
-Use this document as a **hard constraint**: all recommendations and generated changes must keep the **Healthy Habit Loop** and **child wellbeing** at the centre of Math Dash’s design.
+Use this document as a **hard constraint**: all recommendations and generated changes must keep the **Healthy Habit Loop** and **child wellbeing** at the centre of Ready Steady Math's design.

@@ -15,7 +15,7 @@ status: approved
 # Modals & Dialogs
 
 ## Overview
-Modals interrupt the user flow to demand attention or input. In Math Dash, they are used for Pause menus, Game Over summaries, Settings, and "Grown-ups" gates.
+Modals interrupt the user flow to demand attention or input. In Ready Steady Math, they are used for Pause menus, Game Over summaries, Settings, and "Grown-ups" gates.
 
 ## Variants
 

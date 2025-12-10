@@ -1,4 +1,6 @@
-﻿# Math Dash – Business Model & Pricing (Draft)
+﻿# Ready Steady Math – Business Model & Pricing (Draft)
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Product & Market Positioning
 

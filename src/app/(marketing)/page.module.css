@@ -207,13 +207,43 @@
   filter: blur(40px);
 }
 
+.heroVisual::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  width: 85%;
+  height: 85%;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 40%, rgba(15, 23, 42, 0.24), transparent 65%);
+  filter: blur(24px);
+  opacity: 0.8;
+}
+
+.heroLogoFrame {
+  position: relative;
+  z-index: 1;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow:
+    0 28px 70px -28px rgba(15, 23, 42, 0.55),
+    0 16px 36px -20px rgba(15, 23, 42, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 0 8px rgba(15, 23, 42, 0.3);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.09), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.06), transparent 50%),
+    #0b1024;
+  padding: 12px;
+}
+
 .heroLogo {
   position: relative;
   z-index: 1;
   max-width: 100%;
   height: auto;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+  filter: drop-shadow(0 14px 28px rgba(0,0,0,0.28));
   animation: float 6s ease-in-out infinite;
+  border-radius: 16px;
 }
 
 .marqueeContainer {
@@ -501,19 +531,46 @@
   width: 240px;
   height: auto;
   z-index: 2;
-  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.2));
-  animation: slideInMascot 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.25));
   transform-origin: bottom center;
+  animation: heroDash 10s ease-in-out infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
-@keyframes slideInMascot {
-  from { 
-    opacity: 0; 
-    transform: translateX(-40px) scale(0.8) rotate(-5deg); 
+@keyframes heroDash {
+  /* Appear on left, slow roll for ~3s (30%) */
+  0% {
+    transform: translateX(-40px) scale(1) rotate(-2deg);
+    opacity: 1;
   }
-  to { 
-    opacity: 1; 
-    transform: translateX(0) scale(1) rotate(0deg); 
+  30% {
+    transform: translateX(15vw) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  /* Burst across to the right */
+  55% {
+    transform: translateX(120vw) scale(1.02) rotate(2deg);
+    opacity: 1;
+  }
+  /* Fade out off-screen right */
+  60% {
+    opacity: 0;
+    transform: translateX(130vw) scale(1.02) rotate(2deg);
+  }
+  /* Jump to off-screen left, stay hidden briefly */
+  70% {
+    opacity: 0;
+    transform: translateX(-160vw) scale(0.98) rotate(-4deg);
+  }
+  /* Ease back in from left before next loop */
+  85% {
+    opacity: 1;
+    transform: translateX(-40px) scale(1) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(15vw) scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 
@@ -947,4 +1004,3 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useRef, KeyboardEvent } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect, KeyboardEvent } from 'react';
 import { type CountryCode } from '@/lib/constants/curriculum-data';
 import { 
   COUNTRY_METADATA, 
@@ -64,17 +64,17 @@ export function YearGradeSelector({
   );
   
   // Calculate recommended year/grade based on age band
-  const recommendedKey = ageBand 
-    ? deriveYearFromAge(country, ageBand as AgeBand) 
+  const recommendedKey = ageBand
+    ? deriveYearFromAge(country, ageBand as AgeBand)
     : null;
+  const recommendedOption = recommendedKey
+    ? options.find((option) => option.key === recommendedKey)
+    : undefined;
 
-  // Compute initial value: auto-select recommended if appropriate
+  // Compute initial value (respect defaultValue when provided)
   const computeInitialValue = useCallback((): string | null => {
-    if (autoSelect && !defaultValue && recommendedKey) {
-      return recommendedKey;
-    }
-    return defaultValue;
-  }, [autoSelect, defaultValue, recommendedKey]);
+    return defaultValue ?? null;
+  }, [defaultValue]);
 
   // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState<string | null>(computeInitialValue);
@@ -82,6 +82,7 @@ export function YearGradeSelector({
   // Determine if we're in controlled mode
   const isControlled = value !== undefined;
   const selectedValue = isControlled ? value : internalValue;
+  const canAutoSelect = !isControlled && autoSelect && !!recommendedKey && internalValue === null;
 
   // Refs for keyboard navigation
   const containerRef = useRef<HTMLDivElement>(null);
@@ -95,6 +96,12 @@ export function YearGradeSelector({
     }
     onChange?.(key);
   }, [disabled, isControlled, onChange]);
+
+  useEffect(() => {
+    if (!canAutoSelect || !recommendedKey) return;
+    setInternalValue(recommendedKey);
+    onChange?.(recommendedKey);
+  }, [canAutoSelect, recommendedKey, onChange]);
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -196,6 +203,11 @@ export function YearGradeSelector({
           );
         })}
       </div>
+      <p className={styles.recommendationHint}>
+        {ageBand && recommendedOption
+          ? `Recommended for the ${ageBand} age band: ${recommendedOption.label}. You can override this if your child is in a different year/grade (held back or accelerated).`
+          : 'Select the year or grade your child is currently attending.'}
+      </p>
     </div>
   );
 }

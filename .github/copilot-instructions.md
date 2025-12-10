@@ -1,7 +1,9 @@
-# Math Dash - AI Coding Instructions
+# Ready Steady Math - AI Coding Instructions
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## Project Context
-Math Dash is a **local-first, offline-capable PWA** for math practice, built with **Next.js 16** and **React 19**. It focuses on speed, accessibility, and engagement.
+Ready Steady Math is a **local-first, offline-capable PWA** for math practice, built with **Next.js 16** and **React 19**. It focuses on speed, accessibility, and engagement.
 
 ## Tech Stack
 - **Framework**: Next.js 16 (App Router)

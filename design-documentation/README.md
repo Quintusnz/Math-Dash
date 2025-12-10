@@ -1,11 +1,13 @@
-# Math Dash Design Documentation
+# Ready Steady Math Design Documentation
 
-Welcome to the comprehensive design documentation for **Math Dash**. This repository serves as the single source of truth for the User Experience (UX), User Interface (UI), and Interaction Design of the application.
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
+
+Welcome to the comprehensive design documentation for **Ready Steady Math**. This repository serves as the single source of truth for the User Experience (UX), User Interface (UI), and Interaction Design of the application.
 
 ## 📚 Documentation Structure
 
 ### 1. [Design System](./design-system/style-guide.md)
-The foundational elements that make up the Math Dash visual language.
+The foundational elements that make up the Ready Steady Math visual language.
 - **[Style Guide](./design-system/style-guide.md)**: The central reference for our design philosophy.
 - **[Tokens](./design-system/tokens/)**: Colors, Typography, Spacing, and Animations.
 - **[Components](./design-system/components/)**: Reusable UI elements (Buttons, Cards, Modals, etc.).
@@ -43,4 +45,4 @@ Check the [Design Tokens](./assets/design-tokens.json) for theme variables, then
 - **Status**: MVP Ready
 
 ---
-*Math Dash Design Team*
+*Ready Steady Math Design Team*

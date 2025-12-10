@@ -1,4 +1,6 @@
-# Math Dash – Tech Stack Reference (Nov 2025)
+# Ready Steady Math – Tech Stack Reference (Nov 2025)
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 This document serves as a "Cheat Sheet" for the specific versions of the libraries we are using. It highlights the modern patterns (React 19, Motion, Next.js 16) that differ from older tutorials.
 

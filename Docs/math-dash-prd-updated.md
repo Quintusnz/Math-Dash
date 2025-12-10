@@ -1,4 +1,6 @@
-# Math Dash - Product Requirements & Specification
+# Ready Steady Math - Product Requirements & Specification
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 **Version:** 2.2  
 **Last Updated:** December 2025  
@@ -21,7 +23,7 @@ This section summarises the major changes and additions made in this version of 
    - Grown-Ups area shows detailed skill-by-skill curriculum progress
    - Data-driven architecture allows easy addition of new countries
 
-2. **Math Dash Coach – Curriculum-Aligned Insights (Section 12.3.5)** – New subsection
+2. **Ready Steady Math Coach – Curriculum-Aligned Insights (Section 12.3.5)** – New subsection
    - Coach now references curriculum benchmarks in insights and recommendations
    - Country-specific messaging using local terminology
    - Curriculum progress included in monthly Coach reports
@@ -52,14 +54,14 @@ This section summarises the major changes and additions made in this version of 
 ### Changes & Additions (November 2025 - v2.0)
 
 1. **Business Model & Pricing (Section 11)** – Complete rewrite
-   - Clarified the three-tier monetisation model: Free tier → One-time Core unlock → Optional "Math Dash Coach" subscription
+   - Clarified the three-tier monetisation model: Free tier → One-time Core unlock → Optional "Ready Steady Math Coach" subscription
    - Updated Home/Family Core unlock price to **US$6.99** (one-time)
    - Confirmed Teacher Core unlock price at **US$19.99** (one-time)
-   - Added **Math Dash Coach** parent subscription: **US$2.99/month** or **US$23.99/year**
+   - Added **Ready Steady Math Coach** parent subscription: **US$2.99/month** or **US$23.99/year**
    - Documented AI credit packs as a secondary, optional path for subscription-averse parents
    - Added hybrid monetisation approach with medium-term review strategy
 
-2. **New Feature: Math Dash Coach (Section 12)** – New section
+2. **New Feature: Ready Steady Math Coach (Section 12)** – New section
    - Complete feature specification for the parent AI subscription
    - Defined target user, value proposition, and job-to-be-done
    - Specified V1 core capabilities: skill snapshot, guided practice plan, progress over time, parent-facing explanations
@@ -105,9 +107,9 @@ Children aged ~5-11 need fast, engaging ways to build automatic recall of number
 - **Secondary:** Parents who want to see clear evidence of progress and focus practice on weak areas.
 - **Secondary:** Primary school teachers who need quick, reliable fluency practice with simple analytics.
 
-### 1.2 Solution Validation - Why Math Dash?
+### 1.2 Solution Validation - Why Ready Steady Math?
 
-Math Dash is a browser-based, cross-platform math fluency game inspired by Hit the Button and similar apps, but redesigned to:
+Ready Steady Math is a browser-based, cross-platform math fluency game inspired by Hit the Button and similar apps, but redesigned to:
 
 - Keep the core quick-fire, one-tap gameplay that works.
 - Add adaptive practice that reacts to performance.
@@ -116,8 +118,8 @@ Math Dash is a browser-based, cross-platform math fluency game inspired by Hit t
 - Support classroom usage from day one (profiles, simple group tracking).
 
 **Alternatives & differentiation:**
-- **Hit the Button / Twinkl Rapid Math Practice:** Excellent core mechanic; weaker on adaptivity and whole-child view. Math Dash differentiates on personalization, analytics, and engagement.
-- **Times Tables Rock Stars, Mathletics, Sumdog:** Strong platforms but heavy, subscription-based, and more complex. Math Dash positions as a lightweight, quick-start, premium tool with a razor focus on fluency.
+- **Hit the Button / Twinkl Rapid Math Practice:** Excellent core mechanic; weaker on adaptivity and whole-child view. Ready Steady Math differentiates on personalization, analytics, and engagement.
+- **Times Tables Rock Stars, Mathletics, Sumdog:** Strong platforms but heavy, subscription-based, and more complex. Ready Steady Math positions as a lightweight, quick-start, premium tool with a razor focus on fluency.
 
 ### 1.3 Impact Assessment - What Changes for Users?
 
@@ -135,7 +137,7 @@ We measure success across learning, engagement, and business:
 **Business:**
 - Conversion rate from free to paid (Core unlock).
 - Coach subscription attach rate among paying parents.
-- Active schools/classrooms using Math Dash.
+- Active schools/classrooms using Ready Steady Math.
 - Cost per engaged learner (for paid acquisition).
 
 ---
@@ -143,10 +145,10 @@ We measure success across learning, engagement, and business:
 ## 2. Executive Summary
 
 **Elevator Pitch:**
-Math Dash is a fast, fun game where kids race the clock to answer math questions and level up their skills a little bit every day.
+Ready Steady Math is a fast, fun game where kids race the clock to answer math questions and level up their skills a little bit every day.
 
 **Problem Statement:**
-Math Dash helps kids master math facts — addition and subtraction facts (including number-bond style make-10/20/100), multiplication facts / times tables, division facts, doubles and halves, and square numbers — through quick, one-minute challenges. Many apps drill facts but do not adapt to each child, show clear progress to adults, or keep kids coming back consistently. Teacher-facing documentation may still use UK/Commonwealth terms like "number bonds" or "doubles and halves" for clarity, but the app surfaces them under globally clear headings such as "Addition & Subtraction Facts" so parents and kids know what to pick at a glance.
+Ready Steady Math helps kids master math facts — addition and subtraction facts (including number-bond style make-10/20/100), multiplication facts / times tables, division facts, doubles and halves, and square numbers — through quick, one-minute challenges. Many apps drill facts but do not adapt to each child, show clear progress to adults, or keep kids coming back consistently. Teacher-facing documentation may still use UK/Commonwealth terms like "number bonds" or "doubles and halves" for clarity, but the app surfaces them under globally clear headings such as "Addition & Subtraction Facts" so parents and kids know what to pick at a glance.
 
 **Target Audience:**
 
@@ -161,13 +163,13 @@ Math Dash helps kids master math facts — addition and subtraction facts (inclu
 - Need guidance on where their child is struggling and what to focus on next.
 
 **Teachers (Primary, Years 1-6)**
-- Use Math Dash as a 5-10 minute warm-up or homework tool.
+- Use Ready Steady Math as a 5-10 minute warm-up or homework tool.
 - Need quick set-up and basic tracking per pupil.
 
 **Unique Selling Proposition (USP):**
 1. **Adaptive Dash Engine:** Difficulty auto-adjusts per child.
 2. **Visual Progress Radar:** Shows strengths and gaps per topic/table.
-3. **Math Dash Coach:** Optional AI-powered guidance for parents with clear practice plans.
+3. **Ready Steady Math Coach:** Optional AI-powered guidance for parents with clear practice plans.
 4. **Built-in Engagement Layer:** Streaks, goals, challenges.
 5. **Web-first, Cross-Device:** Browser-based, PWA-friendly.
 6. **Teacher-Friendly:** Lightweight classroom mode and analytics.
@@ -430,7 +432,7 @@ As a parent or teacher, I want to see how my child's math fluency compares to ty
 
 ### 8.1 Purpose
 
-Math Dash is explicitly designed to build children's fluency with basic number facts through **short, regular practice**, not to maximise screen time or exploit persuasive design. This section defines the **engagement philosophy**, **allowed mechanics**, and **prohibited patterns** to ensure that:
+Ready Steady Math is explicitly designed to build children's fluency with basic number facts through **short, regular practice**, not to maximise screen time or exploit persuasive design. This section defines the **engagement philosophy**, **allowed mechanics**, and **prohibited patterns** to ensure that:
 
 - Children are **motivated to return** for ~5–10 minutes of focused practice on most days.
 - Engagement mechanics are **transparent, predictable, and skill-based**.
@@ -517,7 +519,7 @@ The following mechanics are **approved** and should form the core of the engagem
 
 ### 8.4 Prohibited & Restricted Mechanics
 
-The following are **not allowed** in Math Dash due to ethical and wellbeing considerations:
+The following are **not allowed** in Ready Steady Math due to ethical and wellbeing considerations:
 
 1. **Gambling-like or variable-ratio reward systems**
    - Loot boxes, spin wheels, or any system where rewards are randomised to encourage "just one more try."
@@ -571,7 +573,7 @@ After the default session, the app:
 
 #### 8.6.2 Notification Content Constraints
 
-- Tone: neutral/positive, low-pressure, addressed to the parent, e.g.: "This could be a good 5-minute Math Dash moment with Sam."
+- Tone: neutral/positive, low-pressure, addressed to the parent, e.g.: "This could be a good 5-minute Ready Steady Math moment with Sam."
 - No:
   - "Your streak is in danger."
   - "Only 2 hours left to get today's reward."
@@ -646,7 +648,7 @@ Any optimisation work (A/B tests, UX tweaks) must be evaluated against **both** 
 
 ### 8.11 Compliance & Review
 
-This section should be treated as a **non-negotiable constraint** for the design, development, and optimisation of Math Dash. Any new feature proposal touching engagement or retention must explicitly confirm alignment with these principles before implementation.
+This section should be treated as a **non-negotiable constraint** for the design, development, and optimisation of Ready Steady Math. Any new feature proposal touching engagement or retention must explicitly confirm alignment with these principles before implementation.
 
 ---
 
@@ -668,7 +670,7 @@ This section should be treated as a **non-negotiable constraint** for the design
 
 **Feature Mapping:**
 - **Objective 1:** Features 1-5.
-- **Objective 2:** Features 7, Section 11 (Core unlock), and Section 12 (Math Dash Coach).
+- **Objective 2:** Features 7, Section 11 (Core unlock), and Section 12 (Ready Steady Math Coach).
 - **Objective 3:** Features 2, 6, 9, Section 8 (Ethical Engagement), and future Teacher Coach.
 
 ---
@@ -677,13 +679,13 @@ This section should be treated as a **non-negotiable constraint** for the design
 
 ### 11.1 Monetisation Overview
 
-Math Dash operates a **one-time paid core app** with an **optional low-cost AI subscription** for parents. The model is designed to be simple, transparent, and family-friendly.
+Ready Steady Math operates a **one-time paid core app** with an **optional low-cost AI subscription** for parents. The model is designed to be simple, transparent, and family-friendly.
 
 **Three-tier model:**
 
 1. **Free Tier** – Try before you buy
 2. **One-time Core Unlock** – Full game access (Home or Teacher)
-3. **Optional "Math Dash Coach" Subscription** – AI-powered parent guidance (plus optional one-off AI credit packs as a secondary path)
+3. **Optional "Ready Steady Math Coach" Subscription** – AI-powered parent guidance (plus optional one-off AI credit packs as a secondary path)
 
 ### 11.2 Free Tier
 
@@ -735,7 +737,7 @@ Math Dash operates a **one-time paid core app** with an **optional low-cost AI s
 
 **Future consideration:** Volume discounts and site licences for schools once demand is validated.
 
-### 11.4 Math Dash Coach – Parent Subscription
+### 11.4 Ready Steady Math Coach – Parent Subscription
 
 **Overview:**
 A low-cost, optional AI subscription for parents that transforms gameplay data into clear insights and guided practice plans.
@@ -751,7 +753,7 @@ A low-cost, optional AI subscription for parents that transforms gameplay data i
 **Licence terms:** Per household (all children in that family), not per child. A single subscription covers Coach features for all child profiles.
 
 **What's included:**
-- Full Math Dash Coach feature set (see Section 12 for detailed specification):
+- Full Ready Steady Math Coach feature set (see Section 12 for detailed specification):
   - Skill snapshot per child
   - AI-generated weekly practice plans
   - Progress over time visualisations
@@ -813,16 +815,16 @@ We will review real adoption patterns:
 
 **Coach upsell triggers:**
 - After several sessions of play, parent sees prompt in Grown-Ups area.
-- Example: "We've spotted some useful patterns in Alex's results. Unlock Math Dash Coach to get a simple weekly plan and clear overview of their progress."
+- Example: "We've spotted some useful patterns in Alex's results. Unlock Ready Steady Math Coach to get a simple weekly plan and clear overview of their progress."
 - Non-intrusive; shown at natural pause points, not mid-gameplay.
 
 ---
 
-## 12. Math Dash Coach (Parent AI Subscription)
+## 12. Ready Steady Math Coach (Parent AI Subscription)
 
 ### 12.1 Overview
 
-Math Dash Coach is a low-cost, optional AI subscription for parents that sits on top of the existing Math Dash game. It transforms raw gameplay data into clear, actionable insights.
+Ready Steady Math Coach is a low-cost, optional AI subscription for parents that sits on top of the existing Ready Steady Math game. It transforms raw gameplay data into clear, actionable insights.
 
 **Primary job-to-be-done:**
 > "Help parents understand where their child is strong or struggling in math facts, and give them a simple, guided practice plan to help the child reach proficiency."
@@ -830,7 +832,7 @@ Math Dash Coach is a low-cost, optional AI subscription for parents that sits on
 ### 12.2 Target User & Value Proposition
 
 **Target user:**
-Parents and caregivers of children using Math Dash at home. These are busy adults who:
+Parents and caregivers of children using Ready Steady Math at home. These are busy adults who:
 - Want to support their child's math development.
 - Don't have time to analyse dashboards or create practice schedules.
 - Value clear, simple guidance over raw data.
@@ -930,10 +932,10 @@ Coach turns raw gameplay data into clear insights:
 
 ### 12.4 Non-Goals (V1)
 
-Math Dash Coach is **not** trying to be:
+Ready Steady Math Coach is **not** trying to be:
 
 - **A full curriculum:** Coach does not replace structured math instruction. It focuses only on fluency facts practice.
-- **A tutoring system:** Coach does not teach concepts or provide explanations of "why" – it assumes the child is learning math elsewhere and uses Math Dash for fluency practice.
+- **A tutoring system:** Coach does not teach concepts or provide explanations of "why" – it assumes the child is learning math elsewhere and uses Ready Steady Math for fluency practice.
 - **A diagnostic tool for learning difficulties:** Coach identifies patterns in gameplay but does not diagnose dyscalculia or other conditions.
 - **A replacement for teacher involvement:** Coach is for home use; teacher-facing analytics are a separate future consideration.
 
@@ -945,7 +947,7 @@ Coach is a **lightweight analytic and guidance layer** on top of the existing fl
 
 **Entry points:**
 - Prompt in the "Grown-Ups" / parent area after several sessions of play.
-- Banner in the progress dashboard: "Get personalised guidance with Math Dash Coach."
+- Banner in the progress dashboard: "Get personalised guidance with Ready Steady Math Coach."
 - Post-session suggestion: "We've spotted some patterns in Alex's results. Want a simple weekly plan?"
 
 **Flow:**
@@ -1167,7 +1169,7 @@ The full success picture combines:
 
 ### 15.1 Financial Impact Summary
 
-The addition of Math Dash Coach significantly improves the long-term financial sustainability of Math Dash without changing the core product's simplicity or the one-time purchase model for the game itself.
+The addition of Ready Steady Math Coach significantly improves the long-term financial sustainability of Ready Steady Math without changing the core product's simplicity or the one-time purchase model for the game itself.
 
 **Base scenario financial impact:**
 
@@ -1204,7 +1206,7 @@ For detailed financial projections, scenario modelling, and sensitivity analysis
 
 ### 16.1 Near-Term Roadmap (Post-MVP)
 
-1. **Math Dash Coach launch** (P1)
+1. **Ready Steady Math Coach launch** (P1)
    - Core Coach features as specified in Section 12.
    - Monthly and annual subscription options.
 
@@ -1274,14 +1276,14 @@ For detailed financial projections, scenario modelling, and sensitivity analysis
 
 ## Summary
 
-Math Dash helps kids master math facts (addition and subtraction facts, multiplication facts / times tables, division facts, number-bond style make-10/20/100 modes, doubles and halves, and square numbers) through quick, one-minute challenges while giving parents and teachers clear insight and control.
+Ready Steady Math helps kids master math facts (addition and subtraction facts, multiplication facts / times tables, division facts, number-bond style make-10/20/100 modes, doubles and halves, and square numbers) through quick, one-minute challenges while giving parents and teachers clear insight and control.
 
-**Our commitment to ethical engagement:** Math Dash is explicitly designed to support healthy digital habits, not to maximise screen time. We target 5-10 minute "Daily Dash" sessions, use only transparent and skill-based engagement mechanics, prohibit dark patterns and manipulative design, and keep parents in control of notifications and goals. See Section 8 for our complete ethical engagement framework.
+**Our commitment to ethical engagement:** Ready Steady Math is explicitly designed to support healthy digital habits, not to maximise screen time. We target 5-10 minute quick sprint sessions, use only transparent and skill-based engagement mechanics, prohibit dark patterns and manipulative design, and keep parents in control of notifications and goals. See Section 8 for our complete ethical engagement framework.
 
 The business model combines:
 - **Free tier** for discovery
 - **One-time Core unlock** (US$6.99 Home / US$19.99 Teacher) for full game access
-- **Optional Math Dash Coach subscription** (US$2.99/month or US$23.99/year) for AI-powered parent guidance
+- **Optional Ready Steady Math Coach subscription** (US$2.99/month or US$23.99/year) for AI-powered parent guidance
 
 This model delivers accessible, family-friendly pricing while building sustainable recurring revenue to fund ongoing development.
 

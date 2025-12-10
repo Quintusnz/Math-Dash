@@ -81,7 +81,7 @@ describe('country-config.ts', () => {
       expect(getCountryLabel('AU')).toBe('Australia');
       expect(getCountryLabel('UK')).toBe('United Kingdom');
       expect(getCountryLabel('US')).toBe('United States');
-      expect(getCountryLabel('CA')).toBe('Canada');
+      expect(getCountryLabel('CA')).toBe('Canada (Ontario)');
     });
   });
 
@@ -115,6 +115,7 @@ describe('country-config.ts', () => {
       expect(deriveYearFromAge('NZ', '5-6')).toBe('Y1');
       expect(deriveYearFromAge('NZ', '7-8')).toBe('Y3');
       expect(deriveYearFromAge('NZ', '10-11')).toBe('Y6');
+      expect(deriveYearFromAge('NZ', '12-13')).toBe('Y8');
     });
 
     it('should derive correct grade for US', () => {
@@ -126,6 +127,7 @@ describe('country-config.ts', () => {
     it('should derive correct grade for CA', () => {
       expect(deriveYearFromAge('CA', '5-6')).toBe('K');
       expect(deriveYearFromAge('CA', '11-12')).toBe('G6');
+      expect(deriveYearFromAge('CA', '12-13')).toBe('G6');
     });
 
     it('should use country-appropriate default for unknown age bands', () => {
@@ -192,7 +194,7 @@ describe('country-config.ts', () => {
 
     it('should format correctly for grade-based countries', () => {
       expect(formatYearGradeWithCountry('US', 'K')).toBe('Kindergarten, United States');
-      expect(formatYearGradeWithCountry('CA', 'G4')).toBe('Grade 4, Canada');
+      expect(formatYearGradeWithCountry('CA', 'G4')).toBe('Grade 4, Canada (Ontario)');
     });
   });
 
@@ -255,3 +257,4 @@ describe('country-config.ts', () => {
     });
   });
 });
+

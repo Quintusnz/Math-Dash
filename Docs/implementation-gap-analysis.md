@@ -1,4 +1,6 @@
-# Math Dash - Implementation Gap Analysis
+# Ready Steady Math - Implementation Gap Analysis
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 **Version:** 1.3  
 **Created:** November 2025  
@@ -9,7 +11,7 @@
 
 ## Executive Summary
 
-This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1) against the current codebase implementation. The analysis is organized by user flow categories to provide a clear roadmap of what has been built and what remains.
+This document compares the Ready Steady Math PRD (v2.1) and documented User Flows (v2.1) against the current codebase implementation. The analysis is organized by user flow categories to provide a clear roadmap of what has been built and what remains.
 
 **Overall Status:**
 - ✅ **Core gameplay loop** is functional (Solo Dash, Duel Mode)
@@ -27,7 +29,7 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
   - Profile deletion confirmation flow ✅
   - Marketing statistics accuracy verified ✅
 - ⚠️ **Engagement layer** partially implemented (Streaks done, Goals not started)
-- ❌ **Math Dash Coach subscription** not started
+- ❌ **Ready Steady Math Coach subscription** not started
 - ❌ **Teacher features** not started
 
 ---
@@ -209,7 +211,7 @@ This document compares the Math Dash PRD (v2.1) and documented User Flows (v2.1)
 - [x] ~~**Adult Gate on Purchase**: Verify adult before payment flow~~ ✅ **Implemented Nov 2025**
 - [x] ~~**Regional Pricing**: Support GBP, EUR tiers~~ ✅ **Implemented Nov 2025** (USD, GBP, EUR, AUD, NZD)
 
-### 2.5 Math Dash Coach (Subscription) ❌ NOT STARTED
+### 2.5 Ready Steady Math Coach (Subscription) ❌ NOT STARTED
 
 This is a **major missing feature** from PRD v2.0:
 
@@ -369,7 +371,7 @@ This is a **major missing feature** from PRD v2.0:
 
 ## 5. Analytics & Data Capture for AI Features
 
-The PRD Section 13 specifies detailed analytics requirements to support Math Dash Coach AI features and ethical engagement metrics. This section audits what's currently captured versus what's needed.
+The PRD Section 13 specifies detailed analytics requirements to support Ready Steady Math Coach AI features and ethical engagement metrics. This section audits what's currently captured versus what's needed.
 
 ### 5.1 Current Data Capture
 
@@ -970,7 +972,7 @@ interface ParentAccount {
     marketingEmails: boolean;      // Feature announcements
     coachReports: boolean;         // Monthly summaries (Coach only)
     progressMilestones: boolean;   // "Emma mastered 7× table!"
-    practiceReminders: boolean;    // "Time for Math Dash?"
+    practiceReminders: boolean;    // "Time for Ready Steady Math?"
   };
   
   // Consent tracking (GDPR)
@@ -1168,7 +1170,7 @@ interface Profile {
 7. **Rule-based topic suggestions** - "You haven't practiced 7× recently" (non-AI)
 8. **Session summary copy refinement** - add "done for today" stopping cues
 
-### P2 - Math Dash Coach (Full Feature)
+### P2 - Ready Steady Math Coach (Full Feature)
 1. **Data infrastructure for AI**:
    - Daily aggregates table for fast queries
    - Skill trend tracking (weekly snapshots)

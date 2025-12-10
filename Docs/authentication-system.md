@@ -1,12 +1,13 @@
-# Math Dash Authentication System
+# Ready Steady Math Authentication System
 
 > **Document Version**: 1.0  
 > **Last Updated**: November 26, 2025  
 > **Status**: Approved for Implementation
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## Overview
 
-Math Dash uses a **kid-safe, passwordless authentication system** built around unique **Play Codes**. This approach prioritizes child safety by not requiring email addresses or personal information while maintaining ease of use for children, parents, and teachers.
+Ready Steady Math uses a **kid-safe, passwordless authentication system** built around unique **Play Codes**. This approach prioritizes child safety by not requiring email addresses or personal information while maintaining ease of use for children, parents, and teachers.
 
 ---
 
@@ -39,7 +40,7 @@ Math Dash uses a **kid-safe, passwordless authentication system** built around u
 
 ### Key Terminology
 
-| Traditional Term | Math Dash Term |
+| Traditional Term | Ready Steady Math Term |
 |-----------------|----------------|
 | Sign Up | **Create Your Player** |
 | Login | **Enter Your Code** |
@@ -363,7 +364,7 @@ Classroom
 
 ```
 ┌─────────────────────────────────┐
-│  🎮 MATH DASH                   │
+│  🎮 READY STEADY MATH                   │
 │                                 │
 │  Player: Emma                   │
 │  Class: Mrs. Johnson's Math     │
@@ -640,4 +641,4 @@ interface Classroom {
 
 ---
 
-*Document maintained by the Math Dash Product Team*
+*Document maintained by the Ready Steady Math Product Team*

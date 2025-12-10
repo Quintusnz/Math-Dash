@@ -1,4 +1,6 @@
-﻿# Math Dash – Detailed Requirements Specification
+﻿# Ready Steady Math – Detailed Requirements Specification
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 > Version: 0.1-draft  
 > Source PRD: `Docs/math-dash-prd-updated.md`  

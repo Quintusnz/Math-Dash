@@ -15,7 +15,7 @@ status: approved
 # Cards
 
 ## Overview
-Cards are the fundamental building blocks of the Math Dash UI. They group related information and actions, such as a Topic selection or a Player Profile.
+Cards are the fundamental building blocks of the Ready Steady Math UI. They group related information and actions, such as a Topic selection or a Player Profile.
 
 ## Variants
 

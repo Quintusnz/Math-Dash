@@ -10,8 +10,13 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" className={styles.brand}>
-            <Image src="/logos/logo-icon.png" alt="Math Dash lightning icon" width={36} height={36} />
-            Math Dash
+            <Image
+              src="/logos/ready_steady_math_trophy_transparent.png"
+              alt="Ready Steady Math logo"
+              width={170}
+              height={40}
+              priority
+            />
           </Link>
           <nav className={styles.nav}>
             <Link href="/about" className={styles.navLink}>About</Link>
@@ -33,8 +38,13 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
           <div className={styles.footerMeta}>
-            <Image src="/logos/logo-main.png" alt="Math Dash logo" width={96} height={30} />
-            <span>Fast, playful math practice—built for kids, trusted by grown-ups.</span>
+            <Image
+              src="/logos/ready_steady_math_trophy_transparent.png"
+              alt="Ready Steady Math logo"
+              width={170}
+              height={40}
+            />
+            <span>Fast, playful math practice - built for kids, trusted by grown-ups.</span>
           </div>
           <div className={styles.footerLinks}>
             <Link href="/about" className={styles.footerLink}>About</Link>

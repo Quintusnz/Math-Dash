@@ -15,7 +15,7 @@ import { type CountryCode } from './curriculum-data';
 // Type Definitions
 // ============================================================================
 
-export type AgeBand = '5-6' | '6-7' | '7-8' | '8-9' | '9-10' | '10-11' | '11-12';
+export type AgeBand = '5-6' | '6-7' | '7-8' | '8-9' | '9-10' | '10-11' | '11-12' | '12-13';
 
 export interface YearGradeOption {
   key: string;      // e.g., 'Y3', 'G2', 'K'
@@ -72,12 +72,12 @@ export const COUNTRY_METADATA: Record<CountryCode, CountryMetadata> = {
     },
     yearGradeOptions: [
       { key: 'F', label: 'Foundation', ageRange: '5-6' },
-      { key: 'Y1', label: 'Year 1', ageRange: '5-6' },
-      { key: 'Y2', label: 'Year 2', ageRange: '6-7' },
-      { key: 'Y3', label: 'Year 3', ageRange: '7-8' },
-      { key: 'Y4', label: 'Year 4', ageRange: '8-9' },
-      { key: 'Y5', label: 'Year 5', ageRange: '9-10' },
-      { key: 'Y6', label: 'Year 6', ageRange: '10-11' },
+      { key: 'Y1', label: 'Year 1', ageRange: '6-7' },
+      { key: 'Y2', label: 'Year 2', ageRange: '7-8' },
+      { key: 'Y3', label: 'Year 3', ageRange: '8-9' },
+      { key: 'Y4', label: 'Year 4', ageRange: '9-10' },
+      { key: 'Y5', label: 'Year 5', ageRange: '10-11' },
+      { key: 'Y6', label: 'Year 6', ageRange: '11-12' },
     ],
   },
 
@@ -120,7 +120,7 @@ export const COUNTRY_METADATA: Record<CountryCode, CountryMetadata> = {
 
   CA: {
     code: 'CA',
-    label: 'Canada',
+    label: 'Canada (Ontario)',
     flagEmoji: '🇨🇦',
     systemType: 'grade',
     terminology: {
@@ -156,15 +156,17 @@ const AGE_TO_YEAR_MAP: Record<CountryCode, Record<AgeBand, string>> = {
     '9-10': 'Y5',
     '10-11': 'Y6',
     '11-12': 'Y7',
+    '12-13': 'Y8',
   },
   AU: {
-    '5-6': 'Y1',  // Could also be Foundation
-    '6-7': 'Y2',
-    '7-8': 'Y3',
-    '8-9': 'Y4',
-    '9-10': 'Y5',
-    '10-11': 'Y6',
-    '11-12': 'Y6', // No Y7 in primary in most AU states
+    '5-6': 'F',
+    '6-7': 'Y1',
+    '7-8': 'Y2',
+    '8-9': 'Y3',
+    '9-10': 'Y4',
+    '10-11': 'Y5',
+    '11-12': 'Y6',
+    '12-13': 'Y6', // Primary typically ends at Y6
   },
   UK: {
     '5-6': 'Y1',
@@ -174,6 +176,7 @@ const AGE_TO_YEAR_MAP: Record<CountryCode, Record<AgeBand, string>> = {
     '9-10': 'Y5',
     '10-11': 'Y6',
     '11-12': 'Y6', // UK primary ends at Y6
+    '12-13': 'Y6',
   },
   US: {
     '5-6': 'K',
@@ -183,6 +186,7 @@ const AGE_TO_YEAR_MAP: Record<CountryCode, Record<AgeBand, string>> = {
     '9-10': 'G4',
     '10-11': 'G5',
     '11-12': 'G5', // US elementary typically ends at G5
+    '12-13': 'G5',
   },
   CA: {
     '5-6': 'K',
@@ -192,6 +196,7 @@ const AGE_TO_YEAR_MAP: Record<CountryCode, Record<AgeBand, string>> = {
     '9-10': 'G4',
     '10-11': 'G5',
     '11-12': 'G6',
+    '12-13': 'G6',
   },
 };
 
@@ -214,7 +219,7 @@ export function getCountryLabel(country: CountryCode): string {
 }
 
 /**
- * Get the country flag emoji (e.g., '🇳🇿')
+ * Get the country flag emoji (e.g., '\u{1F1F3}\u{1F1FF}')
  */
 export function getCountryFlag(country: CountryCode): string {
   return COUNTRY_METADATA[country].flagEmoji;
@@ -331,3 +336,6 @@ export function getAgeRangeForYear(
   );
   return option?.ageRange;
 }
+
+
+

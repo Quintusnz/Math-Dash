@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 
 export interface FocusLossOptions {
   /**
@@ -49,6 +49,7 @@ export function useFocusLoss(options: FocusLossOptions = {}): FocusLossState {
     totalFocusLossDuration: 0,
     focusLossCount: 0,
   });
+  const [state, setState] = useState<FocusLossState>(stateRef.current);
 
   // Use refs for callbacks to avoid effect dependency issues
   const onFocusLostRef = useRef(onFocusLost);
@@ -63,13 +64,15 @@ export function useFocusLoss(options: FocusLossOptions = {}): FocusLossState {
   const handleFocusLost = useCallback(() => {
     if (!stateRef.current.isFocused) return; // Already unfocused
     
-    stateRef.current = {
+    const nextState: FocusLossState = {
       ...stateRef.current,
       isFocused: false,
       lastFocusLostAt: Date.now(),
       focusLossCount: stateRef.current.focusLossCount + 1,
     };
     
+    stateRef.current = nextState;
+    setState(nextState);
     onFocusLostRef.current?.();
   }, []);
 
@@ -79,13 +82,15 @@ export function useFocusLoss(options: FocusLossOptions = {}): FocusLossState {
     const lostAt = stateRef.current.lastFocusLostAt;
     const duration = lostAt ? Date.now() - lostAt : 0;
     
-    stateRef.current = {
+    const nextState: FocusLossState = {
       ...stateRef.current,
       isFocused: true,
       lastFocusLostAt: null,
       totalFocusLossDuration: stateRef.current.totalFocusLossDuration + duration,
     };
     
+    stateRef.current = nextState;
+    setState(nextState);
     onFocusRegainedRef.current?.();
   }, []);
 
@@ -131,8 +136,9 @@ export function useFocusLoss(options: FocusLossOptions = {}): FocusLossState {
         totalFocusLossDuration: 0,
         focusLossCount: 0,
       };
+      setState(stateRef.current);
     }
   }, [enabled]);
 
-  return stateRef.current;
+  return state;
 }

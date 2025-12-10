@@ -123,12 +123,15 @@ export class MasteryTracker {
     };
   }
 
-  static async getRadarData(profileId: string) {
+  static async getRadarData(profileId: string, startDate?: Date) {
     const all = await db.mastery.where('profileId').equals(profileId).toArray();
+    const filtered = startDate
+      ? all.filter((r) => !r.lastAttemptAt || new Date(r.lastAttemptAt) >= startDate)
+      : all;
     
     const ops = ['addition', 'subtraction', 'multiplication', 'division'];
     const data = ops.map(op => {
-      const records = all.filter(r => r.operation === op);
+      const records = filtered.filter(r => r.operation === op);
       if (records.length === 0) return { subject: op.charAt(0).toUpperCase() + op.slice(1), score: 0, fullMark: 100 };
       
       const totalAttempts = records.reduce((sum, r) => sum + r.attempts, 0);
@@ -139,14 +142,14 @@ export class MasteryTracker {
     });
 
     // Calculate Global Accuracy
-    const totalAttempts = all.reduce((sum, r) => sum + r.attempts, 0);
-    const totalCorrect = all.reduce((sum, r) => sum + r.correct, 0);
+    const totalAttempts = filtered.reduce((sum, r) => sum + r.attempts, 0);
+    const totalCorrect = filtered.reduce((sum, r) => sum + r.correct, 0);
     const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
     data.push({ subject: 'Accuracy', score: accuracy, fullMark: 100 });
 
     // Calculate Speed Score (Arbitrary mapping: <1s = 100, >5s = 0)
-    const avgTime = all.length > 0 
-      ? all.reduce((sum, r) => sum + r.avgResponseTime, 0) / all.length 
+    const avgTime = filtered.length > 0 
+      ? filtered.reduce((sum, r) => sum + r.avgResponseTime, 0) / filtered.length 
       : 5000;
     
     // Map 1000ms -> 100, 5000ms -> 0

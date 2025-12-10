@@ -1,10 +1,12 @@
-# Math Dash – Business Model & Pricing Viability (Tier-1 Launch)
+# Ready Steady Math – Business Model & Pricing Viability (Tier-1 Launch)
 
 **Version:** 2.0  
 **Last Updated:** November 2025  
 **Status:** Active
 
-> This report synthesises the existing Math Dash documentation with current infrastructure and AI pricing to evaluate whether a one-time core purchase plus optional Math Dash Coach subscription and AI credit packs is commercially viable for an initial launch in Tier-1 markets (US, UK, EU). All figures are indicative and meant for planning, not budgeting.
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
+>
+> This report synthesises the existing Ready Steady Math documentation with current infrastructure and AI pricing to evaluate whether a one-time core purchase plus optional Ready Steady Math Coach subscription and AI credit packs is commercially viable for an initial launch in Tier-1 markets (US, UK, EU). All figures are indicative and meant for planning, not budgeting.
 
 ---
 
@@ -15,17 +17,17 @@ This section summarises the major changes and additions made in this version of 
 ### Changes & Additions (November 2025)
 
 1. **Business Model Overview (Section 1)** – Updated
-   - Clarified the three-tier monetisation model: Free tier → One-time Core unlock → Optional Math Dash Coach subscription
-   - Made explicit that Math Dash is a one-time paid core game plus optional recurring AI subscription
+   - Clarified the three-tier monetisation model: Free tier → One-time Core unlock → Optional Ready Steady Math Coach subscription
+   - Made explicit that Ready Steady Math is a one-time paid core game plus optional recurring AI subscription
    - Added AI credit packs as secondary option for subscription-averse users
 
 2. **Pricing Assumptions (Section 3)** – Updated
    - Updated Home/Family Core unlock price from US$7.99 to **US$6.99** (one-time)
    - Confirmed Teacher Core unlock at **US$19.99** (one-time)
-   - Added **Math Dash Coach** subscription pricing: **US$2.49/month** or **US$23.99/year**
+   - Added **Ready Steady Math Coach** subscription pricing: **US$2.49/month** or **US$23.99/year**
    - Marked AI credit packs as secondary option with potential future phase-out
 
-3. **Math Dash Coach Economics (Section 4)** – New Section
+3. **Ready Steady Math Coach Economics (Section 4)** – New Section
    - Added complete analysis of Coach subscription economics
    - Defined unit economics: US$28.40 net per subscriber-year
    - Defined attach rate scenarios: 10% (conservative), 20% (Base), 30% (stretch)
@@ -76,7 +78,7 @@ This section summarises the major changes and additions made in this version of 
 
 ### 1.2 Monetisation Model Overview
 
-Math Dash operates a **one-time paid core game** with an **optional low-cost AI subscription** for parents. The model is designed to be simple, transparent, and family-friendly.
+Ready Steady Math operates a **one-time paid core game** with an **optional low-cost AI subscription** for parents. The model is designed to be simple, transparent, and family-friendly.
 
 **Three-tier model:**
 
@@ -91,7 +93,7 @@ Math Dash operates a **one-time paid core game** with an **optional low-cost AI 
    - **Teacher:** US$19.99 one-time (per teacher account).
    - Game is fully usable without any ongoing subscription.
 
-3. **Optional Math Dash Coach Subscription** – AI-powered parent guidance
+3. **Optional Ready Steady Math Coach Subscription** – AI-powered parent guidance
    - Low-cost subscription that turns gameplay data into clear insights and guided practice plans.
    - **Monthly:** US$2.49/month.
    - **Annual:** US$23.99/year (≈US$2/month, "2 months free" positioning).
@@ -103,7 +105,7 @@ Math Dash operates a **one-time paid core game** with an **optional low-cost AI 
    - Positioned as secondary option; Coach subscription is primary AI offering.
    - May be phased out in medium term if Coach adoption is strong and credits create pricing confusion.
 
-**Key principle:** Math Dash is fundamentally a **one-time paid core game** (not a subscription game), with an **optional recurring AI subscription** that adds value for parents who want ongoing guidance. Most revenue comes from one-time Core upgrades, with Coach subscriptions and AI credits as high-margin add-ons.
+**Key principle:** Ready Steady Math is fundamentally a **one-time paid core game** (not a subscription game), with an **optional recurring AI subscription** that adds value for parents who want ongoing guidance. Most revenue comes from one-time Core upgrades, with Coach subscriptions and AI credits as high-margin add-ons.
 
 ---
 
@@ -223,7 +225,7 @@ For this report, **people costs (dev, design, support, marketing)** are treated 
 - We may later test US$7.99 once brand and product maturity increase, but all numeric projections here use US$6.99.
 - Teacher/school licensing may be handled separately in future (volume discounts, site licences).
 
-### 3.2 Math Dash Coach – Parent Subscription
+### 3.2 Ready Steady Math Coach – Parent Subscription
 
 **Pricing:**
 
@@ -282,11 +284,11 @@ For this report, **people costs (dev, design, support, marketing)** are treated 
 
 ---
 
-## 4. Math Dash Coach – Economics and Role in the Model
+## 4. Ready Steady Math Coach – Economics and Role in the Model
 
 ### 4.1 Concept
 
-Math Dash Coach is a **low-cost parent subscription** that:
+Ready Steady Math Coach is a **low-cost parent subscription** that:
 
 - Turns gameplay data into clear insights about each child's strengths and weaknesses.
 - Provides a simple weekly practice plan written in plain language.
@@ -329,7 +331,7 @@ Math Dash Coach is a **low-cost parent subscription** that:
 
 ### 4.3 Attach Rate Assumptions
 
-**Definition:** Attach rate is the percentage of paying parents (Core unlock purchasers) who also subscribe to Math Dash Coach.
+**Definition:** Attach rate is the percentage of paying parents (Core unlock purchasers) who also subscribe to Ready Steady Math Coach.
 
 **Modelled scenarios:**
 
@@ -435,7 +437,7 @@ Your viability is very sensitive to:
 
 **Perception risk: Subscription aversion**
 
-- Risk: Some parents actively dislike subscriptions and may avoid Math Dash because of Coach.
+- Risk: Some parents actively dislike subscriptions and may avoid Ready Steady Math because of Coach.
 - Impact: Could reduce Core unlock conversion if messaging is unclear.
 - Likelihood: Low – Coach is clearly optional and Core unlock is prominently one-time.
 - Mitigation: Emphasise "buy once, play forever" for Core; position Coach as optional "extra guidance."
@@ -595,9 +597,9 @@ Not all of these are addressable:
 - This yields a **Serviceable Available Market (SAM)** of roughly:
   - ~50M children × 0.65 × 0.35 ≈ **11–12 million addressable children**.
 
-**Implication for Math Dash:**
+**Implication for Ready Steady Math:**
 
-- Capturing even **0.5–2%** of this SAM over several years means **55,000–240,000 active children** using Math Dash, which is compatible with the earlier scenarios.
+- Capturing even **0.5–2%** of this SAM over several years means **55,000–240,000 active children** using Ready Steady Math, which is compatible with the earlier scenarios.
 
 ### 7.2 Base Scenario – Detailed 5-Year Projections (With Coach)
 
@@ -779,7 +781,7 @@ The answer is:
 
 ### 9.2 Coach Subscription Pricing Validation
 
-The decision to price Math Dash Coach at **US$2.49/month** (with **US$23.99/year** annual option) is validated by:
+The decision to price Ready Steady Math Coach at **US$2.49/month** (with **US$23.99/year** annual option) is validated by:
 
 **Competitive positioning:**
 
@@ -848,7 +850,7 @@ The decision to price Math Dash Coach at **US$2.49/month** (with **US$23.99/year
 
 ### 9.5 Final Assessment
 
-The Math Dash business model – **one-time Core unlock plus optional Math Dash Coach subscription** – is commercially sound for a Tier-1 launch. The model:
+The Ready Steady Math business model – **one-time Core unlock plus optional Ready Steady Math Coach subscription** – is commercially sound for a Tier-1 launch. The model:
 
 - Maintains the parent-friendly "buy once" positioning for the core game.
 - Adds meaningful recurring revenue through a low-cost AI subscription.

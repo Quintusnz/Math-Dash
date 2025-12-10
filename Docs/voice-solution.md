@@ -1,6 +1,8 @@
-# Voice Input Solution for Math Dash
+# Voice Input Solution for Ready Steady Math
 
-> **Document Purpose:** This document tracks our research, implementation progress, and future plans for voice-based answer input in Math Dash. It serves as a reference for continuing development.
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
+
+> **Document Purpose:** This document tracks our research, implementation progress, and future plans for voice-based answer input in Ready Steady Math. It serves as a reference for continuing development.
 
 **Last Updated:** November 26, 2025  
 **Status:** Phase 1 Implementation In Progress
@@ -26,7 +28,7 @@
 
 ## Executive Summary
 
-Math Dash needs robust voice input to let kids call out answers verbally. Previous implementation using basic Web Speech API failed to recognize inputs reliably. This document outlines a phased approach to implement robust, local-first voice recognition that:
+Ready Steady Math needs robust voice input to let kids call out answers verbally. Previous implementation using basic Web Speech API failed to recognize inputs reliably. This document outlines a phased approach to implement robust, local-first voice recognition that:
 
 - Works across different accents (global deployment)
 - Uses the known correct answer to improve recognition accuracy

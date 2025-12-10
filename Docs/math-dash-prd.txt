@@ -1,24 +1,26 @@
-Math Dash – Product Requirements & Specification
+Ready Steady Math - Product Requirements & Specification
+
+Note: Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 1. Problem-First Framing
 
 1.1 Problem Analysis
 
 Core problem:
-Children aged ~5–11 need fast, engaging ways to build automatic recall of number facts (addition, subtraction, multiplication, division). Existing tools like Hit the Button are effective but have gaps:
+Children aged ~5ï¿½11 need fast, engaging ways to build automatic recall of number facts (addition, subtraction, multiplication, division). Existing tools like Hit the Button are effective but have gaps:
 
-- Limited adaptivity – difficulty does not automatically adjust to the child.
-- Progress insight is shallow – hard for parents/teachers to see where a child struggles at a glance.
-- Engagement is static – few modern game mechanics (streaks, quests, progression).
-- Little personalization – content and goals are not tailored to each child.
-- Weak classroom features – teachers have limited tools to manage groups and track progress.
+- Limited adaptivity ï¿½ difficulty does not automatically adjust to the child.
+- Progress insight is shallow ï¿½ hard for parents/teachers to see where a child struggles at a glance.
+- Engagement is static ï¿½ few modern game mechanics (streaks, quests, progression).
+- Little personalization ï¿½ content and goals are not tailored to each child.
+- Weak classroom features ï¿½ teachers have limited tools to manage groups and track progress.
 
 Who feels this most:
-- Primary: Kids 6–11 who get bored easily and need a simple, fun loop to keep practising.
+- Primary: Kids 6ï¿½11 who get bored easily and need a simple, fun loop to keep practising.
 - Secondary: Parents who want to see clear evidence of progress and focus practice on weak areas.
 - Secondary: Primary school teachers who need quick, reliable fluency practice with simple analytics.
 
-1.2 Solution Validation – Why Math Dash?
+1.2 Solution Validation ï¿½ Why Math Dash?
 
 Math Dash is a browser-based, cross-platform math fluency game inspired by Hit the Button and similar apps, but redesigned to:
 
@@ -32,13 +34,13 @@ Alternatives & differentiation:
 - Hit the Button / Twinkl Rapid Math Practice: Excellent core mechanic; weaker on adaptivity and whole-child view. Math Dash differentiates on personalization, analytics, and engagement.
 - Times Tables Rock Stars, Mathletics, Sumdog: Strong platforms but heavy, subscription-based, and more complex. Math Dash positions as a lightweight, quick-start, freemium tool with a razor focus on fluency.
 
-1.3 Impact Assessment – What Changes for Users?
+1.3 Impact Assessment ï¿½ What Changes for Users?
 
 We measure success across learning, engagement, and business:
 
 Learning impact:
-- Increase in correct answers per minute per child over 4–8 weeks.
-- Reduction in error rate for target skills (e.g., 7× table).
+- Increase in correct answers per minute per child over 4ï¿½8 weeks.
+- Reduction in error rate for target skills (e.g., 7ï¿½ table).
 
 Engagement:
 - D1, W1, and M1 retention of active child profiles.
@@ -59,17 +61,17 @@ Problem Statement:
 Kids need to remember number facts quickly (times tables, number bonds, doubles/halves) to succeed in later math. Many apps drill facts but do not adapt to each child, show clear progress to adults, or keep kids coming back consistently. Teachers and parents lack a simple, modern tool that blends effective practice with clear insight.
 
 Target Audience:
-Kids (6–11)
-- Primary students (Years 1–6 / KS1–KS2).
+Kids (6ï¿½11)
+- Primary students (Years 1ï¿½6 / KS1ï¿½KS2).
 - Can read basic numbers and simple instructions.
 - Use tablets, Chromebooks, laptops, or phones.
 
-Parents/Caregivers (30–55)
+Parents/Caregivers (30ï¿½55)
 - Want short, effective practice activities.
 - Want evidence of progress.
 
-Teachers (Primary, Years 1–6)
-- Use Math Dash as a 5–10 minute warm-up or homework tool.
+Teachers (Primary, Years 1ï¿½6)
+- Use Math Dash as a 5ï¿½10 minute warm-up or homework tool.
 - Need quick set-up and basic tracking per pupil.
 
 Unique Selling Proposition (USP):
@@ -88,19 +90,19 @@ Success Metrics (Top-Level):
 
 3. Personas
 
-Persona 1 – Jake, 8, Reluctant Maths Kid
+Persona 1 ï¿½ Jake, 8, Reluctant Maths Kid
 - Age: 8 (Year 3)
 - Devices: Shared tablet, classroom Chromebook.
 - Goals: Feel competent in times tables; enjoy quick, simple games.
 - Pain points: Bored by text-heavy apps; discouraged by constant difficulty.
 
-Persona 2 – Sarah, 38, Busy Parent
+Persona 2 ï¿½ Sarah, 38, Busy Parent
 - Age: 38, working parent.
 - Devices: Phone, family tablet.
-- Goals: 10–15 min meaningful practice; clear evidence of progress.
+- Goals: 10ï¿½15 min meaningful practice; clear evidence of progress.
 - Pain points: Overwhelmed by complex platforms; dislikes ads and confusing subscriptions.
 
-Persona 3 – Mr. Patel, 32, Year 4 Teacher
+Persona 3 ï¿½ Mr. Patel, 32, Year 4 Teacher
 - Age: 32.
 - Devices: Classroom PCs/Chromebooks, laptop, projector.
 - Goals: Quick warm-up activities; see which pupils struggle with which facts.
@@ -109,9 +111,9 @@ Persona 3 – Mr. Patel, 32, Year 4 Teacher
 4. Feature Specifications
 
 Priority legend:
-- P0 – Must-have for MVP
-- P1 – Important, post-MVP
-- P2 – Nice-to-have / later
+- P0 ï¿½ Must-have for MVP
+- P1 ï¿½ Important, post-MVP
+- P2 ï¿½ Nice-to-have / later
 
 Feature 1: Core Dash Round Gameplay (P0)
 User Story:
@@ -146,7 +148,7 @@ Feature 4: Player Profiles & Avatars (P0)
 - Profile deletion wipes local data with confirmation.
 - Limits for shared school devices to prevent overload.
 
-Feature 5: Progress Dashboard (“Skill Radar”) (P0)
+Feature 5: Progress Dashboard (ï¿½Skill Radarï¿½) (P0)
 - Per-child view summarising strengths and gaps.
 - Grid/radar of skills (e.g. tables, bonds) with simple proficiency indicator.
 - Tap skill for detail: recent scores, best score, trend.
@@ -163,12 +165,12 @@ Feature 7: Engagement Layer (Streaks, Goals, Achievements) (P1)
 - Achievements for milestones (e.g. 1000 correct answers).
 - Guardrails around time/date handling.
 
-Feature 8: Local Multiplayer “Dash Duel” (P2)
+Feature 8: Local Multiplayer ï¿½Dash Duelï¿½ (P2)
 - Two-player head-to-head mode on one device.
 - Split screen with independent questions and scores.
 - Optional handicap for mixed ability.
 
-Feature 9: Accounts & Cloud Sync (P1–P2)
+Feature 9: Accounts & Cloud Sync (P1ï¿½P2)
 - Optional adult accounts for cross-device sync.
 - Teacher accounts with class codes.
 - Offline-first design with conflict-safe sync.
@@ -192,7 +194,7 @@ Entities: PlayerProfile, GameSession, QuestionAttempt, SkillMetric, Achievement.
 Clear events: START_SESSION, END_SESSION, ANSWER_QUESTION, UNLOCK_ACHIEVEMENT, SYNC_SUCCESS.
 
 Data Validation:
-- Profile names 1–20 chars.
+- Profile names 1ï¿½20 chars.
 - Age bands constrained.
 - Questions always have exactly one correct answer; no duplicate options.
 - Streak logic uses local calendar days with defined rules.
@@ -211,7 +213,7 @@ Performance:
 
 Scalability:
 - Mostly client-side; backend for auth, sync, payments.
-- Scales to 10k–100k MAU in first phase.
+- Scales to 10kï¿½100k MAU in first phase.
 
 Security:
 - Minimal PII, encrypted at rest and in transit.
@@ -231,7 +233,7 @@ Information Architecture:
 
 Progressive Disclosure:
 - Simple default flows for kids.
-- Advanced options and teacher tools behind “More options” and adult gates.
+- Advanced options and teacher tools behind ï¿½More optionsï¿½ and adult gates.
 
 Error Prevention:
 - Disabled actions until required inputs selected.
@@ -259,7 +261,7 @@ Business Objectives:
 3. Build a foundation to extend to advanced math content.
 
 Feature Mapping:
-- Objective 1: Features 1–5.
+- Objective 1: Features 1ï¿½5.
 - Objective 2: Features 7 and 10.
 - Objective 3: Features 2, 6, and 9.
 

@@ -1,6 +1,6 @@
 ---
-title: Math Dash Style Guide
-description: The central reference for the Math Dash visual language and design system
+title: Ready Steady Math Style Guide
+description: The central reference for the Ready Steady Math visual language and design system
 feature: Design System
 last-updated: 2025-11-19
 version: 1.0.0
@@ -73,7 +73,7 @@ Accessibility is not an afterthought.
 ## 7. Platform
 *Reference: [Web Guidelines](./platform-adaptations/web.md)*
 
-Math Dash is a **Web-First** application.
+Ready Steady Math is a **Web-First** application.
 - **Responsive**: Adapts to Mobile, Tablet, and Desktop.
 - **PWA**: Installable and offline-capable.
 - **Browser**: Respects browser navigation and history.

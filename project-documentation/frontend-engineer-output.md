@@ -1,8 +1,10 @@
-# Math Dash – Frontend Engineering Specification
+# Ready Steady Math – Frontend Engineering Specification
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Executive Summary
 
-This document defines the frontend implementation strategy for **Math Dash**, a high-performance, offline-first educational web application. The architecture prioritizes **low-latency gameplay (<50ms)**, **robust offline capabilities**, and a **strict separation of concerns** between the child-focused "Play" experience and the adult-focused "Management" dashboards.
+This document defines the frontend implementation strategy for **Ready Steady Math**, a high-performance, offline-first educational web application. The architecture prioritizes **low-latency gameplay (<50ms)**, **robust offline capabilities**, and a **strict separation of concerns** between the child-focused "Play" experience and the adult-focused "Management" dashboards.
 
 We will utilize **Next.js 14 (App Router)** as the framework, leveraging **React Server Components (RSC)** for initial shell rendering and **Client Components** for the interactive gameplay engine. State management will be hybrid: **Zustand** for global app state, **TanStack Query** for server synchronization, and **Dexie.js** for local-first persistence.
 

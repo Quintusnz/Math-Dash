@@ -1,4 +1,6 @@
-# Math Dash – Core Screens & Components
+# Ready Steady Math – Core Screens & Components
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Profile Selection Screen
 

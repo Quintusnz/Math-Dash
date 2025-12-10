@@ -1,4 +1,6 @@
-# Math Dash – Curriculum Alignment: Linear Work Breakdown
+# Ready Steady Math – Curriculum Alignment: Linear Work Breakdown
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 This document contains the issues to be created in Linear for the Curriculum Alignment feature implementation.
 

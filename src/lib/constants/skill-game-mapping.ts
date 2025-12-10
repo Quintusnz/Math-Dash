@@ -8,7 +8,8 @@
  * @see src/lib/stores/useGameStore.ts for TopicType and NumberRange types
  */
 
-import { type SkillId } from './curriculum-data';
+import { type SkillId, getSkillById, type SkillSubdomain } from './curriculum-data';
+import type { MasteryRecord } from '../db';
 import type { TopicType, Operation, NumberRange, RangePreset, RangeType } from '../stores/useGameStore';
 
 // ============================================================================
@@ -501,6 +502,89 @@ export function doesFactMatchSkill(fact: string, skillId: SkillId): boolean {
   }
   
   return false;
+}
+
+/**
+ * Return all skills whose patterns match the provided fact string.
+ */
+export function getMatchingSkillsForFact(fact: string): SkillId[] {
+  return SKILL_GAME_MAPPING
+    .filter((config) => doesFactMatchSkill(fact, config.skillId))
+    .map((config) => config.skillId);
+}
+
+const SPECIFICITY_FALLBACK = Number.MAX_SAFE_INTEGER;
+
+const getSpecificityTuple = (skillId: SkillId): [number, number, number] => {
+  const cfg = SKILL_GAME_MAP[skillId];
+  if (!cfg) return [SPECIFICITY_FALLBACK, SPECIFICITY_FALLBACK, SPECIFICITY_FALLBACK];
+
+  const rangeWidth = cfg.numberRange
+    ? Math.max(1, cfg.numberRange.max - cfg.numberRange.min)
+    : SPECIFICITY_FALLBACK;
+
+  const selectionScope = cfg.selectedNumbers?.length
+    ?? cfg.topics?.length
+    ?? SPECIFICITY_FALLBACK;
+
+  const factScope = cfg.expectedFactCount ?? SPECIFICITY_FALLBACK;
+
+  return [rangeWidth, selectionScope, factScope];
+};
+
+const selectMostSpecificSkill = (
+  skillIds: SkillId[],
+  targetSubdomain: SkillSubdomain | null
+): SkillId | undefined => {
+  if (skillIds.length === 0) return undefined;
+
+  const subdomainMatches = targetSubdomain
+    ? skillIds.filter((id) => getSkillById(id)?.subdomain === targetSubdomain)
+    : skillIds;
+
+  const pool = subdomainMatches.length > 0 ? subdomainMatches : skillIds;
+
+  return [...pool].sort((a, b) => {
+    const [aFacts, aTopics, aOps] = getSpecificityTuple(a);
+    const [bFacts, bTopics, bOps] = getSpecificityTuple(b);
+    if (aFacts !== bFacts) return aFacts - bFacts;
+    if (aTopics !== bTopics) return aTopics - bTopics;
+    return aOps - bOps;
+  })[0];
+};
+
+/**
+ * Filter mastery records so that only facts belonging to the supplied skill remain.
+ * If a fact qualifies for multiple skills, the most specific skill (smallest fact set)
+ * retains ownership.
+ */
+export function filterRecordsForSkill(
+  records: MasteryRecord[],
+  skillId: SkillId
+): MasteryRecord[] {
+  const config = SKILL_GAME_MAP[skillId];
+  if (!config) return [];
+
+  return records.filter((record) => {
+    if (config.operations && !config.operations.includes(record.operation)) {
+      return false;
+    }
+
+    if (!doesFactMatchSkill(record.fact, skillId)) {
+      return false;
+    }
+
+    const matchingSkills = getMatchingSkillsForFact(record.fact);
+    if (matchingSkills.length <= 1) {
+      return true;
+    }
+
+    const owner = selectMostSpecificSkill(
+      matchingSkills,
+      getSkillById(skillId)?.subdomain ?? null
+    );
+    return owner === skillId;
+  });
 }
 
 /**

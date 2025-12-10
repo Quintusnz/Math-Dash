@@ -15,7 +15,7 @@ status: approved
 # Forms & Inputs
 
 ## Overview
-Forms in Math Dash are primarily used for Profile Creation, Settings, and Login (Adults). They should be friendly, forgiving, and easy to tap.
+Forms in Ready Steady Math are primarily used for Profile Creation, Settings, and Login (Adults). They should be friendly, forgiving, and easy to tap.
 
 ## Components
 

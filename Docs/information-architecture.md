@@ -1,4 +1,6 @@
-# Math Dash – Information Architecture
+# Ready Steady Math – Information Architecture
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Top‑Level Navigation
 

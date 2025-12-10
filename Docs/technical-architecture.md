@@ -1,8 +1,10 @@
-# Math Dash – Technical Architecture (High‑Level)
+# Ready Steady Math – Technical Architecture (High‑Level)
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 ## 1. Overview
 
-Math Dash is a web‑first application with:
+Ready Steady Math is a web‑first application with:
 
 - A rich client (browser‑based, potentially wrapped for app stores).
 - Local‑first storage of gameplay and progress.

@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CountrySelector } from '@/components/features/curriculum/CountrySelector';
 import { YearGradeSelector } from '@/components/features/curriculum/YearGradeSelector';
 import { type CountryCode } from '@/lib/constants/curriculum-data';
+import { trackCurriculumProfileSet } from '@/lib/analytics/curriculum-analytics';
 import styles from './ProfileCreator.module.css';
 
 const AVATARS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯'];
@@ -93,6 +94,15 @@ export function ProfileCreator({ onCreated }: ProfileCreatorProps) {
     setActiveProfileId(newProfile.id);
     setName('');
     onCreated?.();
+
+    if (selectedCountry && selectedYearGrade) {
+      trackCurriculumProfileSet(newProfile.id, {
+        country: selectedCountry,
+        yearGrade: selectedYearGrade,
+        source: 'profile_creator',
+        actionStage: 'setup',
+      });
+    }
   };
 
   // Final submit with curriculum
@@ -219,7 +229,7 @@ export function ProfileCreator({ onCreated }: ProfileCreatorProps) {
                 <label className={styles.label}>Select Your Year/Grade</label>
                 <YearGradeSelector
                   country={country}
-                  value={yearGrade}
+                  value={yearGrade ?? undefined}
                   onChange={setYearGrade}
                   ageBand={ageBand}
                   autoSelect={true}

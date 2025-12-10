@@ -1,4 +1,6 @@
-# Math Dash – Component Catalog
+# Ready Steady Math – Component Catalog
+
+> **Note:** Ready Steady Math was previously referred to as 'Math Dash' in earlier internal drafts.
 
 This document serves as the reference for the frontend component library. It maps the Design System to actual React components, defining their props, variants, and behavior.
 

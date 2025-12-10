@@ -9,6 +9,7 @@ import { YearGradeSelector } from '@/components/features/curriculum/YearGradeSel
 import { useToast } from '@/components/ui/Toast';
 import { type CountryCode } from '@/lib/constants/curriculum-data';
 import { COUNTRY_METADATA } from '@/lib/constants/country-config';
+import { trackCurriculumProfileSet } from '@/lib/analytics/curriculum-analytics';
 import styles from './ProfileCurriculumSettings.module.css';
 
 interface ProfileCurriculumSettingsProps {
@@ -91,6 +92,13 @@ export function ProfileCurriculumSettings({ profiles, onProfileUpdated }: Profil
         updatedAt: updatedProfile.updatedAt,
       });
 
+      trackCurriculumProfileSet(profileId, {
+        country: effectiveCountry ?? undefined,
+        yearGrade: undefined,
+        source: 'curriculum_settings',
+        actionStage: 'migration',
+      });
+
       onProfileUpdated?.(updatedProfile);
       
       setEditingState(null);
@@ -129,6 +137,13 @@ export function ProfileCurriculumSettings({ profiles, onProfileUpdated }: Profil
         yearGrade: pendingYearGrade,
         curriculumLastUpdated: updatedProfile.curriculumLastUpdated,
         updatedAt: updatedProfile.updatedAt,
+      });
+
+      trackCurriculumProfileSet(profileId, {
+        country: profile.country,
+        yearGrade: pendingYearGrade,
+        source: 'curriculum_settings',
+        actionStage: profile.yearGrade ? 'update' : 'migration',
       });
 
       onProfileUpdated?.(updatedProfile);
@@ -268,7 +283,7 @@ export function ProfileCurriculumSettings({ profiles, onProfileUpdated }: Profil
                             <div className={styles.editPanel}>
                               <YearGradeSelector
                                 country={profile.country}
-                                value={pendingYearGrade}
+                                value={pendingYearGrade ?? undefined}
                                 onChange={setPendingYearGrade}
                                 ageBand={profile.ageBand}
                                 autoSelect={!profile.yearGrade}

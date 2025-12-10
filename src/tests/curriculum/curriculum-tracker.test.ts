@@ -11,7 +11,17 @@ import {
   type RecommendedSkill,
 } from '@/lib/game-engine/curriculum-tracker';
 import type { MasteryRecord, Profile } from '@/lib/db';
-import type { SkillId } from '@/lib/constants/curriculum-data';
+import {
+  SKILLS,
+  isCoreSkill,
+  isExtensionSkill,
+  type SkillId,
+  type CountryCode,
+} from '@/lib/constants/curriculum-data';
+import {
+  doesFactMatchSkill,
+  filterRecordsForSkill,
+} from '@/lib/constants/skill-game-mapping';
 
 // Create mock functions that will be shared
 const mockToArray = vi.fn().mockResolvedValue([]);
@@ -76,6 +86,61 @@ function createMockProfile(overrides: Partial<Profile> = {}): Profile {
   };
 }
 
+function mockSkillProgressScenario(
+  country: CountryCode,
+  yearGrade: string,
+  options: { coreMasterRatio: number; extensionMastered: number }
+) {
+  const coreSkills = SKILLS.filter((skill) =>
+    isCoreSkill(country, yearGrade, skill.id)
+  ).map((skill) => skill.id);
+  const extensionSkills = SKILLS.filter((skill) =>
+    isExtensionSkill(country, yearGrade, skill.id)
+  ).map((skill) => skill.id);
+
+  const coreMasterCount = Math.min(
+    coreSkills.length,
+    Math.ceil(coreSkills.length * options.coreMasterRatio)
+  );
+  const extensionMasterCount = Math.min(
+    extensionSkills.length,
+    options.extensionMastered
+  );
+
+  const coreMasterSet = new Set(coreSkills.slice(0, coreMasterCount));
+  const extensionMasterSet = new Set(
+    extensionSkills.slice(0, extensionMasterCount)
+  );
+
+  return vi.spyOn(CurriculumTracker, 'getSkillProgress').mockImplementation(
+    async (_profileId, skillId) => {
+      const core = isCoreSkill(country, yearGrade, skillId);
+      const extension = isExtensionSkill(country, yearGrade, skillId);
+      const mastered =
+        (core && coreMasterSet.has(skillId)) ||
+        (extension && extensionMasterSet.has(skillId));
+
+      const base: SkillProgress = {
+        skillId,
+        label: skillId,
+        proficiency: mastered ? 'mastered' : 'not-started',
+        accuracy: mastered ? 95 : 0,
+        coverage: mastered ? 100 : 0,
+        totalAttempts: mastered ? 20 : 0,
+        totalCorrect: mastered ? 20 : 0,
+        avgResponseTime: mastered ? 1800 : 0,
+        masteredFactCount: mastered ? 10 : 0,
+        expectedFactCount: 10,
+        isCore: core,
+        isExtension: extension,
+        lastPracticedAt: mastered ? new Date().toISOString() : undefined,
+      };
+
+      return base;
+    }
+  );
+}
+
 describe('CurriculumTracker', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -100,18 +165,28 @@ describe('CurriculumTracker', () => {
     });
 
     it('should calculate developing proficiency for low accuracy', async () => {
-      const records: MasteryRecord[] = [
-        createMasteryRecord('test-profile', '3+7=10', 'addition', {
-          attempts: 10,
-          correct: 5,
-          status: 'learning',
-        }),
-        createMasteryRecord('test-profile', '4+6=10', 'addition', {
-          attempts: 10,
-          correct: 6,
-          status: 'learning',
-        }),
-      ];
+    const records: MasteryRecord[] = [
+      createMasteryRecord('test-profile', '3+7=10', 'addition', {
+        attempts: 10,
+        correct: 5,
+        status: 'learning',
+      }),
+      createMasteryRecord('test-profile', '4+6=10', 'addition', {
+        attempts: 10,
+        correct: 6,
+        status: 'learning',
+      }),
+      createMasteryRecord('test-profile', '5+5=10', 'addition', {
+        attempts: 10,
+        correct: 6,
+        status: 'learning',
+      }),
+      createMasteryRecord('test-profile', '6+4=10', 'addition', {
+        attempts: 10,
+        correct: 7,
+        status: 'learning',
+      }),
+    ];
 
       mockToArray.mockResolvedValue(records);
 
@@ -121,8 +196,8 @@ describe('CurriculumTracker', () => {
       );
 
       expect(progress.proficiency).toBe('developing');
-      expect(progress.accuracy).toBe(55); // (5+6)/(10+10) = 55%
-      expect(progress.totalAttempts).toBe(20);
+      expect(progress.accuracy).toBe(60);
+      expect(progress.totalAttempts).toBe(40);
     });
 
     it('should return correct skill metadata', async () => {
@@ -294,6 +369,23 @@ describe('CurriculumTracker', () => {
       expect(progress.yearGrade).toBe('Y3'); // Derived from 7-8 age band
     });
 
+    it('prefers the stored yearGrade over the derived suggestion when they differ', async () => {
+      const profile = createMockProfile({
+        country: 'NZ',
+        yearGrade: 'Y2',
+        ageBand: '7-8',
+      });
+
+      mockProfileGet.mockResolvedValue(profile);
+      mockToArray.mockResolvedValue([]);
+
+      const progress = await CurriculumTracker.getCurriculumProgress('test-profile');
+
+      expect(progress.yearGrade).toBe('Y2');
+      expect(progress.yearGrade).not.toBe('Y3');
+      expect(progress.yearGradeLabel).toBe('Year 2');
+    });
+
     it('should separate core and extension skills', async () => {
       const profile = createMockProfile({
         country: 'NZ',
@@ -355,6 +447,42 @@ describe('CurriculumTracker', () => {
       const progress = await CurriculumTracker.getCurriculumProgress('test-profile');
 
       expect(progress.overallStatus).toBe('behind');
+    });
+
+    it('should return on-track when at least half of core skills are mastered', async () => {
+      const profile = createMockProfile({
+        country: 'NZ',
+        yearGrade: 'Y3',
+      });
+
+      mockProfileGet.mockResolvedValue(profile);
+      const spy = mockSkillProgressScenario('NZ', 'Y3', {
+        coreMasterRatio: 0.5,
+        extensionMastered: 0,
+      });
+
+      const progress = await CurriculumTracker.getCurriculumProgress('test-profile');
+
+      expect(progress.overallStatus).toBe('on-track');
+      spy.mockRestore();
+    });
+
+    it('should return ahead when 80% of core and some extension skills are mastered', async () => {
+      const profile = createMockProfile({
+        country: 'NZ',
+        yearGrade: 'Y5',
+      });
+
+      mockProfileGet.mockResolvedValue(profile);
+      const spy = mockSkillProgressScenario('NZ', 'Y5', {
+        coreMasterRatio: 0.85,
+        extensionMastered: 1,
+      });
+
+      const progress = await CurriculumTracker.getCurriculumProgress('test-profile');
+
+      expect(progress.overallStatus).toBe('ahead');
+      spy.mockRestore();
     });
 
     it('should include calculatedAt timestamp', async () => {
@@ -437,6 +565,8 @@ describe('CurriculumTracker', () => {
         expect(rec.reason).toBeDefined();
         expect(rec.priority).toBeGreaterThan(0);
         expect(rec.proficiency).toBeDefined();
+        expect(rec.action).toBeDefined();
+        expect(rec.action.config).toBeDefined();
       }
     });
 
@@ -522,7 +652,7 @@ describe('CurriculumTracker - Proficiency Calculation', () => {
 
   it('should return proficient for good accuracy and coverage', async () => {
     const records: MasteryRecord[] = [];
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 6; i++) {
       records.push(
         createMasteryRecord('test-profile', `${i}+${10-i}=10`, 'addition', {
           attempts: 15,
@@ -540,8 +670,83 @@ describe('CurriculumTracker - Proficiency Calculation', () => {
       'NB10'
     );
 
-    // 6/11 = 54% coverage, 80% accuracy = proficient
+    // 7/11 = 64% coverage, 80% accuracy = proficient
     expect(progress.proficiency).toBe('proficient');
+  });
+
+  it('should downgrade to proficient when responses are too slow for mastery', async () => {
+    const records: MasteryRecord[] = [];
+    for (let i = 0; i <= 10; i++) {
+      records.push(
+        createMasteryRecord('test-profile', `${i}+${10 - i}=10`, 'addition', {
+          attempts: 25,
+          correct: 23,
+          avgResponseTime: 4000, // slower than mastery threshold
+          status: 'mastered',
+        })
+      );
+    }
+
+    mockToArray.mockResolvedValue(records);
+
+    const progress = await CurriculumTracker.getSkillProgress(
+      'test-profile',
+      'NB10'
+    );
+
+    expect(progress.coverage).toBe(100);
+    expect(progress.accuracy).toBeGreaterThan(90);
+    expect(progress.proficiency).toBe('proficient');
+  });
+
+  it('should stay developing when coverage is below the proficient threshold', async () => {
+    const records: MasteryRecord[] = [];
+    for (let i = 0; i < 5; i++) {
+      records.push(
+        createMasteryRecord('test-profile', `${i}+${10 - i}=10`, 'addition', {
+          attempts: 12,
+          correct: 11,
+          avgResponseTime: 1800,
+          status: 'learning',
+        })
+      );
+    }
+
+    mockToArray.mockResolvedValue(records);
+
+    const progress = await CurriculumTracker.getSkillProgress(
+      'test-profile',
+      'NB10'
+    );
+
+    // Coverage is < 60% but above the not-started threshold, so still developing
+    expect(progress.coverage).toBeLessThan(60);
+    expect(progress.coverage).toBeGreaterThan(30);
+    expect(progress.proficiency).toBe('developing');
+  });
+
+  it('should remain not-started when coverage is below 30 even with attempts', async () => {
+    const records: MasteryRecord[] = [];
+    for (let i = 0; i < 2; i++) {
+      records.push(
+        createMasteryRecord('test-profile', `${i}+${10 - i}=10`, 'addition', {
+          attempts: 10,
+          correct: 9,
+          avgResponseTime: 2000,
+          status: 'learning',
+        })
+      );
+    }
+
+    mockToArray.mockResolvedValue(records);
+
+    const progress = await CurriculumTracker.getSkillProgress(
+      'test-profile',
+      'NB10'
+    );
+
+    expect(progress.coverage).toBeLessThan(30);
+    expect(progress.proficiency).toBe('not-started');
   });
 });
 
@@ -602,5 +807,96 @@ describe('CurriculumTracker - Status Calculation (behind/on-track/ahead)', () =>
     const progress = await CurriculumTracker.getCurriculumProgress('test-profile');
 
     expect(['behind', 'on-track', 'ahead']).toContain(progress.overallStatus);
+  });
+});
+
+describe('Skill matching helpers', () => {
+  it('matches number bond skills correctly', () => {
+    expect(doesFactMatchSkill('3+7=10', 'NB10')).toBe(true);
+    expect(doesFactMatchSkill('3+8=11', 'NB10')).toBe(false);
+    expect(doesFactMatchSkill('15+5=20', 'NB20')).toBe(true);
+    expect(doesFactMatchSkill('15+4=19', 'NB20')).toBe(false);
+    expect(doesFactMatchSkill('0.4+0.6=1.0', 'NB_DEC1')).toBe(true);
+    expect(doesFactMatchSkill('0.4+0.4=0.8', 'NB_DEC1')).toBe(false);
+  });
+
+  it('matches addition/subtraction ranges', () => {
+    expect(doesFactMatchSkill('12+5=17', 'ADD_SUB_20')).toBe(true);
+    expect(doesFactMatchSkill('32+5=37', 'ADD_SUB_20')).toBe(false);
+    expect(doesFactMatchSkill('250-75=175', 'ADD_SUB_1000')).toBe(true);
+    expect(doesFactMatchSkill('250-75=175', 'ADD_SUB_20')).toBe(false);
+  });
+
+  it('matches times tables selections', () => {
+    expect(doesFactMatchSkill('2x6=12', 'TT_2_5_10')).toBe(true);
+    expect(doesFactMatchSkill('7x6=42', 'TT_2_5_10')).toBe(false);
+    expect(doesFactMatchSkill('9x11=99', 'TT_1_12_ALL')).toBe(true);
+  });
+
+  it('matches division skill filters', () => {
+    expect(doesFactMatchSkill('30/5=6', 'DIV_2_5_10')).toBe(true);
+    expect(doesFactMatchSkill('30/7=4', 'DIV_2_5_10')).toBe(false);
+    expect(doesFactMatchSkill('96/12=8', 'DIV_1_12_ALL')).toBe(true);
+  });
+
+  it('matches doubles and halves skills', () => {
+    expect(doesFactMatchSkill('12+12=24', 'DBL_20')).toBe(true);
+    expect(doesFactMatchSkill('12+13=25', 'DBL_20')).toBe(false);
+    expect(doesFactMatchSkill('250+250=500', 'DBL_3DIG')).toBe(true);
+  });
+
+  it('matches square number skills', () => {
+    expect(doesFactMatchSkill('7x7=49', 'SQ_1_10')).toBe(true);
+    expect(doesFactMatchSkill('13x13=169', 'SQ_1_10')).toBe(false);
+    expect(doesFactMatchSkill('12x12=144', 'SQ_1_12')).toBe(true);
+  });
+
+  it('filterRecordsForSkill returns only number bond records for the matching skill', () => {
+    const records: MasteryRecord[] = [
+      createMasteryRecord('p1', '3+7=10', 'addition'),
+      createMasteryRecord('p1', '15+5=20', 'addition'),
+      createMasteryRecord('p1', '50+50=100', 'addition'),
+    ];
+
+    const nb10 = filterRecordsForSkill(records, 'NB10');
+    const nb20 = filterRecordsForSkill(records, 'NB20');
+
+    expect(nb10).toHaveLength(1);
+    expect(nb10[0].fact).toBe('3+7=10');
+
+    expect(nb20).toHaveLength(1);
+    expect(nb20[0].fact).toBe('15+5=20');
+  });
+
+  it('filterRecordsForSkill enforces operation/number range constraints', () => {
+    const records: MasteryRecord[] = [
+      createMasteryRecord('p1', '12+5=17', 'addition'),
+      createMasteryRecord('p1', '60+25=85', 'addition'),
+      createMasteryRecord('p1', '250+75=325', 'addition'),
+    ];
+
+    const add20 = filterRecordsForSkill(records, 'ADD_SUB_20');
+    const add100 = filterRecordsForSkill(records, 'ADD_SUB_100');
+    const add1000 = filterRecordsForSkill(records, 'ADD_SUB_1000');
+
+    expect(add20.map((r) => r.fact)).toEqual(['12+5=17']);
+    expect(add100.map((r) => r.fact)).toEqual(['60+25=85']);
+    expect(add1000.map((r) => r.fact)).toEqual(['250+75=325']);
+  });
+
+  it('filterRecordsForSkill assigns overlapping facts to the most specific skill', () => {
+    const records: MasteryRecord[] = [
+      createMasteryRecord('p1', '2x5=10', 'multiplication'),
+      createMasteryRecord('p1', '3x4=12', 'multiplication'),
+      createMasteryRecord('p1', '7x6=42', 'multiplication'),
+    ];
+
+    const ttSmall = filterRecordsForSkill(records, 'TT_2_5_10');
+    const ttCore = filterRecordsForSkill(records, 'TT_CORE');
+    const ttAll = filterRecordsForSkill(records, 'TT_1_10_ALL');
+
+    expect(ttSmall.map((r) => r.fact)).toEqual(['2x5=10']);
+    expect(ttCore.map((r) => r.fact)).toEqual(['3x4=12']);
+    expect(ttAll.map((r) => r.fact)).toEqual(['7x6=42']);
   });
 });

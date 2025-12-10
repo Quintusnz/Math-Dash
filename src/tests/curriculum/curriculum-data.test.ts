@@ -100,16 +100,22 @@ describe('curriculum-data.ts', () => {
       }
     });
 
-    it('NZ should have Y1-Y6 year levels', () => {
+    it('NZ should have Y1-Y8 year levels', () => {
       const nzYears = Object.keys(COUNTRY_BENCHMARKS.NZ.years);
       expect(nzYears).toContain('Y1');
-      expect(nzYears).toContain('Y6');
+      expect(nzYears).toContain('Y8');
     });
 
     it('US should have K-G5 grade levels', () => {
       const usGrades = Object.keys(COUNTRY_BENCHMARKS.US.years);
       expect(usGrades).toContain('K');
       expect(usGrades).toContain('G5');
+    });
+
+    it('CA should include Kindergarten through G6', () => {
+      const caGrades = Object.keys(COUNTRY_BENCHMARKS.CA.years);
+      expect(caGrades).toContain('K');
+      expect(caGrades).toContain('G6');
     });
   });
 
@@ -212,7 +218,7 @@ describe('curriculum-data.ts', () => {
       const keys = getYearGradeKeys('NZ');
       expect(keys).toContain('Y1');
       expect(keys).toContain('Y2');
-      expect(keys).toContain('Y6');
+      expect(keys).toContain('Y8');
     });
 
     it('should return grade keys for US', () => {

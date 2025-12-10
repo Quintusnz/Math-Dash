@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## About Ready Steady Math
+
+**Ready Steady Math** is a browser-based math fluency game for children aged 6-11. It was previously referred to as 'Math Dash' in earlier internal drafts.
+
 ## Getting Started
 
 First, run the development server:

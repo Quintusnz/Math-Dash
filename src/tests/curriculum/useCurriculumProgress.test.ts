@@ -56,6 +56,10 @@ const mockRecommendedFocus: RecommendedSkill[] = [
     priority: 1,
     proficiency: 'developing',
     coverage: 50,
+    accuracy: 72,
+    action: {
+      config: {},
+    },
   },
 ];
 
@@ -155,12 +159,18 @@ describe('useCurriculumProgress', () => {
       expect(result.current).toHaveProperty('loading');
       expect(result.current).toHaveProperty('error');
       expect(result.current).toHaveProperty('overallStatus');
+      expect(result.current).toHaveProperty('overallPercentage');
       expect(result.current).toHaveProperty('skillProgress');
+      expect(result.current).toHaveProperty('coreSkills');
+      expect(result.current).toHaveProperty('extensionSkills');
       expect(result.current).toHaveProperty('coreProgress');
       expect(result.current).toHaveProperty('extensionProgress');
+      expect(result.current).toHaveProperty('coreSkillCounts');
+      expect(result.current).toHaveProperty('extensionSkillCounts');
       expect(result.current).toHaveProperty('recommendedFocus');
       expect(result.current).toHaveProperty('refresh');
       expect(result.current).toHaveProperty('curriculumInfo');
+      expect(result.current).toHaveProperty('lastCalculatedAt');
     });
 
     it('should return loading: boolean', async () => {
@@ -307,8 +317,6 @@ describe('useCurriculumProgress', () => {
     });
 
     it('should invalidate cache after TTL expires', async () => {
-      vi.useFakeTimers();
-      
       const { result, unmount } = renderHook(() => useCurriculumProgress('test-profile'));
       
       await waitFor(() => {
@@ -317,8 +325,15 @@ describe('useCurriculumProgress', () => {
       
       expect(mockGetCurriculumProgress).toHaveBeenCalledTimes(1);
       
-      // Advance time past cache TTL
-      vi.advanceTimersByTime(6 * 60 * 1000); // 6 minutes
+      // Expire the cache by backdating its timestamp (grab the only cache entry)
+      const cacheKey = Array.from(_testExports.progressCache.keys())[0];
+      const cached = cacheKey ? _testExports.progressCache.get(cacheKey) : undefined;
+      if (cacheKey && cached) {
+        _testExports.progressCache.set(cacheKey, {
+          ...cached,
+          timestamp: Date.now() - _testExports.CACHE_TTL_MS - 1000,
+        });
+      }
       
       unmount();
       
@@ -331,8 +346,6 @@ describe('useCurriculumProgress', () => {
       
       // Should call again because cache expired
       expect(mockGetCurriculumProgress).toHaveBeenCalledTimes(2);
-      
-      vi.useRealTimers();
     });
 
     it('should bypass cache when refresh() is called', async () => {
@@ -528,6 +541,39 @@ describe('useCurriculumProgress', () => {
       // 2 core + 1 extension = 3 total
       expect(result.current.skillProgress.length).toBe(3);
     });
+
+    it('should expose separate arrays for core and extension skills', async () => {
+      const { result } = renderHook(() => useCurriculumProgress('test-profile'));
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.coreSkills.length).toBe(2);
+      expect(result.current.extensionSkills.length).toBe(1);
+    });
+
+    it('should expose proficiency counts from the tracker', async () => {
+      const { result } = renderHook(() => useCurriculumProgress('test-profile'));
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.coreSkillCounts).toEqual(mockCurriculumProgress.coreSkillCounts);
+      expect(result.current.extensionSkillCounts).toEqual(mockCurriculumProgress.extensionSkillCounts);
+    });
+
+    it('should surface overall percentage and timestamp metadata', async () => {
+      const { result } = renderHook(() => useCurriculumProgress('test-profile'));
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.overallPercentage).toBe(mockCurriculumProgress.overallPercentage);
+      expect(result.current.lastCalculatedAt).toBe(mockCurriculumProgress.calculatedAt);
+    });
   });
 
   describe('clearCurriculumProgressCache utility', () => {
@@ -538,11 +584,11 @@ describe('useCurriculumProgress', () => {
         expect(result.current.loading).toBe(false);
       });
       
-      expect(_testExports.progressCache.has('test-profile')).toBe(true);
+      expect(_testExports.progressCache.size).toBeGreaterThan(0);
       
       clearCurriculumProgressCache('test-profile');
       
-      expect(_testExports.progressCache.has('test-profile')).toBe(false);
+      expect(_testExports.progressCache.size).toBe(0);
     });
 
     it('should clear entire cache when no profileId provided', async () => {

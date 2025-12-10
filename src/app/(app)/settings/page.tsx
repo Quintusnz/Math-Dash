@@ -9,6 +9,7 @@ import {
   ThemeSelector,
   type Theme,
 } from '@/components/features/settings';
+import { CurriculumSettings } from '@/components/features/settings/CurriculumSettings';
 import styles from './page.module.css';
 
 export default function SettingsPage() {
@@ -53,6 +54,10 @@ export default function SettingsPage() {
             value={theme as Theme}
             onChange={setTheme}
           />
+        </SettingsSection>
+
+        <SettingsSection title="Curriculum">
+          <CurriculumSettings />
         </SettingsSection>
 
         <SettingsSection title="About">

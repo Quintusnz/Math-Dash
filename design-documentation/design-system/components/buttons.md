@@ -15,7 +15,7 @@ status: approved
 # Buttons
 
 ## Overview
-Buttons are the primary interactive elements in Math Dash. They must be large, colorful, and tactile to appeal to children and ensure easy interaction on touch devices.
+Buttons are the primary interactive elements in Ready Steady Math. They must be large, colorful, and tactile to appeal to children and ensure easy interaction on touch devices.
 
 ## Variants
 
