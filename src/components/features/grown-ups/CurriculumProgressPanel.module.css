@@ -15,6 +15,12 @@
   gap: 0.75rem;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .titleRow {
   display: flex;
   align-items: center;
@@ -89,6 +95,16 @@
   background: #e0f2fe;
   border-color: #bae6fd;
   color: #075985;
+}
+
+.detailButton {
+  border: 1px solid #d1d5db;
+  background: transparent;
+  color: #4f46e5;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
 }
 
 .sections {

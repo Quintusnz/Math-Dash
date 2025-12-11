@@ -1,6 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
+import type { LucideIcon } from 'lucide-react';
+import { Circle, CircleDot, CheckCircle2, Sparkles as SparkleIcon } from 'lucide-react';
 import type { SkillProgress } from '@/lib/game-engine/curriculum-tracker';
 import styles from './SkillCard.module.css';
 
@@ -16,6 +18,13 @@ const BADGE_CLASS: Record<SkillProgress['proficiency'], string> = {
   developing: styles.badgeDeveloping,
   proficient: styles.badgeProficient,
   mastered: styles.badgeMastered,
+};
+
+const PROFICIENCY_ICON: Record<SkillProgress['proficiency'], LucideIcon> = {
+  'not-started': Circle,
+  developing: CircleDot,
+  proficient: CheckCircle2,
+  mastered: SparkleIcon,
 };
 
 export interface SkillCardProps {
@@ -34,6 +43,7 @@ export function SkillCard({
   onSelect,
 }: SkillCardProps) {
   const resolvedVariant = variant ?? (skill.isCore ? 'core' : skill.isExtension ? 'extension' : undefined);
+  const BadgeIcon = PROFICIENCY_ICON[skill.proficiency];
 
   const handleSelect = () => {
     onSelect?.(skill);
@@ -63,6 +73,7 @@ export function SkillCard({
       <div className={styles.header}>
         <span className={styles.skillLabel}>{skill.label}</span>
         <span className={clsx(styles.badge, BADGE_CLASS[skill.proficiency])}>
+          <BadgeIcon size={14} aria-hidden="true" />
           {PROFICIENCY_LABELS[skill.proficiency]}
         </span>
       </div>

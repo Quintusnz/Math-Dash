@@ -122,6 +122,10 @@ export function CurriculumProgressPanel({
       router.push('/grown-ups?tab=settings');
     }
   };
+  const openDetailedView = () => {
+    if (!profileId) return;
+    router.push(`/grown-ups/curriculum?profileId=${profileId}`);
+  };
 
   const statusClass =
     overallStatus === 'ahead'
@@ -137,9 +141,14 @@ export function CurriculumProgressPanel({
           <BookOpen size={18} aria-hidden="true" />
           <span className={styles.title}>Curriculum Progress</span>
         </div>
-        {overallStatus && (
-          <span className={`${styles.statusBadge} ${statusClass}`}>{overallStatus}</span>
-        )}
+        <div className={styles.headerActions}>
+          {overallStatus && (
+            <span className={`${styles.statusBadge} ${statusClass}`}>{overallStatus}</span>
+          )}
+          <button type="button" className={styles.detailButton} onClick={openDetailedView}>
+            View details
+          </button>
+        </div>
       </div>
 
       {loading && (

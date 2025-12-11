@@ -165,6 +165,13 @@ describe("CurriculumProgressPanel", () => {
     expect(pushMock).toHaveBeenCalledWith("/grown-ups?tab=settings");
   });
 
+  it("navigates to detailed view page when link pressed", () => {
+    render(<CurriculumProgressPanel profileId="p1" />);
+
+    fireEvent.click(screen.getByRole("button", { name: /View details/i }));
+    expect(pushMock).toHaveBeenCalledWith("/grown-ups/curriculum?profileId=p1");
+  });
+
   it("reports analytics once per status", () => {
     const { rerender } = render(<CurriculumProgressPanel profileId="p1" />);
 

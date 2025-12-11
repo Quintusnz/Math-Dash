@@ -75,6 +75,11 @@
   color: var(--text-strong);
 }
 
+.filterButton:focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 2px;
+}
+
 .filterButtonActive {
   background: var(--color-primary-50);
   border-color: var(--color-primary-500);
@@ -84,7 +89,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-md);
 }
 
